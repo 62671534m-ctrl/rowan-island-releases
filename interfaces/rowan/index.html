@@ -1,0 +1,3731 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rowan AI</title>
+<link rel="stylesheet" href="surfaces.css"/>
+<script src="web-mock-rowan.js"></script>
+<script src="surfaces.js"></script>
+<link rel="stylesheet" href="product.css"/><script src="product.js"></script>
+<!-- Tailwind CSS CDN -->
+<script src="tailwind.js"></script>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+
+
+
+<!-- Material Symbols Outlined -->
+
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            carbon: {
+              950: '#060606',
+              900: '#0a0a0c',
+              850: '#101012',
+              800: '#141416',
+              750: '#1a1a1e',
+              700: '#222226',
+              600: '#2e2e34',
+            },
+            ivory: '#F3F2EE',
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Bulletproof Fallback CSS (Protects against any CDN or layout delays) */
+    .hidden {
+      display: none !important;
+    }
+    [hidden]:not(.live-discrete-anim) {
+      display: none !important;
+    }
+
+    #emotions-popover.hidden {
+      display: none !important;
+    }
+
+    #emotions-popover {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 10px;
+      width: 440px;
+      max-width: 90vw;
+      background-color: rgba(17, 17, 21, 0.98);
+      border: 1px solid #26262e;
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      backdrop-filter: blur(24px);
+    }
+
+    /* Modern button and input normalization */
+    button {
+      font-family: inherit;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0a0a0c;
+      color: #e5e5e5;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      user-select: none;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #202024;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #323238;
+    }
+
+    /* Ambient Background Aura & Breathing Glow */
+    @keyframes auraBreathing {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.85;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.08);
+        opacity: 1;
+      }
+    }
+
+    .ambient-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 420px;
+      height: 250px;
+      background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.05) 0%, rgba(243, 242, 238, 0.012) 50%, transparent 75%);
+      filter: blur(44px);
+      pointer-events: none;
+      animation: auraBreathing 5.4s ease-in-out infinite;
+      transition: background 0.65s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), 
+                  filter 0.65s ease,
+                  opacity 0.65s ease;
+      will-change: transform, opacity, background;
+    }
+    .ambient-glow.listening {
+      background: radial-gradient(ellipse at center, rgba(244, 63, 94, 0.12) 0%, rgba(244, 63, 94, 0.03) 50%, transparent 80%);
+      transform: translate(-50%, -50%) scale(1.22);
+      filter: blur(50px);
+      animation-duration: 2.2s;
+    }
+    .ambient-glow.thinking {
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.11) 0%, rgba(251, 191, 36, 0.025) 55%, transparent 80%);
+      transform: translate(-50%, -50%) scale(1.15);
+      filter: blur(46px);
+      animation-duration: 3s;
+    }
+    .ambient-glow.speaking {
+      background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.11) 0%, rgba(243, 242, 238, 0.035) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.28);
+      filter: blur(52px);
+      animation-duration: 1.8s;
+    }
+    .ambient-glow.live-active {
+      background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.03) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.3);
+      filter: blur(52px);
+    }
+
+    /* Emotional Auras */
+    .ambient-glow.aura-greeting {
+      background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.16) 0%, rgba(147, 197, 253, 0.08) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.32);
+      filter: blur(50px);
+    }
+    .ambient-glow.aura-happy {
+      background: radial-gradient(ellipse at center, rgba(254, 240, 138, 0.13) 0%, rgba(243, 242, 238, 0.05) 50%, transparent 78%);
+      transform: translate(-50%, -50%) scale(1.28);
+      filter: blur(48px);
+    }
+    .ambient-glow.aura-groove {
+      background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.14) 0%, rgba(236, 72, 153, 0.08) 50%, transparent 80%);
+      transform: translate(-50%, -50%) scale(1.4);
+      filter: blur(54px);
+    }
+    .ambient-glow.aura-eureka {
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(243, 242, 238, 0.08) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.45);
+      filter: blur(55px);
+    }
+    .ambient-glow.aura-confused {
+      background: radial-gradient(ellipse at center, rgba(147, 197, 253, 0.11) 0%, rgba(203, 213, 225, 0.04) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.15);
+      filter: blur(46px);
+    }
+    .ambient-glow.aura-focused {
+      background: radial-gradient(ellipse at center, rgba(96, 165, 250, 0.12) 0%, rgba(243, 242, 238, 0.03) 40%, transparent 70%);
+      transform: translate(-50%, -50%) scale(1.05);
+      filter: blur(36px);
+    }
+    .ambient-glow.aura-surprised {
+      background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.18) 0%, rgba(244, 114, 182, 0.08) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.36);
+      filter: blur(52px);
+    }
+    .ambient-glow.aura-sympathetic {
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.09) 0%, rgba(243, 242, 238, 0.03) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.18);
+      filter: blur(46px);
+    }
+    .ambient-glow.aura-sleepy {
+      background: radial-gradient(ellipse at center, rgba(148, 163, 184, 0.04) 0%, transparent 60%);
+      transform: translate(-50%, -50%) scale(0.95);
+      filter: blur(40px);
+      opacity: 0.55;
+    }
+
+    /* Soundwave ripple rings behind Rowan Eyes in Speaking/Listening modes */
+    .eye-soundwave-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 110px;
+      height: 70px;
+      border-radius: 9999px;
+      border: 1px solid rgba(243, 242, 238, 0.18);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .speaking .eye-soundwave-ring,
+    .listening .eye-soundwave-ring {
+      opacity: 1;
+      animation: avatarWaveEcho 2.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    @keyframes avatarWaveEcho {
+      0% {
+        transform: translate(-50%, -50%) scale(0.85);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.55);
+        opacity: 0;
+      }
+    }
+
+    /* Rowan Eyes Base */
+    .rowan-eye {
+      width: 1rem; /* 16px */
+      height: 2.75rem; /* 44px base */
+      border-radius: 9999px;
+      background-color: #f3f2ee;
+      box-shadow: 0 0 20px rgba(243, 242, 238, 0.45), 0 0 45px rgba(243, 242, 238, 0.15);
+      transition: border-radius 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.35s ease,
+                  background-color 0.3s ease;
+      will-change: transform, height, width, box-shadow;
+      transform-origin: center center;
+    }
+
+    /* Eye Blinking */
+    .rowan-eye.blink {
+      transform: scaleY(0.05) !important;
+      box-shadow: 0 0 5px rgba(243, 242, 238, 0.15) !important;
+      transition: transform 0.07s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.07s ease-in-out !important;
+    }
+
+    /* ========================================================
+       EMOTION KEYFRAME ANIMATIONS & CLASSES
+       ======================================================== */
+    /* 1. GREETING: Doble rebote elástico hacia arriba y pulso de luz */
+    @keyframes emotionGreetingBounce {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      20% { transform: translateY(-16px) scaleY(1.12); }
+      40% { transform: translateY(2px) scaleY(0.92); }
+      60% { transform: translateY(-8px) scaleY(1.05); }
+      80% { transform: translateY(0) scaleY(0.98); }
+    }
+    .emotion-greeting .rowan-eye {
+      animation: emotionGreetingBounce 1.25s cubic-bezier(0.34, 1.56, 0.64, 1) 1;
+      box-shadow: 0 0 28px rgba(243, 242, 238, 0.75), 0 0 55px rgba(243, 242, 238, 0.35);
+    }
+
+    /* 2. HAPPY: Cápsulas en arco sonriente (^ ^), rotadas hacia afuera con rebote rítmico */
+    @keyframes emotionHappyBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4.5px); }
+    }
+    .emotion-happy #eye-left {
+      border-radius: 9999px 9999px 40% 40% !important;
+      box-shadow: 0 0 24px rgba(254, 240, 138, 0.6), 0 0 45px rgba(243, 242, 238, 0.25);
+    }
+    .emotion-happy #eye-right {
+      border-radius: 9999px 9999px 40% 40% !important;
+      box-shadow: 0 0 24px rgba(254, 240, 138, 0.6), 0 0 45px rgba(243, 242, 238, 0.25);
+    }
+    .emotion-happy #eyes-container {
+      animation: emotionHappyBob 0.68s ease-in-out infinite alternate;
+    }
+
+    /* 3. CONFUSED: Arqueo asimétrico de ceja con socket ladeado */
+    .emotion-confused #eye-left {
+      box-shadow: 0 0 22px rgba(243, 242, 238, 0.5);
+    }
+
+    /* 4. FOCUSED: Ojos hendidura de precisión, gap estrecho y aura recogida */
+    .emotion-focused #eye-socket {
+      gap: 1.125rem !important; /* 18px */
+    }
+
+    /* 5. SURPRISED: Ojos como platos, más anchos (22px), alargados */
+    .emotion-surprised .rowan-eye {
+      width: 1.375rem !important; /* 22px */
+      box-shadow: 0 0 32px rgba(243, 242, 238, 0.8), 0 0 60px rgba(243, 242, 238, 0.3);
+    }
+
+    /* 6. AMUSED: Guiño asimétrico con arco pícaro */
+    @keyframes amusedWink {
+      0%, 20%, 80%, 100% { transform: scaleY(0.18) rotate(12deg); }
+      35%, 65% { transform: scaleY(0.08) rotate(12deg); }
+    }
+    .emotion-amused #eye-right {
+      animation: amusedWink 1.4s ease-in-out infinite;
+    }
+
+    /* 7. GROOVE: Head-bobbing rítmico a ~110 BPM (0.54s) con squash & stretch */
+    @keyframes grooveHeadBob {
+      0% { transform: translateY(0) scale(1, 1); }
+      25% { transform: translateY(-7px) rotate(-2.5deg) scale(0.96, 1.12); }
+      50% { transform: translateY(3px) rotate(0deg) scale(1.08, 0.92); }
+      75% { transform: translateY(-7px) rotate(2.5deg) scale(0.96, 1.12); }
+      100% { transform: translateY(0) scale(1, 1); }
+    }
+    .emotion-groove #eye-socket {
+      animation: grooveHeadBob 0.54s ease-in-out infinite;
+    }
+    .emotion-groove .rowan-eye {
+      box-shadow: 0 0 28px rgba(192, 132, 252, 0.65), 0 0 50px rgba(244, 114, 182, 0.35);
+    }
+
+    /* 8. SYMPATHETIC: Mirada baja, inclinación suave y tierna */
+    .emotion-sympathetic .rowan-eye {
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.4), 0 0 35px rgba(243, 242, 238, 0.15);
+    }
+
+    /* 9. EUREKA: Salto elástico con destello resplandeciente */
+    @keyframes eurekaHop {
+      0% { transform: translateY(0) scale(1); }
+      30% { transform: translateY(-18px) scale(1.15, 1.2); }
+      60% { transform: translateY(2px) scale(1.05, 0.95); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .emotion-eureka #eye-socket {
+      animation: eurekaHop 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) 1;
+    }
+    .emotion-eureka .rowan-eye {
+      box-shadow: 0 0 38px rgba(255, 255, 255, 0.95), 0 0 70px rgba(243, 242, 238, 0.6) !important;
+      background-color: #ffffff !important;
+    }
+
+    /* 10. SLEEPY: Cápsulas bajas, pesadas, al 35% de altura */
+    .emotion-sleepy .rowan-eye {
+      box-shadow: 0 0 10px rgba(243, 242, 238, 0.25);
+      opacity: 0.72;
+    }
+
+    /* Message entrance animation: soft spring stagger + slide up 6px */
+    @keyframes messageIn {
+      0% {
+        opacity: 0;
+        transform: translateY(6px) scale(0.99);
+      }
+      65% {
+        transform: translateY(-0.8px) scale(1.001);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .msg-entrance {
+      animation: messageIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Streaming Cursor Pulsing Effect */
+    @keyframes streamCursorBlink {
+      0%, 100% { 
+        opacity: 1; 
+        box-shadow: 0 0 8px rgba(243, 242, 238, 0.6);
+      }
+      50% { 
+        opacity: 0.15; 
+        box-shadow: none;
+      }
+    }
+    .stream-cursor {
+      display: inline-block;
+      width: 6.5px;
+      height: 14px;
+      margin-left: 3px;
+      vertical-align: -2px;
+      background-color: #f3f2ee;
+      border-radius: 1.5px;
+      animation: streamCursorBlink 0.75s ease-in-out infinite;
+    }
+
+    /* Modal Animation: scale-95 to scale-100 with backdrop-blur */
+    .modal-backdrop-anim {
+      opacity: 0;
+      transition: opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-backdrop-anim.open {
+      opacity: 1;
+    }
+    .modal-card-anim {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s ease-out;
+    }
+    .modal-card-anim.open {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Pulse wave ripples for Mic button */
+    .mic-ripple-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(244, 63, 94, 0.65);
+      pointer-events: none;
+      animation: micRippleAnim 1.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    @keyframes micRippleAnim {
+      0% {
+        transform: scale(0.92);
+        opacity: 0.95;
+      }
+      100% {
+        transform: scale(1.48);
+        opacity: 0;
+      }
+    }
+
+    /* Live Mode Ripple Ring */
+    .live-ripple-ring {
+      position: absolute;
+      inset: -3px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(16, 185, 129, 0.7);
+      pointer-events: none;
+      animation: livePulseAnim 1.35s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    @keyframes livePulseAnim {
+      0% {
+        transform: scale(0.94);
+        opacity: 0.9;
+      }
+      100% {
+        transform: scale(1.45);
+        opacity: 0;
+      }
+    }
+
+    /* Live button audio waves micro animation */
+    @keyframes liveWavePulse {
+      0%, 100% { transform: scaleY(0.7); }
+      50% { transform: scaleY(1.35); }
+    }
+    .live-active-wave {
+      animation: liveWavePulse 0.9s ease-in-out infinite alternate;
+    }
+
+    /* Toast Notification Animation */
+    .toast-anim {
+      transform: translateY(16px) scale(0.94);
+      opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+    }
+    .toast-anim.show {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    /* Reorder card flash highlight */
+    @keyframes cardSwapGlow {
+      0% {
+        box-shadow: 0 0 0 1.5px rgba(243, 242, 238, 0.45), 0 0 24px rgba(243, 242, 238, 0.15);
+        transform: scale(1.008);
+      }
+      100% {
+        box-shadow: 0 0 0 1px rgba(34, 34, 38, 1), 0 0 0 rgba(243, 242, 238, 0);
+        transform: scale(1);
+      }
+    }
+    .card-swapped {
+      animation: cardSwapGlow 0.46s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Memory row remove animation with height collapse */
+    .memory-row {
+      transition: opacity 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+                  max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+                  padding 0.28s ease,
+                  margin 0.28s ease;
+      max-height: 90px;
+    }
+    .memory-row.removing {
+      opacity: 0;
+      transform: translateX(24px) scale(0.96);
+      max-height: 0px !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      overflow: hidden;
+      border-color: transparent !important;
+    }
+
+    /* PC Control switch spring transitions */
+    .toggle-spring {
+      transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+    }
+
+    /* Bottom dock floating glow upon focus */
+    .chat-dock-glow {
+      box-shadow: 0 12px 36px rgba(0,0,0,0.7), 0 0 0 0 rgba(243,242,238,0);
+      transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    }
+    .chat-dock-glow:focus-within {
+      border-color: #3e3e48;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 28px rgba(243, 242, 238, 0.06);
+    }
+  
+    /* --- STITCH 100 EMOTIONS KEYFRAMES --- */
+    .tear-drop {
+
+      position: absolute;
+
+      top: 100%;
+
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      width: 4px;
+
+      height: 8px;
+
+      border-radius: 9999px;
+
+      background: rgba(147, 197, 253, 0.85);
+
+      box-shadow: 0 0 8px #93c5fd;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+    }
+
+    .anim-crying .tear-drop {
+
+      animation: tearFalling 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+    }
+
+    @keyframes tearFalling {
+
+      0% { transform: translate(-50%, 2px) scale(0.6); opacity: 0; }
+
+      20% { opacity: 0.9; }
+
+      80% { opacity: 0.7; }
+
+      100% { transform: translate(-50%, 30px) scale(1.1); opacity: 0; }
+
+    }
+
+
+
+    /* ================= KEYFRAMES DE ANIMACIONES ESPECIALES ================= */
+
+    @keyframes bounceElastic {
+
+      0%, 100% { transform: translateY(0) scaleY(1) scaleX(1); }
+
+      30% { transform: translateY(-12px) scaleY(1.15) scaleX(0.9); }
+
+      50% { transform: translateY(0) scaleY(0.85) scaleX(1.15); }
+
+      70% { transform: translateY(-4px) scaleY(1.05) scaleX(0.95); }
+
+    }
+
+    .anim-bounce { animation: bounceElastic 0.85s ease infinite; }
+
+
+
+    @keyframes laughterShake {
+
+      0%, 100% { transform: translateY(0) scaleY(0.7); }
+
+      25% { transform: translateY(-5px) scaleY(0.78); }
+
+      50% { transform: translateY(2px) scaleY(0.65); }
+
+      75% { transform: translateY(-4px) scaleY(0.75); }
+
+    }
+
+    .anim-laugh { animation: laughterShake 0.3s ease infinite; }
+
+
+
+    @keyframes rapidVibe {
+
+      0%, 100% { transform: translate(0, 0); }
+
+      20% { transform: translate(-1.5px, 1px); }
+
+      40% { transform: translate(1.5px, -1px); }
+
+      60% { transform: translate(-1px, -1.5px); }
+
+      80% { transform: translate(1px, 1.5px); }
+
+    }
+
+    .anim-vibe { animation: rapidVibe 0.08s linear infinite; }
+
+
+
+    @keyframes glitchJitter {
+
+      0%, 100% { transform: translate(0, 0) skew(0deg); filter: drop-shadow(0 0 10px #f43f5e); }
+
+      20% { transform: translate(-4px, 2px) skew(-6deg); filter: drop-shadow(-3px 0 12px #38bdf8); }
+
+      40% { transform: translate(3px, -2px) skew(4deg); filter: drop-shadow(3px 0 12px #ec4899); }
+
+      60% { transform: translate(-2px, -3px) skew(-3deg); filter: drop-shadow(0 0 16px #a855f7); }
+
+      80% { transform: translate(4px, 1px) skew(5deg); filter: drop-shadow(-2px 0 10px #22c55e); }
+
+    }
+
+    .anim-glitch { animation: glitchJitter 0.18s steps(2, start) infinite; }
+
+
+
+    @keyframes grooveBob {
+
+      0%, 100% { transform: translateY(0) scale(1, 1); }
+
+      35% { transform: translateY(-10px) scale(0.92, 1.14); }
+
+      50% { transform: translateY(3px) scale(1.14, 0.88); }
+
+      70% { transform: translateY(-3px) scale(0.98, 1.04); }
+
+    }
+
+    .anim-groove { animation: grooveBob 0.54s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite; }
+
+
+
+    @keyframes scanMotion {
+
+      0%, 100% { transform: translateX(-16px); }
+
+      50% { transform: translateX(16px); }
+
+    }
+
+    .anim-scan { animation: scanMotion 1.4s ease-in-out infinite alternate; }
+
+
+
+    @keyframes readingSweep {
+
+      0% { transform: translateX(-18px); }
+
+      70% { transform: translateX(18px); }
+
+      85% { transform: translateX(18px); opacity: 0.7; }
+
+      100% { transform: translateX(-18px); opacity: 1; }
+
+    }
+
+    .anim-reading { animation: readingSweep 1.6s ease-in-out infinite; }
+
+
+
+    @keyframes headShake {
+
+      0%, 100% { transform: translateX(0); }
+
+      20% { transform: translateX(-10px); }
+
+      40% { transform: translateX(9px); }
+
+      60% { transform: translateX(-6px); }
+
+      80% { transform: translateX(5px); }
+
+    }
+
+    .anim-headshake { animation: headShake 0.45s ease-in-out infinite; }
+
+
+
+    @keyframes heartBeatPulse {
+
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 16px rgba(244,114,182,0.3)); }
+
+      15% { transform: scale(1.16); filter: drop-shadow(0 0 28px rgba(244,114,182,0.7)); }
+
+      30% { transform: scale(1.02); }
+
+      45% { transform: scale(1.12); filter: drop-shadow(0 0 24px rgba(244,114,182,0.6)); }
+
+    }
+
+    .anim-heartbeat { animation: heartBeatPulse 1.1s ease infinite; }
+
+
+
+    @keyframes zenBreathe {
+
+      0%, 100% { transform: scaleY(0.8) scaleX(0.95); opacity: 0.75; }
+
+      50% { transform: scaleY(1.08) scaleX(1.04); opacity: 1; }
+
+    }
+
+    .anim-zen { animation: zenBreathe 4s ease-in-out infinite; }
+
+
+
+    @keyframes paranoidLook {
+
+      0%, 100% { transform: translateX(-18px); }
+
+      20% { transform: translateX(-18px); }
+
+      30% { transform: translateX(18px); }
+
+      60% { transform: translateX(18px); }
+
+      70% { transform: translateX(0); }
+
+      85% { transform: translateY(-6px); }
+
+    }
+
+    .anim-paranoid { animation: paranoidLook 1.8s steps(4) infinite; }
+
+
+
+    @keyframes dizzySpin {
+
+      0% { transform: translate(0, 0) rotate(0deg); }
+
+      25% { transform: translate(4px, -4px) rotate(90deg); }
+
+      50% { transform: translate(0, -6px) rotate(180deg); }
+
+      75% { transform: translate(-4px, -2px) rotate(270deg); }
+
+      100% { transform: translate(0, 0) rotate(360deg); }
+
+    }
+
+    .anim-dizzy-left { animation: dizzySpin 1.4s linear infinite; }
+
+    .anim-dizzy-right { animation: dizzySpin 1.4s linear infinite reverse; }
+
+
+
+    @keyframes footTap {
+
+      0%, 100% { transform: translateY(0); }
+
+      50% { transform: translateY(-7px); }
+
+    }
+
+    .anim-tap-right { animation: footTap 0.38s ease infinite; }
+
+
+
+    @keyframes alternatingHopL {
+
+      0%, 100% { transform: translateY(0); }
+
+      50% { transform: translateY(-9px); }
+
+    }
+
+    @keyframes alternatingHopR {
+
+      0%, 100% { transform: translateY(-9px); }
+
+      50% { transform: translateY(0); }
+
+    }
+
+    .anim-hop-l { animation: alternatingHopL 0.65s ease infinite; }
+
+    .anim-hop-r { animation: alternatingHopR 0.65s ease infinite; }
+
+
+
+    @keyframes partyOscillate {
+
+      0%, 100% { transform: translateY(0) rotate(-14deg); }
+
+      50% { transform: translateY(-12px) rotate(14deg); }
+
+    }
+
+    .anim-party { animation: partyOscillate 0.5s ease-in-out infinite alternate; }
+
+
+
+    @keyframes yawnStretch {
+
+      0%, 100% { transform: scaleY(0.3) scaleX(1.3); }
+
+      40% { transform: scaleY(1.4) scaleX(0.85); }
+
+      70% { transform: scaleY(1.2) scaleX(0.9); }
+
+      90% { transform: scaleY(0.2) scaleX(1.4); }
+
+    }
+
+    .anim-yawn { animation: yawnStretch 2.8s ease-in-out infinite; }
+
+
+
+    @keyframes rechargingFill {
+
+      0% { box-shadow: inset 0 -6px 0 0 #10b981, 0 0 12px #10b981; }
+
+      50% { box-shadow: inset 0 -28px 0 0 #10b981, 0 0 24px #10b981; }
+
+      100% { box-shadow: inset 0 -48px 0 0 #10b981, 0 0 32px #10b981; }
+
+    }
+
+    .anim-recharge { animation: rechargingFill 1.8s ease-in-out infinite alternate; }
+
+    /* ========================================================
+       MODO LIVE vs MODO CHAT — FLUID COMPOSITOR TRANSITIONS
+       ======================================================== */
+    #avatar-section {
+      /* Identity transformations prevent stacking-context shifts on state change */
+      translate: 0px 0px;
+      scale: 1;
+      z-index: 25;
+      transform-origin: center center;
+      transition:
+        translate 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+        scale 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+      @media (prefers-reduced-motion: reduce) {
+        transition-duration: 0.2s;
+      }
+    }
+
+    #messages-container {
+      opacity: 1;
+      translate: 0px 0px;
+      scale: 1;
+      transition:
+        opacity 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+        translate 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+        scale 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        transition-duration: 0.18s;
+      }
+    }
+
+    footer#chat-footer {
+      opacity: 1;
+      translate: 0px 0px;
+      scale: 1;
+      transition:
+        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        translate 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        scale 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        transition-duration: 0.18s;
+      }
+    }
+
+    /* En Modo Live: la cara de Rowan se agranda en el centro y el chat desaparece con fluidez */
+    body.live-mode-active #avatar-section {
+      translate: 0px calc(45vh - 148px);
+      scale: 2.08;
+      @media (prefers-reduced-motion: reduce) {
+        scale: 1.75;
+      }
+    }
+
+    body.live-mode-active #messages-container {
+      opacity: 0;
+      translate: 0px 44px;
+      scale: 0.96;
+      pointer-events: none;
+      user-select: none;
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        scale: 1;
+      }
+    }
+
+    body.live-mode-active footer#chat-footer {
+      opacity: 0;
+      translate: 0px 36px;
+      scale: 0.95;
+      pointer-events: none;
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        scale: 1;
+      }
+    }
+
+    body.live-mode-active .listening .eye-soundwave-ring {
+      border-color: rgba(52, 211, 153, 0.32);
+    }
+
+    /* Subtítulo inferior del usuario ("abajito") y controles de Modo Live */
+    .live-discrete-anim {
+      display: flex;
+      opacity: 1;
+      translate: 0px 0px;
+      scale: 1;
+      transition:
+        display 0.38s,
+        opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        translate 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        scale 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-behavior: allow-discrete;
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        scale: 1;
+        transition-duration: 0.15s;
+      }
+    }
+
+    @starting-style {
+      .live-discrete-anim {
+        opacity: 0;
+        translate: 0px 18px;
+        scale: 0.96;
+      }
+    }
+
+    .live-discrete-anim:where([hidden], [data-closing]) {
+      opacity: 0;
+      translate: 0px 18px;
+      scale: 0.96;
+      pointer-events: none;
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        scale: 1;
+      }
+    }
+
+    .live-discrete-anim[hidden] {
+      display: none;
+    }
+  </style>
+<link rel="stylesheet" href="fonts.css"/></head>
+<body class="bg-[#0a0a0c] text-[#e5e5e5] h-screen w-screen flex flex-col justify-between items-center relative overflow-hidden select-none">
+<!-- SUBTLE VIGNETTE BACKGROUND -->
+<div class="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_rgba(255,255,255,0.015)_0%,_transparent_70%)] z-0"></div>
+<!-- TOP BAR: Status & Controls -->
+<header class="w-full flex justify-between items-center px-8 py-5 z-20 shrink-0 border-b border-[#18181c]/70 backdrop-blur-md transition-colors duration-200">
+<!-- Brand & System State -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 group cursor-pointer" title="Estado de Rowan">
+<span class="mono text-[11px] font-semibold tracking-wider text-[#8e8e93] group-hover:text-[#f3f2ee] transition-colors">ROWAN</span>
+<span class="text-[#2c2c30] font-mono text-[11px]">/</span>
+<div class="flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#121214] border border-[#202024] shadow-sm hover:border-[#303036] transition-all">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 transition-all duration-300 shadow-[0_0_8px_rgba(52,211,153,0.65)]" id="status-dot"></span>
+<span class="mono text-[10px] tracking-widest uppercase text-[#888] font-medium transition-colors" id="status-text">LISTO</span>
+</div>
+</div>
+<!-- Active Emotion Pill Badge -->
+<div class="hidden items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#18181d] border border-[#2a2a32] text-[#d4d4d8] shadow-sm transition-all" id="current-emotion-badge" data-legacy-id="emotion-pill">
+<span class="text-[11px]" id="emotion-pill-icon">✨</span>
+<span class="mono text-[9.5px] uppercase tracking-wider font-semibold text-[#a1a1aa]" id="emotion-pill-name">GREETING</span>
+</div>
+<!-- Dynamic 'EN VIVO' Status Badge (1-clic para salir de Modo Live) -->
+<button class="hidden items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)] animate-pulse cursor-pointer transition-colors" id="live-header-badge" title="Clic para volver al Modo Chat" type="button">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.8)]"></span>
+<span class="mono text-[10px] font-semibold tracking-widest uppercase">EN VIVO</span>
+</button>
+</div>
+<!-- Right Actions: Emotion Tester, Voice Mute & Settings -->
+<div class="flex items-center gap-2">
+<!-- Emotion Dropdown Menu Trigger -->
+<div class="relative">
+
+<button class="px-3 py-1.5 text-[#d4d4d8] hover:text-white bg-[#141418] hover:bg-[#1a1a20] border border-[#26262e] hover:border-[#383842] rounded-xl transition-all duration-150 flex items-center gap-1.5 cursor-pointer text-[11.5px] mono font-medium shadow-sm" id="emotions-menu-btn" title="Explorador de 100 Expresiones Emocionales">
+
+<span class="text-[14px]">🎭</span>
+
+<span class="font-semibold">100 Emociones</span>
+
+<span class="material-symbols-outlined text-[15px] text-[#71717a] transition-transform duration-200" id="emotions-caret">expand_more</span>
+
+</button>
+
+<!-- Popover Desplegable con Buscador (100 Emociones completas en 7 Familias) -->
+
+<div class="hidden absolute right-0 mt-2.5 w-[420px] bg-[#111115]/98 border border-[#26262e] rounded-2xl p-3.5 shadow-[0_20px_60px_rgba(0,0,0,0.95)] z-50 flex flex-col gap-3 backdrop-blur-2xl" id="emotions-popover">
+
+<div class="flex flex-col gap-2 border-b border-[#1c1c22] pb-2.5">
+
+<div class="flex items-center justify-between">
+
+<span class="text-[12.5px] font-semibold text-[#f3f2ee] tracking-tight">Catálogo de 100 Emociones</span>
+
+<span class="mono text-[9px] px-2 py-0.5 rounded-full bg-[#1b1b22] text-[#8e8e93] border border-[#282832]">v1.2 Fiel &amp; Real</span>
+
+</div>
+
+<!-- Input Buscador -->
+
+<div class="relative flex items-center">
+
+<span class="material-symbols-outlined absolute left-2.5 text-[16px] text-[#71717a]">search</span>
+
+<input autocomplete="off" class="w-full bg-[#16161c] border border-[#24242c] focus:border-[#444] rounded-xl pl-8 pr-3 py-1.5 text-[11.5px] text-[#f3f2ee] placeholder-[#60606a] focus:outline-none transition-all mono" id="emotion-search-input" placeholder="Buscar entre las 100 emociones..." type="text"/>
+
+</div>
+
+</div>
+
+<!-- Accesos Rápidos Clave (Las familias y estados estelares) -->
+
+<div class="flex flex-col gap-1.5 border-b border-[#1c1c22] pb-2.5">
+
+<span class="mono text-[9px] uppercase tracking-wider text-[#71717a] font-medium">Accesos Rápidos Estelares</span>
+
+<div class="flex flex-wrap gap-1.5">
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-sky-300 border border-sky-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.setEmotion('thinking'); toggleEmotionPopover(false);">
+
+<span>🌊</span> Olitas (thinking)
+
+              </button>
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-amber-300 border border-amber-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.setEmotion('happy'); toggleEmotionPopover(false);">
+
+<span>😊</span> Happy (⌒ ⌒)
+
+              </button>
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-yellow-300 border border-yellow-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.setEmotion('ecstatic'); toggleEmotionPopover(false);">
+
+<span>✨</span> Chevrons (^ ^)
+
+              </button>
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-rose-300 border border-rose-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.setEmotion('puppy_eyes'); toggleEmotionPopover(false);">
+
+<span>🥺</span> Puppy Eyes (\ /)
+
+              </button>
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-cyan-300 border border-cyan-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.setEmotion('standby'); toggleEmotionPopover(false);">
+
+<span>⚪</span> Standby (— —)
+
+              </button>
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-purple-300 border border-purple-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.triggerMusicReaction(); toggleEmotionPopover(false);">
+
+<span>🎵</span> Groove (~110 BPM)
+
+              </button>
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-emerald-300 border border-emerald-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.setEmotion('eureka'); toggleEmotionPopover(false);">
+
+<span>💡</span> Eureka
+
+              </button>
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-fuchsia-300 border border-fuchsia-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.setEmotion('glitch'); toggleEmotionPopover(false);">
+
+<span>⚡</span> Glitch
+
+              </button>
+
+<button class="px-2 py-1 rounded-lg bg-[#181820] hover:bg-[#23232c] text-blue-300 border border-blue-500/25 text-[10.5px] mono flex items-center gap-1 cursor-pointer" onclick="window.setEmotion('crying'); toggleEmotionPopover(false);">
+
+<span>💧</span> Crying
+
+              </button>
+
+</div>
+
+</div>
+
+<!-- Catálogo Scrollable (100 Emociones Exactas) -->
+
+<div class="max-h-[320px] overflow-y-auto pr-1 flex flex-col gap-3" id="emotions-catalog-container"></div>
+
+<div class="pt-2 border-t border-[#1c1c22] flex items-center justify-between text-[10px] text-[#71717a] mono">
+
+<span>Total: <strong class="text-[#e4e4e7]" id="emotions-count-label">100</strong> expresiones</span>
+
+<span class="text-[#888]">1-clic para ejecutar</span>
+
+</div>
+
+</div>
+
+</div>
+        <button class="relative p-2 text-[#71717A] hover:text-[#f3f2ee] hover:bg-[#151518] border border-transparent hover:border-[#222226] rounded-xl transition-all duration-150 transform hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer group" id="toggle-audio-btn" title="Voz del asistente">
+<span class="material-symbols-outlined text-[19px] transition-transform duration-200 group-hover:rotate-[-6deg]" id="audio-icon">volume_up</span>
+<span class="absolute top-1.5 right-1.5 w-1 h-1 rounded-full bg-emerald-400 opacity-0 transition-opacity duration-300" id="audio-wave-dot"></span>
+</button>
+<!-- Hidden alias button for #mute-btn contract compatibility -->
+<button class="hidden" id="mute-btn" type="button"></button>
+<!-- Settings Trigger -->
+<button class="p-2 text-[#71717A] hover:text-[#f3f2ee] hover:bg-[#151518] border border-transparent hover:border-[#222226] rounded-xl transition-all duration-150 transform hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer group" id="open-settings-btn" title="Ajustes (v1.0)">
+<span class="material-symbols-outlined text-[19px] transition-transform duration-300 group-hover:rotate-45">settings</span>
+</button>
+<!-- Pop-out Full Window Button (visible in mini-chat inside Dynamic Island) -->
+<button class="hidden p-2 text-[#a1a1aa] hover:text-[#f3f2ee] hover:bg-[#151518] border border-transparent hover:border-[#222226] rounded-xl transition-all duration-150 transform hover:scale-105 active:scale-95 items-center justify-center cursor-pointer group" id="open-full-window-btn" title="Abrir ventana grande de Rowan" type="button">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+<polyline points="15 3 21 3 21 9"></polyline>
+<line x1="10" y1="14" x2="21" y2="3"></line>
+</svg>
+</button>
+</div>
+</header>
+<!-- MAIN STAGE: Eyes & Message Stream -->
+<main class="w-full flex-1 flex flex-col items-center justify-between px-6 pt-6 pb-28 relative overflow-hidden max-w-4xl z-10">
+<!-- AVATAR CONTAINER (Strictly isolated fixed-height container preventing layout shifts/jitter) -->
+<div class="w-full h-28 shrink-0 flex flex-col items-center justify-center relative overflow-visible pointer-events-none" id="avatar-section">
+<div class="relative w-48 h-20 flex items-center justify-center pointer-events-auto" id="eyes-container">
+<!-- Atmospheric ambient aura -->
+<div class="ambient-glow" id="ambient-aura"></div>
+<!-- Soundwave Ripple Ring for voice activity -->
+<div class="eye-soundwave-ring"></div>
+<!-- Eye Socket Tracked Wrapper (Accelerated with translate3d) -->
+<div class="flex items-center justify-center gap-6 p-4 select-none cursor-default will-change-transform transition-[filter] duration-300" id="eye-socket">
+<!-- Sensor micro-dot Izquierdo (Standby / Scanning) -->
+          <div class="sensor-dot absolute -left-4 top-1/2 -translate-y-1/2" id="sensor-dot-left"></div>
+          <!-- Left Eye con lágrimas -->
+          <div class="rowan-eye" id="eye-left">
+            <div class="tear-drop" id="tear-left"></div>
+          </div>
+          <!-- Right Eye con lágrimas -->
+          <div class="rowan-eye" id="eye-right">
+            <div class="tear-drop" id="tear-right"></div>
+          </div>
+          <!-- Sensor micro-dot Derecho (Standby / Scanning) -->
+          <div class="sensor-dot absolute -right-4 top-1/2 -translate-y-1/2" id="sensor-dot-right"></div>
+        </div>
+      </div>
+      <!-- Etiqueta Mental 'THINKING' con diseño de alta precisión -->
+      <div class="hidden items-center justify-center gap-2 mt-2 px-3 py-0.5 rounded-full bg-[#0d0d12]/90 border border-cyan-500/30 text-cyan-300 mono text-[9.5px] tracking-[0.22em] uppercase shadow-[0_0_15px_rgba(6,182,212,0.22)] select-none transition-all duration-300" id="thinking-tag">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span>Thinking</span>
+        <span class="w-7 h-[1px] bg-gradient-to-r from-cyan-400/50 to-transparent"></span>
+      </div>
+    </div>
+<!-- MESSAGES STREAM (Isolated scroll and stable geometry) -->
+<div class="w-full flex-1 min-h-0 overflow-y-auto px-4 py-3 flex flex-col items-center gap-5 scroll-smooth" id="messages-container">
+<div class="w-full max-w-2xl flex flex-col gap-5 shrink-0" id="messages-list">
+<!-- Default Welcome Message (Assistant: Left-aligned) -->
+<div class="w-full flex justify-start items-start gap-3.5 group msg-entrance">
+<div class="w-6 h-6 rounded-full bg-[#16161a] border border-[#26262c] flex items-center justify-center shrink-0 mt-0.5 shadow-sm group-hover:border-[#383842] transition-colors">
+<span class="mono text-[11px] text-[#f3f2ee] font-medium">R</span>
+</div>
+<div class="flex flex-col gap-1 max-w-xl">
+<div class="flex items-center gap-2">
+<span class="mono text-[10px] text-[#52525B] font-medium uppercase tracking-wider">ROWAN</span>
+<span class="mono text-[9px] text-[#3f3f46]">AHORA</span>
+</div>
+<p class="text-[13.5px] text-[#d4d4d8] leading-relaxed font-normal selection:bg-[#27272a]">
+              Hola. Soy Rowan. He calibrado mi sistema de expresiones emocionales orgánicas, streaming y control total de tu equipo. ¿Qué tenemos entre manos hoy?
+            </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FLOATING INPUT BAR (Bottom Dock) -->
+<footer class="fixed bottom-6 w-full max-w-2xl px-4 z-20 pointer-events-auto" id="chat-footer">
+<div class="relative bg-[#111114]/95 backdrop-blur-xl border border-[#202024] rounded-2xl p-1.5 chat-dock-glow flex items-center gap-2">
+<!-- Voice Input Button (Mic) -->
+<div class="relative flex items-center justify-center">
+<button class="relative p-2.5 text-[#71717A] hover:text-[#f3f2ee] hover:bg-[#1a1a1e] rounded-xl transition-all duration-150 transform hover:scale-105 active:scale-95 flex items-center justify-center shrink-0 cursor-pointer overflow-visible" id="mic-btn" title="Hablar con Rowan">
+<span class="material-symbols-outlined text-[20px] transition-colors duration-200" id="mic-icon">mic</span>
+<div class="hidden mic-ripple-ring" id="mic-pulse"></div>
+</button>
+</div>
+<!-- Live Mode Toggle Button -->
+<div class="relative flex items-center justify-center">
+<button class="relative p-2.5 text-[#71717A] hover:text-[#f3f2ee] hover:bg-[#1a1a1e] border border-transparent rounded-xl transition-all duration-150 transform hover:scale-105 active:scale-95 flex items-center justify-center shrink-0 cursor-pointer overflow-visible group" id="toggle-live-btn" title="Activar/Desactivar Modo en Vivo">
+<span class="material-symbols-outlined text-[20px] transition-all duration-200" id="live-icon">graphic_eq</span>
+<div class="hidden live-ripple-ring" id="live-pulse"></div>
+</button>
+</div>
+<!-- Chat Input Field -->
+<input autocomplete="off" class="flex-1 bg-transparent border-none text-[13.5px] text-[#f3f2ee] placeholder-[#52525b] focus:outline-none px-2 py-2 selection:bg-[#27272a] transition-all duration-200" id="chat-input" placeholder="Escribe una instrucción o pregunta a Rowan..." type="text"/>
+<!-- Send Button with Micro-bounce elevation -->
+<button class="p-2.5 bg-[#f3f2ee] text-[#0c0c0c] hover:bg-white active:bg-[#e4e4e0] rounded-xl transition-all duration-200 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 active:translate-y-0 flex items-center justify-center shrink-0 disabled:opacity-30 disabled:cursor-not-allowed shadow-sm hover:shadow-[0_4px_16px_rgba(243,242,238,0.35)] cursor-pointer group" id="send-btn" title="Enviar mensaje">
+<span class="material-symbols-outlined text-[18px] font-semibold transition-transform duration-150 group-hover:-translate-y-0.5 group-active:translate-y-0">arrow_upward</span>
+</button>
+</div>
+</footer>
+<!-- LIVE MODE BOTTOM STAGE: Lo que dice el usuario ("abajito") + Salir a Modo Chat -->
+<div class="live-discrete-anim fixed bottom-6 inset-x-0 z-30 flex flex-col items-center gap-3 px-6 pointer-events-none" hidden="" id="live-stage-bottom">
+<div aria-atomic="true" aria-live="polite" class="live-discrete-anim max-w-xl w-fit px-4 py-2.5 rounded-2xl bg-[#111318]/90 backdrop-blur-xl border border-emerald-500/25 shadow-[0_12px_40px_rgba(0,0,0,0.8)] flex items-center gap-2.5 text-center pointer-events-none" hidden="" id="live-user-caption">
+<span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)] shrink-0 animate-pulse" id="live-caption-dot"></span>
+<p class="text-[13.5px] text-[#f3f2ee]/95 font-normal leading-snug tracking-wide" id="live-user-caption-text"></p>
+</div>
+<button class="pointer-events-auto px-3.5 py-1.5 rounded-full bg-[#121216]/90 hover:bg-[#1a1a22] border border-[#26262f] hover:border-emerald-500/40 text-[#a1a1aa] hover:text-[#f3f2ee] shadow-lg backdrop-blur-md transition-all duration-200 flex items-center gap-2 cursor-pointer group" id="exit-live-pill-btn" title="Volver al Modo Chat (Esc / Insert)" type="button">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.85)] animate-pulse"></span>
+<span class="mono text-[10.5px] uppercase tracking-widest font-medium">Modo Live · Volver al Chat</span>
+<span class="material-symbols-outlined text-[14px] text-[#71717a] group-hover:text-rose-400 transition-colors">call_end</span>
+</button>
+</div>
+<!-- FLOATING TOAST NOTIFICATION -->
+<div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+<div class="toast-anim px-4 py-2 rounded-xl bg-[#16161a] border border-[#2a2a32] shadow-2xl flex items-center gap-2.5 backdrop-blur-md" id="app-toast">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400" id="toast-dot"></span>
+<span class="text-[12px] font-medium text-[#f3f2ee] tracking-wide" id="toast-text">Notificación</span>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- MODAL DE AJUSTES (v1.1)                                  -->
+<!-- ======================================================== -->
+<div class="hidden fixed inset-0 z-50 items-center justify-center p-4" id="settings-modal">
+<!-- Dark Backdrop with smooth blur -->
+<div class="modal-backdrop-anim absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer" id="settings-backdrop"></div>
+<!-- Modal Card (Scale-95 -> Scale-100 cinematic) -->
+<div class="modal-card-anim relative w-full max-w-xl bg-[#111114] border border-[#222228] rounded-2xl shadow-[0_24px_64px_rgba(0,0,0,0.85)] flex flex-col max-h-[85vh] overflow-hidden z-10">
+<!-- Modal Header -->
+<div class="px-6 py-4 border-b border-[#1c1c22] flex items-center justify-between shrink-0 bg-[#141418]/60">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-[#a1a1aa]">tune</span>
+<h2 class="text-[13.5px] font-medium text-[#f3f2ee] tracking-tight">Ajustes del Sistema</h2>
+<span class="mono text-[10px] bg-[#1a1a1f] border border-[#272730] px-2 py-0.5 rounded text-[#71717a]">v1.0</span>
+</div>
+<button class="p-1.5 text-[#71717A] hover:text-[#f3f2ee] hover:bg-[#1c1c22] rounded-lg transition-all duration-150 transform hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer" id="close-settings-btn">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Navigation Tabs with Gliding Pill Indicator -->
+<div class="px-6 border-b border-[#1c1c22] relative flex items-center gap-2 shrink-0 bg-[#0e0e11] overflow-x-auto">
+<!-- Gliding active pill background -->
+<div class="absolute bottom-0 h-0.5 bg-[#f3f2ee] transition-all duration-250 ease-out" id="tab-indicator" style="left: 24px; width: 44px;"></div>
+<button class="tab-trigger relative py-3 px-2 text-[12.5px] font-medium transition-colors text-[#f3f2ee] cursor-pointer flex items-center shrink-0" data-tab="profile" id="tab-btn-profile" type="button">
+          Perfil
+        </button>
+<button class="tab-trigger relative py-3 px-2 text-[12.5px] font-medium transition-colors text-[#71717a] hover:text-[#d4d4d8] cursor-pointer flex items-center shrink-0" data-tab="models" id="tab-btn-models" type="button">
+          Modelos &amp; APIs
+        </button>
+<button class="tab-trigger relative py-3 px-2 text-[12.5px] font-medium transition-colors text-[#71717a] hover:text-[#d4d4d8] cursor-pointer flex items-center shrink-0" data-tab="voice" id="tab-btn-voice" type="button">
+          Voz
+        </button>
+<button class="tab-trigger relative py-3 px-2 text-[12.5px] font-medium transition-colors text-[#71717a] hover:text-[#d4d4d8] cursor-pointer flex items-center shrink-0" data-tab="pccontrol" id="tab-btn-pccontrol" type="button">
+          Control de PC
+        </button>
+<button class="tab-trigger relative py-3 px-2 text-[12.5px] font-medium transition-colors text-[#71717a] hover:text-[#d4d4d8] flex items-center gap-1.5 cursor-pointer shrink-0" data-tab="memory" id="tab-btn-memory" type="button">
+<span>Memoria</span>
+<span class="mono text-[9px] px-1.5 py-0.2 rounded-full bg-[#18181d] text-[#a1a1aa] border border-[#26262e] transition-transform duration-200 group-hover:scale-105" id="memories-badge">0</span>
+</button>
+<button class="tab-trigger relative py-3 px-2 text-[12.5px] text-[#71717a] cursor-pointer shrink-0" data-tab="help" id="tab-btn-help" type="button">Ayuda</button>
+</div>
+<!-- Tabs Content (Scrollable) -->
+<div class="p-6 overflow-y-auto flex-1 flex flex-col gap-6">
+<section id="tab-help" class="tab-panel hidden product-help">
+<h3>Tu Rowan, paso a paso</h3><p>Conecta una IA para conversar. Elige una guía; puedes cambiar de proveedor después. Las pruebas hacen una petición breve y pueden consumir cuota. Nunca compartas tu clave por el chat.</p>
+<div id="help-providers" class="help-providers"></div>
+<h3 id="help-title"></h3><p id="help-tag"></p>
+<div class="help-controls"><button id="help-site">Abrir proveedor</button><button id="help-docs">Guía oficial</button><button id="help-watch">Ver video paso a paso</button><button id="help-official-video" hidden>Video oficial de Google</button></div>
+<video id="help-video" controls preload="none" hidden></video>
+<div class="help-step"><strong id="help-progress"></strong><div id="help-instruction"></div></div>
+<div class="help-controls"><button id="help-prev">Anterior</button><button id="help-next">Siguiente</button></div>
+<label for="help-key">Tu API key</label><input id="help-key" type="password" autocomplete="off" placeholder="Pega tu clave privada aquí"/>
+<input id="help-model" aria-label="Identificador del modelo NVIDIA" placeholder="Identificador del modelo NVIDIA" hidden/>
+<button id="help-connect">Probar y guardar</button><p id="help-result" role="status"></p>
+<details><summary>¿Qué puedo hacer con Rowan e Island?</summary><p>Escribe en la barra y envía con la flecha. Micrófono dicta una frase; ondas activa Live. Altavoz controla la voz. En Island, la flecha superior del chat abre Rowan grande y la papelera borra la conversación visible. La memoria se administra en Ajustes → Memoria.</p><p>El notch se expande al pasar el cursor. Usa la chincheta para mantener el menú abierto. Calendario, checklist, portapapeles, shelf, clima y herramientas funcionan desde sus pestañas.</p><button id="help-explain">Rowan, enséñame tu interfaz</button><p>Este último botón necesita una IA conectada. Las guías y videos de Ayuda funcionan sin API.</p></details>
+<details><summary>Si algo no conecta</summary><p>401: revisa la clave. 403: revisa permisos y acceso al modelo. 429: espera o revisa la cuota. Un modelo no disponible puede requerir otro identificador. Para dictar, permite el micrófono en Windows. OCR necesita un idioma de reconocimiento instalado. En el primer dictado puede descargarse el modelo de voz local.</p></details>
+<p>Versión de desarrollo 1.0. Puedes volver a esta guía desde Ajustes → Ayuda.</p><button id="help-quit">Cerrar la aplicación</button>
+</section>
+
+<!-- ================= TAB: PERFIL ================= -->
+<div class="tab-panel flex flex-col gap-5 transition-opacity duration-200" id="tab-profile">
+<div class="flex flex-col gap-1.5">
+<label class="text-[12px] font-medium text-[#d4d4d8]" for="user-name-input">Tu Nombre</label>
+<p class="text-[11.5px] text-[#71717a] leading-relaxed">
+              Define cómo Rowan se referirá a ti en sus respuestas y recordatorios.
+            </p>
+<div class="relative mt-1">
+<input class="w-full bg-[#16161a] border border-[#26262e] focus:border-[#444] rounded-lg px-3.5 py-2.5 text-[13px] text-[#f3f2ee] placeholder-[#48484f] focus:outline-none transition-all focus:ring-1 focus:ring-[#f3f2ee]/15" id="user-name-input" placeholder="Tu nombre" type="text"/>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-[#151518] border border-[#222228] flex items-start gap-3 hover:border-[#2e2e36] transition-colors">
+<span class="material-symbols-outlined text-[18px] text-[#71717a] mt-0.5">neurology</span>
+<div class="flex flex-col gap-1 text-[11.5px]">
+<span class="text-[#e4e4e7] font-medium">Personalidad y Expresiones de Rowan</span>
+<p class="text-[#71717a] leading-normal">
+                Minimalista, conciso y técnico. Reacciona orgánicamente a tus mensajes con 10 emociones morphing y vibración al ritmo de la música.
+              </p>
+</div>
+</div>
+</div>
+<!-- ================= TAB: MODELOS & APIS ================= -->
+<div class="tab-panel hidden flex flex-col gap-5 transition-opacity duration-200" id="tab-models">
+<!-- Providers Priority Notice -->
+<div class="flex items-center justify-between">
+<p class="text-[11.5px] text-[#71717a] leading-relaxed">
+              Reordena los proveedores según tu prioridad. Rowan intentará consultar en cascada respetando este orden.
+            </p>
+</div>
+<!-- Providers Container: 3 Reorderable Cards -->
+<div class="flex flex-col gap-3.5" id="providers-container">
+<!-- Card 1: NVIDIA NIM -->
+<div class="provider-card border border-[#222228] rounded-xl overflow-hidden bg-[#151519]/90 flex flex-col transition-all duration-300 ease-out hover:border-[#2f2f38]" data-provider="nvidia">
+<div class="px-4 py-3 border-b border-[#1f1f26] bg-[#131317]/90 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="text-[12.5px] font-medium text-[#f3f2ee]">NVIDIA NIM</span>
+<span class="provider-badge mono text-[9.5px] px-2 py-0.5 rounded-full font-medium tracking-wide bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 transition-all duration-300">Prioridad 1 (Principal)</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="btn-move-up p-1.5 text-[#71717a] hover:text-[#f3f2ee] hover:bg-[#1f1f26] rounded transition-transform active:scale-90 cursor-pointer" title="Subir prioridad" type="button">
+<span class="material-symbols-outlined text-[15px]">arrow_upward</span>
+</button>
+<button class="btn-move-down p-1.5 text-[#71717a] hover:text-[#f3f2ee] hover:bg-[#1f1f26] rounded transition-transform active:scale-90 cursor-pointer" title="Bajar prioridad" type="button">
+<span class="material-symbols-outlined text-[15px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<label class="text-[11.5px] font-medium text-[#d4d4d8]" for="nvidia-key-input">NVIDIA API Key</label>
+<span class="mono text-[10px] text-[#71717a]">Nemotron 3.5 Lightning / Llama</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full mono bg-[#17171c] border border-[#26262e] focus:border-[#444] rounded-lg pl-3.5 pr-10 py-2.5 text-[12px] text-[#f3f2ee] placeholder-[#48484f] focus:outline-none transition-all focus:ring-1 focus:ring-[#f3f2ee]/15" id="nvidia-key-input" placeholder="nvapi-..." type="password"/>
+<button class="absolute right-2 p-1.5 text-[#71717a] hover:text-[#e4e4e7] transition-colors rounded hover:scale-105 active:scale-95 cursor-pointer" id="toggle-nvidia-key-visibility" type="button">
+<span class="material-symbols-outlined text-[17px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Google Gemini -->
+<div class="provider-card border border-[#222228] rounded-xl overflow-hidden bg-[#151519]/90 flex flex-col transition-all duration-300 ease-out hover:border-[#2f2f38]" data-provider="google">
+<div class="px-4 py-3 border-b border-[#1f1f26] bg-[#131317]/90 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="text-[12.5px] font-medium text-[#f3f2ee]">Google Gemini</span>
+<span class="provider-badge mono text-[9.5px] px-2 py-0.5 rounded-full font-medium tracking-wide bg-[#202026] text-[#a1a1aa] border border-[#2a2a32] transition-all duration-300">Prioridad 2 (Failover)</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="btn-move-up p-1.5 text-[#71717a] hover:text-[#f3f2ee] hover:bg-[#1f1f26] rounded transition-transform active:scale-90 cursor-pointer" title="Subir prioridad" type="button">
+<span class="material-symbols-outlined text-[15px]">arrow_upward</span>
+</button>
+<button class="btn-move-down p-1.5 text-[#71717a] hover:text-[#f3f2ee] hover:bg-[#1f1f26] rounded transition-transform active:scale-90 cursor-pointer" title="Bajar prioridad" type="button">
+<span class="material-symbols-outlined text-[15px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-3.5">
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="text-[11.5px] font-medium text-[#d4d4d8]" for="api-key-input">
+                    Google AI Studio API Key <span class="text-rose-400">*</span>
+</label>
+<span class="mono text-[10px] text-[#71717a]">Gemini 2.5 &amp; Flash Latest</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full mono bg-[#17171c] border border-[#26262e] focus:border-[#444] rounded-lg pl-3.5 pr-10 py-2.5 text-[12px] text-[#f3f2ee] placeholder-[#48484f] focus:outline-none transition-all focus:ring-1 focus:ring-[#f3f2ee]/15" id="api-key-input" placeholder="AIzaSy..." type="password"/>
+<button class="absolute right-2 p-1.5 text-[#71717a] hover:text-[#e4e4e7] transition-colors rounded hover:scale-105 active:scale-95 cursor-pointer" id="toggle-key-visibility" type="button">
+<span class="material-symbols-outlined text-[17px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Google Backup Keys Accordion -->
+<div class="border border-[#222228] rounded-lg overflow-hidden bg-[#121216]/80 transition-colors hover:border-[#2c2c34]">
+<button class="w-full px-3.5 py-2.5 flex items-center justify-between text-left hover:bg-[#17171c] transition-colors cursor-pointer" id="toggle-backup-accordion" type="button">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#a1a1aa]">shuffle</span>
+<span class="text-[11.5px] font-medium text-[#d4d4d8]">Claves de Respaldo Gemini</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-[#71717a] transition-transform duration-250 ease-out" id="backup-chevron">expand_more</span>
+</button>
+<div class="hidden px-3.5 pb-3.5 pt-1 flex flex-col gap-2 border-t border-[#1f1f26]" id="backup-accordion-content">
+<p class="text-[11px] text-[#71717a] leading-relaxed">
+                    Pega una o varias claves secundarias de Gemini (una por línea). Se activarán de inmediato si la clave principal alcanza límites de cuota (Rate Limit 429).
+                  </p>
+<textarea class="w-full mono bg-[#17171c] border border-[#26262e] focus:border-[#444] rounded-lg p-3 text-[11.5px] text-[#f3f2ee] placeholder-[#48484f] focus:outline-none transition-all focus:ring-1 focus:ring-[#f3f2ee]/15" id="backup-keys-input" placeholder="AIzaSyBackupKey1...&#10;AIzaSyBackupKey2..." rows="2"></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: OpenRouter -->
+<div class="provider-card border border-[#222228] rounded-xl overflow-hidden bg-[#151519]/90 flex flex-col transition-all duration-300 ease-out hover:border-[#2f2f38]" data-provider="openrouter">
+<div class="px-4 py-3 border-b border-[#1f1f26] bg-[#131317]/90 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="text-[12.5px] font-medium text-[#f3f2ee]">OpenRouter</span>
+<span class="provider-badge mono text-[9.5px] px-2 py-0.5 rounded-full font-medium tracking-wide bg-[#202026] text-[#a1a1aa] border border-[#2a2a32] transition-all duration-300">Prioridad 3 (Failover)</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="btn-move-up p-1.5 text-[#71717a] hover:text-[#f3f2ee] hover:bg-[#1f1f26] rounded transition-transform active:scale-90 cursor-pointer" title="Subir prioridad" type="button">
+<span class="material-symbols-outlined text-[15px]">arrow_upward</span>
+</button>
+<button class="btn-move-down p-1.5 text-[#71717a] hover:text-[#f3f2ee] hover:bg-[#1f1f26] rounded transition-transform active:scale-90 cursor-pointer" title="Bajar prioridad" type="button">
+<span class="material-symbols-outlined text-[15px]">arrow_downward</span>
+</button>
+</div>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<label class="text-[11.5px] font-medium text-[#d4d4d8]" for="openrouter-key-input">OpenRouter API Key</label>
+<span class="mono text-[10px] text-[#71717a]">Gateway multimodelo / Respaldo opcional</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full mono bg-[#17171c] border border-[#26262e] focus:border-[#444] rounded-lg pl-3.5 pr-10 py-2.5 text-[12px] text-[#f3f2ee] placeholder-[#48484f] focus:outline-none transition-all focus:ring-1 focus:ring-[#f3f2ee]/15" id="openrouter-key-input" placeholder="sk-or-v1-..." type="password"/>
+<button class="absolute right-2 p-1.5 text-[#71717a] hover:text-[#e4e4e7] transition-colors rounded hover:scale-105 active:scale-95 cursor-pointer" id="toggle-openrouter-key-visibility" type="button">
+<span class="material-symbols-outlined text-[17px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Auto Failover Info Badge -->
+<div class="flex items-center justify-between p-3 rounded-xl bg-[#141418] border border-[#222228]">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span>
+<span class="text-[11.5px] text-[#d4d4d8] font-medium">Auto-failover inteligente</span>
+</div>
+<span class="mono text-[10.5px] text-[#71717a]">Activo</span>
+</div>
+</div>
+        <!-- ================= TAB: VOZ & FISH AUDIO ================= -->
+        <div class="tab-panel hidden flex flex-col gap-5 transition-opacity duration-200" id="tab-voice">
+          <div class="flex items-center justify-between">
+            <p class="text-[11.5px] text-[#71717a] leading-relaxed">
+              Configura la síntesis de voz neuronal de Fish Audio para respuestas naturales y clonación de voz.
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <!-- Card: Fish Audio API Key -->
+            <div class="p-4 rounded-xl bg-[#151519]/90 border border-[#222228] flex flex-col gap-2 hover:border-[#2f2f38] transition-colors">
+              <div class="flex items-center justify-between">
+                <label class="text-[11.5px] font-medium text-[#d4d4d8]" for="fish-api-key-input">Fish Audio API Key</label>
+                <span class="mono text-[10px] text-[#71717a]">Síntesis s2.1-pro</span>
+              </div>
+              <div class="relative flex items-center">
+                <input autocapitalize="off" autocorrect="off" class="w-full mono bg-[#17171c] border border-[#26262e] focus:border-[#444] rounded-lg pl-3.5 pr-10 py-2.5 text-[12px] text-[#f3f2ee] placeholder-[#48484f] focus:outline-none transition-all focus:ring-1 focus:ring-[#f3f2ee]/15" id="fish-api-key-input" name="fish_api_key" placeholder="sk-fish-..." spellcheck="false" type="password"/>
+                <button class="absolute right-2 p-1.5 text-[#71717a] hover:text-[#e4e4e7] transition-colors rounded hover:scale-105 active:scale-95 cursor-pointer" id="toggle-fish-key-visibility" type="button">
+                  <span class="material-symbols-outlined text-[17px]">visibility</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card: Main Voice ID -->
+            <div class="p-4 rounded-xl bg-[#151519]/90 border border-[#222228] flex flex-col gap-2 hover:border-[#2f2f38] transition-colors">
+              <div class="flex items-center justify-between">
+                <label class="text-[11.5px] font-medium text-[#d4d4d8]" for="fish-voice-id-input">Voice ID Principal</label>
+                <span class="mono text-[10px] text-[#71717a]">Identificador del Modelo</span>
+              </div>
+              <div class="relative flex items-center">
+                <input autocapitalize="off" autocorrect="off" class="w-full mono bg-[#17171c] border border-[#26262e] focus:border-[#444] rounded-lg px-3.5 py-2.5 text-[12px] text-[#f3f2ee] placeholder-[#48484f] focus:outline-none transition-all focus:ring-1 focus:ring-[#f3f2ee]/15" id="fish-voice-id-input" name="fish_voice_id" placeholder="b91cf7911253411a894268fa773aa621" spellcheck="false" type="text"/>
+              </div>
+            </div>
+
+            <!-- Banner: Personaje Temporal Activo -->
+            <div class="hidden p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 items-center justify-between gap-3" id="active-character-banner">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="text-[15px]">🎭</span>
+                <div class="flex flex-col min-w-0">
+                  <span class="text-[11px] text-emerald-300 font-medium truncate">Voz temporal activa: <strong id="active-character-label">—</strong></span>
+                  <span class="text-[10px] text-[#a1a1aa]">Tu Voice ID Principal sigue intacto</span>
+                </div>
+              </div>
+              <button class="px-2.5 py-1 rounded-lg bg-[#1c1c22] hover:bg-[#272730] border border-[#32323d] text-[10.5px] font-medium text-[#e4e4e7] transition-colors shrink-0 cursor-pointer" id="reset-character-voice-btn" type="button">
+                Restaurar principal
+              </button>
+            </div>
+
+            <!-- Card: Explorador Biblioteca Fish Studio -->
+            <div class="p-4 rounded-xl bg-[#151519]/90 border border-[#222228] flex flex-col gap-2.5 hover:border-[#2f2f38] transition-colors">
+              <div class="flex items-center justify-between">
+                <label class="text-[11.5px] font-medium text-[#d4d4d8]" for="fish-studio-search-input">Biblioteca Fish Studio (Voces Clonadas)</label>
+                <span class="mono text-[10px] text-emerald-400">API /model en vivo</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input autocapitalize="off" autocorrect="off" class="flex-1 bg-[#17171c] border border-[#26262e] focus:border-[#444] rounded-lg px-3 py-2 text-[12px] text-[#f3f2ee] placeholder-[#52525b] focus:outline-none transition-all focus:ring-1 focus:ring-[#f3f2ee]/15" enterkeyhint="search" id="fish-studio-search-input" name="fish_studio_query" placeholder="Buscar voz (ej. Goku, Vegeta, Homero, Dross, Messi...)" spellcheck="false" type="text"/>
+                <button class="px-3 py-2 rounded-lg bg-[#22222a] hover:bg-[#2c2c36] border border-[#32323c] text-[11.5px] font-medium text-[#f3f2ee] transition-all active:scale-95 shrink-0 cursor-pointer" id="fish-studio-search-btn" type="button">
+                  Buscar
+                </button>
+              </div>
+              <div class="flex flex-wrap gap-1.5" id="fish-studio-quick-chips">
+                <button class="fish-quick-chip mono text-[10px] px-2 py-0.5 rounded-md bg-[#1b1b22] hover:bg-[#25252f] border border-[#2a2a34] text-[#a1a1aa] hover:text-[#f3f2ee] transition-colors cursor-pointer" data-query="Goku" type="button">Goku</button>
+                <button class="fish-quick-chip mono text-[10px] px-2 py-0.5 rounded-md bg-[#1b1b22] hover:bg-[#25252f] border border-[#2a2a34] text-[#a1a1aa] hover:text-[#f3f2ee] transition-colors cursor-pointer" data-query="Vegeta" type="button">Vegeta</button>
+                <button class="fish-quick-chip mono text-[10px] px-2 py-0.5 rounded-md bg-[#1b1b22] hover:bg-[#25252f] border border-[#2a2a34] text-[#a1a1aa] hover:text-[#f3f2ee] transition-colors cursor-pointer" data-query="Homero Simpson" type="button">Homero</button>
+                <button class="fish-quick-chip mono text-[10px] px-2 py-0.5 rounded-md bg-[#1b1b22] hover:bg-[#25252f] border border-[#2a2a34] text-[#a1a1aa] hover:text-[#f3f2ee] transition-colors cursor-pointer" data-query="Bob Esponja" type="button">Bob Esponja</button>
+                <button class="fish-quick-chip mono text-[10px] px-2 py-0.5 rounded-md bg-[#1b1b22] hover:bg-[#25252f] border border-[#2a2a34] text-[#a1a1aa] hover:text-[#f3f2ee] transition-colors cursor-pointer" data-query="Dross" type="button">Dross</button>
+                <button class="fish-quick-chip mono text-[10px] px-2 py-0.5 rounded-md bg-[#1b1b22] hover:bg-[#25252f] border border-[#2a2a34] text-[#a1a1aa] hover:text-[#f3f2ee] transition-colors cursor-pointer" data-query="Iron Man" type="button">Iron Man</button>
+              </div>
+              <div class="hidden flex-col gap-1.5 max-h-[170px] overflow-y-auto pr-1 pt-1" id="fish-studio-results"></div>
+            </div>
+
+            <!-- Switch: Usar Fish Audio también en Modo Live -->
+            <div class="p-3.5 rounded-xl bg-[#151518] border border-[#222228] flex items-center justify-between gap-4 hover:border-[#2e2e36] transition-colors">
+              <div class="flex items-start gap-3">
+                <span class="text-[17px] mt-0.5">🎙️</span>
+                <div class="flex flex-col">
+                  <span class="text-[12.5px] font-medium text-[#f3f2ee]">Mantener Voz de Fish Audio en Modo Live</span>
+                  <span class="text-[11px] text-[#71717a] leading-relaxed">Usa tu Voice ID clonada y cambios de personaje también durante las llamadas en vivo</span>
+                </div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                <input checked="" class="sr-only peer" id="live-fish-voice-toggle" type="checkbox"/>
+                <div class="w-9 h-5 bg-[#222228] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#f3f2ee] after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 toggle-spring peer-checked:bg-emerald-500"></div>
+              </label>
+            </div>
+
+            <!-- Info Card: Cambio Dinámico de Personaje -->
+            <div class="p-3.5 rounded-xl bg-[#141418] border border-[#222228] flex items-start gap-2.5">
+              <span class="material-symbols-outlined text-[17px] text-emerald-400 mt-0.5">record_voice_over</span>
+              <div class="flex flex-col gap-0.5 text-[11px]">
+                <span class="text-[#e4e4e7] font-medium">Autocambio de Voz por Comando</span>
+                <p class="text-[#71717a] leading-relaxed">
+                  Pídele <span class="mono text-[#a1a1aa]">"habla como Jarvis / Batman / Yoda / una chica / un narrador"</span> o pasa otro ID de Fish Audio. Di <span class="mono text-[#a1a1aa]">"vuelve a tu voz normal"</span> para restaurar tu Voice ID Principal intacto.
+                </p>
+              </div>
+            </div>
+
+            <!-- Info Badge: Motor y Respaldo -->
+            <div class="flex items-center justify-between p-3 rounded-xl bg-[#141418] border border-[#222228]">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"></span>
+                <span class="text-[11.5px] text-[#d4d4d8] font-medium">Motor de Voz: Fish Audio (Fallback automático a Edge-TTS)</span>
+              </div>
+              <span class="mono text-[10.5px] text-emerald-400">MP3 Turbo + Circuit Breaker</span>
+            </div>
+          </div>
+        </div>
+<!-- ================= TAB: CONTROL DE PC ================= -->
+<div class="tab-panel hidden flex flex-col gap-4 transition-opacity duration-200" id="tab-pccontrol">
+<div class="flex items-center justify-between">
+<p class="text-[11.5px] text-[#71717a] leading-relaxed">
+              Configura los permisos locales de automatización y herramientas de sistema otorgados a Rowan.
+            </p>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Switch 1: Acceso a Cámara Web -->
+<div class="p-3.5 rounded-xl bg-[#151518] border border-[#222228] flex items-center justify-between gap-4 hover:border-[#2e2e36] transition-colors">
+<div class="flex items-start gap-3">
+<span class="text-[17px] mt-0.5">📸</span>
+<div class="flex flex-col">
+<span class="text-[12.5px] font-medium text-[#f3f2ee]">Acceso a Cámara Web</span>
+<span class="text-[11px] text-[#71717a] leading-relaxed">Permitir a Rowan tomar fotos cuando se lo solicites</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" id="allow-camera-toggle" type="checkbox"/>
+<div class="w-9 h-5 bg-[#222228] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#f3f2ee] after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 toggle-spring peer-checked:bg-emerald-500"></div>
+</label>
+</div>
+<!-- Switch 2: Capturas de Pantalla -->
+<div class="p-3.5 rounded-xl bg-[#151518] border border-[#222228] flex items-center justify-between gap-4 hover:border-[#2e2e36] transition-colors">
+<div class="flex items-start gap-3">
+<span class="text-[17px] mt-0.5">🖥️</span>
+<div class="flex flex-col">
+<span class="text-[12.5px] font-medium text-[#f3f2ee]">Capturas de Pantalla</span>
+<span class="text-[11px] text-[#71717a] leading-relaxed">Guardar capturas de pantalla en el Escritorio</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" id="allow-screenshots-toggle" type="checkbox"/>
+<div class="w-9 h-5 bg-[#222228] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#f3f2ee] after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 toggle-spring peer-checked:bg-emerald-500"></div>
+</label>
+</div>
+<!-- Switch 3: Control de Ventanas y Sistema -->
+<div class="p-3.5 rounded-xl bg-[#151518] border border-[#222228] flex items-center justify-between gap-4 hover:border-[#2e2e36] transition-colors">
+<div class="flex items-start gap-3">
+<span class="text-[17px] mt-0.5">⚡</span>
+<div class="flex flex-col">
+<span class="text-[12.5px] font-medium text-[#f3f2ee]">Control de Ventanas y Sistema</span>
+<span class="text-[11px] text-[#71717a] leading-relaxed">Minimizar ventanas, atajos y teclas automáticas</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" id="allow-pc-control-toggle" type="checkbox"/>
+<div class="w-9 h-5 bg-[#222228] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#f3f2ee] after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 toggle-spring peer-checked:bg-emerald-500"></div>
+</label>
+</div>
+<!-- Switch 4: Gestión de Archivos -->
+<div class="p-3.5 rounded-xl bg-[#151518] border border-[#222228] flex items-center justify-between gap-4 hover:border-[#2e2e36] transition-colors">
+<div class="flex items-start gap-3">
+<span class="text-[17px] mt-0.5">📁</span>
+<div class="flex flex-col">
+<span class="text-[12.5px] font-medium text-[#f3f2ee]">Gestión de Archivos</span>
+<span class="text-[11px] text-[#71717a] leading-relaxed">Crear, mover, leer y buscar archivos en el equipo</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" id="allow-file-actions-toggle" type="checkbox"/>
+<div class="w-9 h-5 bg-[#222228] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#f3f2ee] after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 toggle-spring peer-checked:bg-emerald-500"></div>
+</label>
+</div>
+<!-- Switch 5: Búsqueda Visual en Menú Inicio -->
+<div class="p-3.5 rounded-xl bg-[#151518] border border-[#222228] flex items-center justify-between gap-4 hover:border-[#2e2e36] transition-colors">
+<div class="flex items-start gap-3">
+<span class="text-[17px] mt-0.5">🔍</span>
+<div class="flex flex-col">
+<span class="text-[12.5px] font-medium text-[#f3f2ee]">Búsqueda Visual en Menú Inicio</span>
+<span class="text-[11px] text-[#71717a] leading-relaxed">Animar el tecleado visible al buscar programas en Windows</span>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" id="visual-start-menu-toggle" type="checkbox"/>
+<div class="w-9 h-5 bg-[#222228] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#f3f2ee] after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 toggle-spring peer-checked:bg-emerald-500"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- ================= TAB: MEMORIA DE ROWAN ================= -->
+<div class="tab-panel hidden flex flex-col gap-4 transition-opacity duration-200" id="tab-memory">
+<div class="flex items-center justify-between">
+<p class="text-[11.5px] text-[#71717a] leading-relaxed">
+              Recuerdos aprendidos automáticamente y almacenados en SQLite (<span class="mono text-[10.5px] text-[#a1a1aa]">rowan_memory.db</span>).
+            </p>
+<button class="p-1.5 text-[#71717a] hover:text-[#f3f2ee] rounded-lg transition-transform duration-300 hover:rotate-180 active:scale-90 cursor-pointer" id="refresh-memories-btn" title="Recargar memorias" type="button">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+</button>
+</div>
+<!-- Memories List Container -->
+<div class="flex flex-col gap-2 max-h-60 overflow-y-auto pr-1" id="memories-list">
+<!-- Dynamically populated -->
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-6 py-4 border-t border-[#1c1c22] bg-[#131317]/80 flex items-center justify-between shrink-0">
+<span class="mono text-[11px] text-[#71717a] transition-all" id="save-status"></span>
+<div class="flex items-center gap-2.5">
+<button class="px-4 py-2 text-[12px] font-medium text-[#71717a] hover:text-[#e4e4e7] transition-all hover:bg-[#1a1a20] rounded-lg cursor-pointer" id="cancel-settings-btn" type="button">
+            Cancelar
+          </button>
+<button class="px-4 py-2 text-[12px] font-medium bg-[#f3f2ee] hover:bg-white active:bg-[#e4e4e0] text-[#0c0c0c] rounded-lg transition-all duration-200 transform hover:scale-102 active:scale-98 flex items-center gap-2 shadow-sm hover:shadow-[0_0_14px_rgba(243,242,238,0.25)] cursor-pointer" id="save-settings-btn" type="button">
+<span>Guardar Ajustes</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- JAVASCRIPT: Physics, Audio, Emotional System, State Machine, pywebview API Bridge -->
+<script>
+    /**
+     * ========================================================
+     * ROWAN v1.1 RUNTIME CORE & EMOTIONAL REACTION LAYER
+     * ========================================================
+     */
+
+    // --- State variables ---
+    let currentState = 'idle';
+    window.getRowanState = () => currentState; // 'idle', 'listen', 'think', 'speak'
+    let currentEmotion = null; // null or emotion name string
+    let emotionTimer = null;
+    let emotionPhaseTime = 0;
+    let isMuted = false;
+    window.isLiveModeActive = false;
+
+    let memoriesCache = [
+      { id: 1, category: "usuario", key: "nombre", value: "Maykol" },
+      { id: 2, category: "preferencia", key: "lenguaje", value: "Python 3.14 & JavaScript" },
+      { id: 3, category: "proyecto", key: "arquitectura", value: "Rowan AI Desktop" }
+    ];
+
+    // --- DOM Elements ---
+    const eyeSocket = document.getElementById('eye-socket');
+    const eyeLeft = document.getElementById('eye-left');
+    const eyeRight = document.getElementById('eye-right');
+    const eyesContainer = document.getElementById('eyes-container');
+    const ambientAura = document.getElementById('ambient-aura');
+    const statusDot = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
+    const liveHeaderBadge = document.getElementById('live-header-badge');
+    const emotionPill = document.getElementById('current-emotion-badge') || document.getElementById('emotion-pill');
+    const emotionPillIcon = document.getElementById('emotion-pill-icon');
+    const emotionPillName = document.getElementById('emotion-pill-name');
+    const emotionsMenuBtn = document.getElementById('emotions-menu-btn');
+    const emotionsDropdown = document.getElementById('emotions-dropdown');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const micBtn = document.getElementById('mic-btn');
+    const micIcon = document.getElementById('mic-icon');
+    const micPulse = document.getElementById('mic-pulse');
+    const toggleLiveBtn = document.getElementById('toggle-live-btn');
+    const liveIcon = document.getElementById('live-icon');
+    const livePulse = document.getElementById('live-pulse');
+    const liveStageBottom = document.getElementById('live-stage-bottom');
+    const liveUserCaption = document.getElementById('live-user-caption');
+    const liveCaptionDot = document.getElementById('live-caption-dot');
+    const liveUserCaptionText = document.getElementById('live-user-caption-text');
+    const exitLivePillBtn = document.getElementById('exit-live-pill-btn');
+    const messagesList = document.getElementById('messages-list');
+    const messagesContainer = document.getElementById('messages-container');
+    const toggleAudioBtn = document.getElementById('toggle-audio-btn');
+    const muteBtn = document.getElementById('mute-btn');
+    const audioIcon = document.getElementById('audio-icon');
+    const audioWaveDot = document.getElementById('audio-wave-dot');
+
+    // PC Control Toggles DOM
+    const allowCameraToggle = document.getElementById('allow-camera-toggle');
+    const allowScreenshotsToggle = document.getElementById('allow-screenshots-toggle');
+    const allowPcControlToggle = document.getElementById('allow-pc-control-toggle');
+    const allowFileActionsToggle = document.getElementById('allow-file-actions-toggle');
+    const visualStartMenuToggle = document.getElementById('visual-start-menu-toggle');
+
+    // Toast Notification DOM
+    const appToast = document.getElementById('app-toast');
+    const toastText = document.getElementById('toast-text');
+    const toastDot = document.getElementById('toast-dot');
+    let toastTimeout = null;
+
+    function showToast(message, type = 'success') {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastText.textContent = message;
+      if (type === 'error') {
+        toastDot.className = 'w-1.5 h-1.5 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(244,63,94,0.6)]';
+      } else {
+        toastDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]';
+      }
+      appToast.classList.add('show');
+      toastTimeout = setTimeout(() => {
+        appToast.classList.remove('show');
+      }, 3000);
+    }
+    window.showToast = showToast;
+
+    // Settings Modal DOM
+    const settingsModal = document.getElementById('settings-modal');
+    const openSettingsBtn = document.getElementById('open-settings-btn');
+    const closeSettingsBtn = document.getElementById('close-settings-btn');
+    const cancelSettingsBtn = document.getElementById('cancel-settings-btn');
+    const settingsBackdrop = document.getElementById('settings-backdrop');
+    const settingsCard = settingsModal.querySelector('.modal-card-anim');
+    const saveSettingsBtn = document.getElementById('save-settings-btn');
+    const saveStatus = document.getElementById('save-status');
+    const tabTriggers = document.querySelectorAll('.tab-trigger');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    const tabIndicator = document.getElementById('tab-indicator');
+    const memoriesBadge = document.getElementById('memories-badge');
+    const memoriesList = document.getElementById('memories-list');
+    const refreshMemoriesBtn = document.getElementById('refresh-memories-btn');
+
+    // Key visibility & Accordion
+    const toggleKeyVisibilityBtn = document.getElementById('toggle-key-visibility');
+    const apiKeyInput = document.getElementById('api-key-input');
+    const toggleBackupAccordion = document.getElementById('toggle-backup-accordion');
+    const backupAccordionContent = document.getElementById('backup-accordion-content');
+    const backupChevron = document.getElementById('backup-chevron');
+
+    // Inputs
+    const userNameInput = document.getElementById('user-name-input');
+    const backupKeysInput = document.getElementById('backup-keys-input');
+    const nvidiaKeyInput = document.getElementById('nvidia-key-input');
+    const openrouterKeyInput = document.getElementById('openrouter-key-input');
+    const fishApiKeyInput = document.getElementById('fish-api-key-input');
+    const fishVoiceIdInput = document.getElementById('fish-voice-id-input');
+    const toggleFishKeyVisibilityBtn = document.getElementById('toggle-fish-key-visibility');
+    const liveFishVoiceToggle = document.getElementById('live-fish-voice-toggle');
+    const fishStudioSearchInput = document.getElementById('fish-studio-search-input');
+    const fishStudioSearchBtn = document.getElementById('fish-studio-search-btn');
+    const fishStudioResults = document.getElementById('fish-studio-results');
+    const activeCharacterBanner = document.getElementById('active-character-banner');
+    const activeCharacterLabel = document.getElementById('active-character-label');
+    const resetCharacterVoiceBtn = document.getElementById('reset-character-voice-btn');
+    const toggleNvidiaKeyVisibilityBtn = document.getElementById('toggle-nvidia-key-visibility');
+    const toggleOpenrouterKeyVisibilityBtn = document.getElementById('toggle-openrouter-key-visibility');
+    const providersContainer = document.getElementById('providers-container');
+
+    // Toggle emotions menu
+    // --- STITCH 100 EMOTIONS CATALOG & SEARCHABLE POPOVER ---
+    const EMOTIONS_CATALOG = {
+
+      "Familia 1: Alegría, Éxito & Celebración (15)": [
+
+        { name: "happy", icon: "😊", desc: "Sonrisa suave (⌒ ⌒), arco superior", shape: "rainbow", h: 26, w: 18, rot: 12, transY: -4, aura: "rgba(254, 240, 138, 0.22)" },
+
+        { name: "cheerful", icon: "😄", desc: "Rebote elástico y aura dorada", shape: "rainbow", h: 32, w: 18, rot: 8, anim: "anim-bounce", aura: "rgba(250, 204, 21, 0.28)" },
+
+        { name: "ecstatic", icon: "✨", desc: "Chevrons agudos (^ ^) y rebote", shape: "chevron", h: 26, w: 18, rot: 22, transY: -6, anim: "anim-bounce", aura: "rgba(251, 191, 36, 0.3)" },
+
+        { name: "laughing", icon: "😆", desc: "Temblor alegre de risa", shape: "rainbow", h: 22, w: 20, rot: 14, anim: "anim-laugh", aura: "rgba(253, 224, 71, 0.28)" },
+
+        { name: "giggle", icon: "🤭", desc: "Guiño travieso con micro-vibración", shape: "asym_wink", h: 26, anim: "anim-vibe", aura: "rgba(244, 114, 182, 0.24)" },
+
+        { name: "proud", icon: "😌", desc: "Ojos erguidos, ladeo exterior y elevación", shape: "rainbow", h: 42, rot: -8, transY: -6, aura: "rgba(167, 243, 208, 0.24)" },
+
+        { name: "victorious", icon: "🏆", desc: "Chevrons (^ ^) y destello triunfal", shape: "chevron", h: 30, w: 18, rot: 24, transY: -8, aura: "rgba(251, 191, 36, 0.38)" },
+
+        { name: "party", icon: "🎉", desc: "Vaivén festivo y ondas de brillo", shape: "chevron", h: 32, anim: "anim-party", aura: "rgba(244, 63, 94, 0.3)" },
+
+        { name: "grateful", icon: "🌸", desc: "Mirada dulce marfil y parpadeo lento", shape: "rainbow", h: 32, w: 16, transY: 2, aura: "rgba(254, 243, 199, 0.25)" },
+
+        { name: "greeting", icon: "👋", desc: "Doble rebote elástico de bienvenida", shape: "greeting", h: 46, w: 17, anim: "anim-bounce", aura: "rgba(243, 242, 238, 0.26)" },
+
+        { name: "playful", icon: "😜", desc: "Alternancia de salto asimétrico", shape: "rainbow", h: 34, animSocket: "anim-hop", aura: "rgba(232, 121, 249, 0.24)" },
+
+        { name: "excited", icon: "🤩", desc: "Cápsulas agrandadas vibrando", shape: "pill", h: 54, w: 20, anim: "anim-vibe", aura: "rgba(250, 204, 21, 0.32)" },
+
+        { name: "beaming", icon: "🌟", desc: "Ultra-brillantes con resplandor amplio", shape: "rainbow", h: 36, w: 18, rot: 6, aura: "rgba(255, 255, 255, 0.42)" },
+
+        { name: "delighted", icon: "🥰", desc: "Micro-arqueo hacia arriba y aura ámbar", shape: "rainbow", h: 28, w: 17, transY: -4, rot: 9, aura: "rgba(245, 158, 11, 0.25)" },
+
+        { name: "optimistic", icon: "🚀", desc: "Cápsulas alargadas hacia arriba", shape: "pill", h: 50, w: 16, transY: -5, aura: "rgba(52, 211, 153, 0.25)" }
+
+      ],
+
+      "Familia 2: Curiosidad, Intelecto & Enfoque (15)": [
+
+        { name: "thinking", icon: "🌊", desc: "Asimétrico: izq plano, der arco (— ⌒)", shape: "thinking_real", h: 34, aura: "rgba(56, 189, 248, 0.26)" },
+
+        { name: "focused", icon: "🎯", desc: "Hendiduras 6° hacia el centro, gap 16px", shape: "focused", h: 22, w: 13, gap: 16, rot: 6, aura: "rgba(96, 165, 250, 0.26)" },
+
+        { name: "curious", icon: "🧐", desc: "Ojo izq +8px y ladeo facial de 5°", shape: "curious_tilt", h: 42, transYLeft: -8, faceRot: 5, aura: "rgba(251, 191, 36, 0.22)" },
+
+        { name: "analytical", icon: "📊", desc: "Barras horizontales escaneando", shape: "slit", h: 18, w: 18, animSocket: "anim-scan", aura: "rgba(56, 189, 248, 0.28)" },
+
+        { name: "eureka", icon: "💡", desc: "Micro-salto con destello blanco intenso", shape: "pill", h: 56, w: 20, transY: -10, aura: "rgba(255, 255, 255, 0.48)" },
+
+        { name: "calculating", icon: "🧮", desc: "Parpadeo alternado procesando", shape: "calculating", h: 26, aura: "rgba(99, 102, 241, 0.25)" },
+
+        { name: "observing", icon: "👁️", desc: "Seguimiento horizontal fluido", shape: "pill", h: 36, w: 16, animSocket: "anim-scan", aura: "rgba(45, 212, 191, 0.22)" },
+
+        { name: "intrigued", icon: "🤨", desc: "Ceja alzada asimétrica pulsante", shape: "asym_tilt", h: 40, transYLeft: -6, aura: "rgba(217, 119, 6, 0.24)" },
+
+        { name: "studious", icon: "📖", desc: "Rendijas horizontales ultra-estables", shape: "slit", h: 16, w: 16, aura: "rgba(148, 163, 184, 0.2)" },
+
+        { name: "brainstorming", icon: "🧠", desc: "Vibración con aura pulsante", shape: "pill", h: 44, anim: "anim-vibe", aura: "rgba(168, 85, 247, 0.35)" },
+
+        { name: "reading", icon: "📑", desc: "Lectura rítmica de izquierda a derecha", shape: "slit", h: 22, w: 15, animSocket: "anim-reading", aura: "rgba(125, 211, 252, 0.22)" },
+
+        { name: "evaluating", icon: "⚖️", desc: "Un ojo más estrecho sopesando", shape: "asym_weight", h: 36, aura: "rgba(148, 163, 184, 0.24)" },
+
+        { name: "puzzled", icon: "❓", desc: "Inclinación de cabeza y alturas dispares", shape: "curious_tilt", h: 38, transYLeft: -10, transYRight: 4, faceRot: -7, aura: "rgba(253, 224, 71, 0.2)" },
+
+        { name: "sharp", icon: "🗡️", desc: "Máxima altura con bordes hiper-definidos", shape: "sharp", h: 56, w: 14, aura: "rgba(243, 242, 238, 0.38)" },
+
+        { name: "detective", icon: "🕵️", desc: "Entrecerrados mirando esquina inferior", shape: "slit", h: 20, transY: 7, aura: "rgba(180, 83, 9, 0.22)" }
+
+      ],
+
+      "Familia 3: Picardía, Afecto & Complicidad (15)": [
+
+        { name: "amused", icon: "😏", desc: "Guiño pícaro clásico (guiño + sonrisa)", shape: "asym_wink_smile", h: 30, aura: "rgba(244, 114, 182, 0.24)" },
+
+        { name: "smug", icon: "😼", desc: "Entrecerrados con superioridad amistosa", shape: "slit", h: 20, rot: 10, faceRot: 3, aura: "rgba(251, 191, 36, 0.22)" },
+
+        { name: "winking", icon: "😉", desc: "Guiño rápido con rebote elástico", shape: "winking_quick", h: 36, aura: "rgba(236, 72, 153, 0.22)" },
+
+        { name: "flirty", icon: "😘", desc: "Parpadeo coqueto y aura rosada", shape: "rainbow", h: 30, rot: 8, aura: "rgba(244, 114, 182, 0.3)" },
+
+        { name: "tsundere", icon: "😒", desc: "Inclinados hacia afuera mirando ladeado", shape: "angry", h: 26, rot: 14, faceRot: 6, aura: "rgba(244, 63, 94, 0.22)" },
+
+        { name: "affectionate", icon: "💌", desc: "Arcos suaves con latido cardíaco tenue", shape: "rainbow", h: 28, rot: 10, anim: "anim-heartbeat", aura: "rgba(251, 113, 133, 0.3)" },
+
+        { name: "bashful", icon: "🙈", desc: "Inclinación diagonal (/ \\) tímida", shape: "puppy", h: 30, rot: -8, transY: 5, aura: "rgba(253, 164, 175, 0.22)" },
+
+        { name: "charming", icon: "✨", desc: "Mirada centrada con pulsación elegante", shape: "pill", h: 44, anim: "anim-heartbeat", aura: "rgba(216, 180, 254, 0.25)" },
+
+        { name: "teasing", icon: "😋", desc: "Guiño alternado con ladeo de cabeza", shape: "asym_wink", h: 32, faceRot: -6, aura: "rgba(244, 114, 182, 0.24)" },
+
+        { name: "sarcastic", icon: "🙄", desc: "Entrecerrados horizontales con ladeo 6°", shape: "slit", h: 18, faceRot: 6, transY: -4, aura: "rgba(148, 163, 184, 0.18)" },
+
+        { name: "friendly", icon: "🤝", desc: "Cápsulas acogedoras con respiración armónica", shape: "pill", h: 42, anim: "anim-zen", aura: "rgba(254, 240, 138, 0.2)" },
+
+        { name: "cozy", icon: "☕", desc: "Cápsulas gorditas y redondeadas", shape: "pill", h: 34, w: 22, aura: "rgba(253, 186, 116, 0.22)" },
+
+        { name: "tender", icon: "🌿", desc: "Mirada suave hacia abajo con descenso", shape: "puppy", h: 32, transY: 6, aura: "rgba(167, 243, 208, 0.2)" },
+
+        { name: "conspirator", icon: "🤫", desc: "Gap reducido a 12px compartiendo secreto", shape: "slit", h: 22, gap: 12, aura: "rgba(192, 132, 252, 0.24)" },
+
+        { name: "reassured", icon: "🕊️", desc: "Parpadeo largo de alivio y confianza", shape: "rainbow", h: 32, aura: "rgba(147, 197, 253, 0.22)" }
+
+      ],
+
+      "Familia 4: Vulnerabilidad, Tristeza & Empatía (15)": [
+
+        { name: "puppy_eyes", icon: "🥺", desc: "Inclinación (/ \\) dilatada y vidriosa", shape: "puppy", h: 46, w: 20, rot: -14, aura: "rgba(251, 191, 36, 0.2)" },
+
+        { name: "sympathetic", icon: "🫂", desc: "Mirada comprensiva hacia abajo", shape: "puppy", h: 38, rot: 10, transY: 4, aura: "rgba(253, 224, 71, 0.2)" },
+
+        { name: "pleading", icon: "🙏", desc: "Cápsulas en (/ \\) con micro-temblor", shape: "puppy", h: 36, rot: -12, anim: "anim-vibe", aura: "rgba(244, 114, 182, 0.22)" },
+
+        { name: "sad", icon: "😢", desc: "Cápsulas caídas en altura y aura tenue", shape: "puppy", h: 24, rot: 8, transY: 7, opacity: 0.7, aura: "rgba(96, 165, 250, 0.16)" },
+
+        { name: "crying", icon: "😭", desc: "Micro-gota de luz desprendiéndose", shape: "puppy", h: 28, rot: 10, transY: 6, anim: "anim-crying", aura: "rgba(147, 197, 253, 0.3)" },
+
+        { name: "heartbroken", icon: "💔", desc: "Tiemblan levemente con aura fría azulada", shape: "puppy", h: 26, rot: 6, anim: "anim-vibe", aura: "rgba(59, 130, 246, 0.28)" },
+
+        { name: "shy", icon: "👉👈", desc: "Ojos retraídos, gap estrecho y mirada baja", shape: "puppy", h: 22, w: 12, gap: 14, transY: 8, aura: "rgba(244, 114, 182, 0.18)" },
+
+        { name: "apologetic", icon: "🙇", desc: "Reverencia suave y desplazamiento en Y", shape: "puppy", h: 28, transY: 10, aura: "rgba(203, 213, 225, 0.18)" },
+
+        { name: "melancholy", icon: "🌧️", desc: "Ojos lánguidos con parpadeo pesado", shape: "slit", h: 14, w: 18, transY: 4, aura: "rgba(100, 116, 139, 0.15)" },
+
+        { name: "comforting", icon: "🤍", desc: "Ondulación suave como un abrazo visual", shape: "rainbow", h: 34, animSocket: "anim-scan", aura: "rgba(243, 242, 238, 0.24)" },
+
+        { name: "lonely", icon: "🍂", desc: "Ojos separados con mínima luminosidad", shape: "slit", h: 16, gap: 34, opacity: 0.5, aura: "rgba(71, 85, 105, 0.1)" },
+
+        { name: "disappointed", icon: "😞", desc: "Encogiéndose verticalmente con descenso seco", shape: "slit", h: 12, transY: 8, aura: "rgba(148, 163, 184, 0.12)" },
+
+        { name: "vulnerable", icon: "🫧", desc: "Translúcidas al 60% y formas frágiles", shape: "pill", h: 30, w: 14, opacity: 0.6, aura: "rgba(186, 230, 253, 0.18)" },
+
+        { name: "forgiving", icon: "🤲", desc: "Apertura suave y luminosa", shape: "rainbow", h: 38, w: 18, transY: -2, aura: "rgba(254, 240, 138, 0.26)" },
+
+        { name: "nostalgic", icon: "🌌", desc: "Mirada perdida arriba a la derecha", shape: "pill", h: 34, transY: -7, faceRot: 5, aura: "rgba(199, 210, 254, 0.2)" }
+
+      ],
+
+      "Familia 5: Intensidad, Determinación & Tensión (15)": [
+
+        { name: "determined", icon: "⚔️", desc: "Inclinación agresiva (\\ /) fija", shape: "angry", h: 34, rot: 14, aura: "rgba(239, 68, 68, 0.28)" },
+
+        { name: "angry", icon: "💢", desc: "Diagonal (/ \) marcada y aura roja", shape: "angry", h: 32, rot: -22, anim: "anim-vibe", aura: "rgba(239, 68, 68, 0.42)" },
+
+        { name: "annoyed", icon: "😤", desc: "Un ojo plano y el otro ladeado", shape: "asym_tilt", h: 22, rot: 12, aura: "rgba(249, 115, 22, 0.28)" },
+
+        { name: "glare", icon: "😠", desc: "Rendijas hiper-estrechas fijas", shape: "slit", h: 10, w: 18, rot: -8, aura: "rgba(220, 38, 38, 0.32)" },
+
+        { name: "fierce", icon: "🦁", desc: "Ojos anchos con inclinación filosa", shape: "angry", h: 36, w: 19, rot: -18, aura: "rgba(244, 63, 94, 0.36)" },
+
+        { name: "frustrated", icon: "🤦", desc: "Headshake lateral rápido de 'no puede ser'", shape: "angry", h: 28, rot: -12, animSocket: "anim-headshake", aura: "rgba(239, 68, 68, 0.34)" },
+
+        { name: "impatient", icon: "⏱️", desc: "Golpeteo rítmico vertical de una cápsula", shape: "asym_tilt", h: 30, animRight: "anim-tap-right", aura: "rgba(249, 115, 22, 0.24)" },
+
+        { name: "defiant", icon: "✊", desc: "Elevación con ojos entrecerrados pero altos", shape: "slit", h: 22, transY: -8, rot: 8, aura: "rgba(245, 158, 11, 0.3)" },
+
+        { name: "protective", icon: "🛡️", desc: "Cápsulas firmes con escudo brillante", shape: "pill", h: 46, w: 20, aura: "rgba(59, 130, 246, 0.35)" },
+
+        { name: "rebellious", icon: "⚡", desc: "Inclinación asimétrica desafiante", shape: "asym_tilt", h: 36, rot: 15, faceRot: -6, aura: "rgba(236, 72, 153, 0.32)" },
+
+        { name: "serious", icon: "🗿", desc: "Hendiduras sobrias sin movimiento", shape: "slit", h: 20, w: 16, aura: "rgba(148, 163, 184, 0.2)" },
+
+        { name: "overheated", icon: "🔥", desc: "Parpadeo rápido y alarma térmica roja", shape: "pill", h: 42, anim: "anim-vibe", aura: "rgba(220, 38, 38, 0.48)" },
+
+        { name: "stubborn", icon: "🧱", desc: "Ojos apretados que no se mueven", shape: "slit", h: 12, w: 18, aura: "rgba(217, 119, 6, 0.25)" },
+
+        { name: "commanding", icon: "👑", desc: "Grandes y autoritarios con resplandor nítido", shape: "pill", h: 54, w: 18, aura: "rgba(243, 242, 238, 0.4)" },
+
+        { name: "hyperfocus", icon: "🎯", desc: "Ultra-delgadas con brillo concentrado", shape: "slit", h: 28, w: 10, gap: 14, aura: "rgba(56, 189, 248, 0.35)" }
+
+      ],
+
+      "Familia 6: Asombro, Confusión & Glitch (15)": [
+
+        { name: "surprised", icon: "😲", desc: "Agrandados (24x56) y destello en aura", shape: "pill", h: 56, w: 24, aura: "rgba(255, 255, 255, 0.45)" },
+
+        { name: "confused", icon: "🤨", desc: "Arqueo asimétrico y ladeo de 5°", shape: "asym_tilt", h: 42, transYLeft: -8, faceRot: 5, aura: "rgba(251, 191, 36, 0.24)" },
+
+        { name: "shocked", icon: "😱", desc: "Abiertos temblando con respiración contenida", shape: "pill", h: 58, w: 22, anim: "anim-vibe", aura: "rgba(239, 68, 68, 0.35)" },
+
+        { name: "mindblown", icon: "🤯", desc: "Expansión rápida con halo explosivo suave", shape: "pill", h: 62, w: 26, aura: "rgba(251, 191, 36, 0.5)" },
+
+        { name: "dizzy", icon: "💫", desc: "Oscilación contraria o tambaleo", shape: "pill", h: 36, w: 18, animLeft: "anim-dizzy-left", animRight: "anim-dizzy-right", aura: "rgba(192, 132, 252, 0.28)" },
+
+        { name: "hypnotized", icon: "😵💫", desc: "Movimiento sinusoidal continuo", shape: "olitas", h: 36, aura: "rgba(232, 121, 249, 0.3)" },
+
+        { name: "glitch", icon: "⚡", desc: "Desfase horizontal y chromatic glitch", shape: "pill", h: 42, anim: "anim-glitch", aura: "rgba(236, 72, 153, 0.45)" },
+
+        { name: "paranoid", icon: "👀", desc: "Mirando frenéticamente a ambos lados", shape: "pill", h: 40, animSocket: "anim-paranoid", aura: "rgba(245, 158, 11, 0.3)" },
+
+        { name: "skeptical", icon: "🧐", desc: "Un ojo muy achinado mirando con recelo", shape: "asym_tilt", h: 44, hRight: 16, aura: "rgba(161, 161, 170, 0.22)" },
+
+        { name: "speechless", icon: "😶", desc: "Congeladas a media altura sin parpadear", shape: "pill", h: 32, aura: "rgba(243, 242, 238, 0.2)" },
+
+        { name: "baffled", icon: "🌀", desc: "Desalineados verticalmente con aura confusa", shape: "asym_tilt", h: 42, transYLeft: -10, transYRight: 8, aura: "rgba(125, 211, 252, 0.25)" },
+
+        { name: "startled", icon: "⚡", desc: "Salto de 10px arriba y encogimiento", shape: "pill", h: 52, transY: -10, anim: "anim-bounce", aura: "rgba(250, 204, 21, 0.35)" },
+
+        { name: "overloaded", icon: "💥", desc: "Parpadeo caótico alternante", shape: "calculating", h: 38, anim: "anim-vibe", aura: "rgba(239, 68, 68, 0.38)" },
+
+        { name: "disoriented", icon: "😵", desc: "Balanceo lento buscando equilibrio", shape: "asym_tilt", h: 34, faceRot: -8, animSocket: "anim-headshake", aura: "rgba(168, 85, 247, 0.25)" },
+
+        { name: "clueless", icon: "😶🌫️", desc: "Redondeadas vacías mirando al infinito", shape: "pill", h: 26, w: 26, opacity: 0.7, aura: "rgba(148, 163, 184, 0.16)" }
+
+      ],
+
+      "Familia 7: Calma, Sueño, Música & Standby (10)": [
+
+        { name: "groove", icon: "🎵", desc: "Head-bob squash & stretch a ~110 BPM", shape: "groove", h: 44, anim: "anim-groove", aura: "rgba(168, 85, 247, 0.32)" },
+
+        { name: "sleepy", icon: "🥱", desc: "Cápsulas al 25% de altura y parpadeo pesado", shape: "sleepy", h: 12, transY: 7, aura: "rgba(148, 163, 184, 0.12)" },
+
+        { name: "sleeping", icon: "😴", desc: "Rendijas estáticas con respiración profunda", shape: "slit", h: 6, w: 18, transY: 6, anim: "anim-zen", aura: "rgba(100, 116, 139, 0.1)" },
+
+        { name: "yawn", icon: "🥱", desc: "Se alargan verticalmente y luego se cierran", shape: "pill", h: 54, anim: "anim-yawn", aura: "rgba(253, 186, 116, 0.24)" },
+
+        { name: "zen", icon: "🪨", desc: "Respiración armónica de 4s y aura azulada", shape: "pill", h: 36, anim: "anim-zen", aura: "rgba(147, 197, 253, 0.2)" },
+
+        { name: "meditating", icon: "🧘", desc: "Rendijas flotando con aura pacífica", shape: "rainbow", h: 20, w: 18, anim: "anim-zen", aura: "rgba(167, 243, 208, 0.22)" },
+
+        { name: "low_battery", icon: "🪫", desc: "Hendiduras ultra-finas con puntos parpadeando", shape: "standby", h: 8, eyeColor: "#fca5a5", aura: "rgba(239, 68, 68, 0.2)" },
+
+        { name: "recharging", icon: "🔋", desc: "Llenándose de luz progresivamente", shape: "pill", h: 40, anim: "anim-recharge", eyeColor: "#a7f3d0", aura: "rgba(16, 185, 129, 0.32)" },
+
+        { name: "standby", icon: "⚪", desc: "Hendiduras mínimas (— —) con sensores cian", shape: "standby", h: 10, w: 18, aura: "rgba(56, 189, 248, 0.18)" },
+
+        { name: "cyber", icon: "🌐", desc: "Destello futurista con micro-escaneo y aura fría", shape: "slit", h: 22, w: 16, animSocket: "anim-scan", aura: "rgba(186, 230, 253, 0.32)" }
+
+      ]
+
+    };
+
+
+
+    // Aplanar para búsqueda O(1)
+
+    const EMOTION_MAP = {};
+
+    Object.values(EMOTIONS_CATALOG).forEach(fam => fam.forEach(e => { EMOTION_MAP[e.name] = e; }));
+
+    const emotionsPopover = document.getElementById('emotions-popover');
+    const emotionsCaret = document.getElementById('emotions-caret');
+    const emotionSearchInput = document.getElementById('emotion-search-input');
+    const emotionsCatalogContainer = document.getElementById('emotions-catalog-container');
+    const emotionsCountLabel = document.getElementById('emotions-count-label');
+    const currentEmotionBadge = document.getElementById('current-emotion-badge') || document.getElementById('emotion-pill');
+    const thinkingTag = document.getElementById('thinking-tag');
+    let activeEmotion = null;
+    let emotionStartTime = 0;
+
+    const ALL_ANIM_CLASSES = [
+      'anim-bounce', 'anim-laugh', 'anim-vibe', 'anim-glitch', 'anim-groove', 
+      'anim-scan', 'anim-reading', 'anim-headshake', 'anim-heartbeat', 'anim-zen', 
+      'anim-paranoid', 'anim-dizzy-left', 'anim-dizzy-right', 'anim-tap-right', 
+      'anim-hop-l', 'anim-hop-r', 'anim-party', 'anim-yawn', 'anim-recharge', 'anim-crying'
+    ];
+
+    function clearAnimationClasses() {
+      ALL_ANIM_CLASSES.forEach(c => {
+        if (eyeLeft) eyeLeft.classList.remove(c);
+        if (eyeRight) eyeRight.classList.remove(c);
+        if (eyeSocket) eyeSocket.classList.remove(c);
+      });
+      if (eyeLeft) eyeLeft.style.animation = '';
+      if (eyeRight) eyeRight.style.animation = '';
+      if (eyeSocket) eyeSocket.style.animation = '';
+    }
+
+    // Renderizar catálogo del popover
+    function renderEmotions(query = '') {
+      if (!emotionsCatalogContainer) return;
+      emotionsCatalogContainer.innerHTML = '';
+      const q = query.toLowerCase().trim();
+      let count = 0;
+
+      Object.entries(EMOTIONS_CATALOG).forEach(([family, list]) => {
+        const filtered = list.filter(e => !q || e.name.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q));
+        if (filtered.length > 0) {
+          count += filtered.length;
+          const famTitle = document.createElement('div');
+          famTitle.className = 'flex items-center justify-between pt-1 border-b border-[#1f1f26] pb-0.5 sticky top-0 bg-[#111115] z-10';
+          famTitle.innerHTML = `<span class="mono text-[9.5px] uppercase tracking-wider text-[#a1a1aa] font-semibold">${family}</span><span class="mono text-[8.5px] text-[#60606a]">${filtered.length}</span>`;
+          emotionsCatalogContainer.appendChild(famTitle);
+
+          const grid = document.createElement('div');
+          grid.className = 'grid grid-cols-2 gap-1.5 pt-0.5';
+
+          filtered.forEach(emo => {
+            const btn = document.createElement('button');
+            btn.className = 'px-2 py-1.5 rounded-xl bg-[#141418] hover:bg-[#1e1e24] border border-[#222228] hover:border-[#383842] text-left transition-all flex items-center gap-1.5 cursor-pointer';
+            btn.style.cssText = 'padding: 6px 8px; border-radius: 10px; background: #141418; border: 1px solid #222228; color: #e4e4e7; display: flex; align-items: center; gap: 6px; cursor: pointer; text-align: left; transition: all 0.15s; font-family: inherit;';
+            btn.innerHTML = `
+              <span class="text-[13px] shrink-0">${emo.icon}</span>
+              <div class="flex flex-col min-w-0" style="display:flex; flex-direction:column; min-width:0;">
+                <span class="mono text-[10.5px] text-[#e4e4e7] truncate font-medium" style="font-size:10.5px; color:#e4e4e7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:500;">${emo.name}</span>
+                <span class="text-[8.5px] text-[#71717a] truncate" style="font-size:8.5px; color:#71717a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${emo.desc}</span>
+              </div>
+            `;
+            btn.onmouseenter = () => { btn.style.background = '#202028'; btn.style.borderColor = '#383848'; };
+            btn.onmouseleave = () => { btn.style.background = '#141418'; btn.style.borderColor = '#222228'; };
+            btn.onclick = (e) => {
+              e.stopPropagation();
+              window.setEmotion(emo.name);
+              toggleEmotionPopover(false);
+            };
+            grid.appendChild(btn);
+          });
+          emotionsCatalogContainer.appendChild(grid);
+        }
+      });
+      if (emotionsCountLabel) emotionsCountLabel.textContent = count;
+    }
+
+    // Única y definitiva función para abrir / cerrar el Popover
+    function toggleEmotionPopover(force = null) {
+      if (!emotionsPopover) return;
+      const isCurrentlyOpen = !emotionsPopover.classList.contains('hidden');
+      const shouldOpen = (force !== null) ? force : !isCurrentlyOpen;
+
+      if (shouldOpen) {
+        emotionsPopover.classList.remove('hidden');
+        if (emotionsCaret) emotionsCaret.style.transform = 'rotate(180deg)';
+        if (emotionSearchInput) {
+          emotionSearchInput.value = '';
+          renderEmotions('');
+          setTimeout(() => emotionSearchInput.focus(), 60);
+        }
+      } else {
+        emotionsPopover.classList.add('hidden');
+        if (emotionsCaret) emotionsCaret.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Asignación de evento de clic único al botón
+    if (emotionsMenuBtn) {
+      emotionsMenuBtn.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleEmotionPopover();
+      };
+    }
+
+    if (emotionsPopover) {
+      emotionsPopover.onclick = function(e) {
+        e.stopPropagation();
+      };
+    }
+
+    if (emotionSearchInput) {
+      emotionSearchInput.oninput = function(e) {
+        renderEmotions(e.target.value);
+      };
+    }
+
+    document.addEventListener('click', function(e) {
+      if (emotionsPopover && !emotionsPopover.classList.contains('hidden')) {
+        if (!emotionsPopover.contains(e.target) && (!emotionsMenuBtn || !emotionsMenuBtn.contains(e.target))) {
+          toggleEmotionPopover(false);
+        }
+      }
+    });
+
+    // Sistema de Persistencia Emocional Consciente
+    let emotionLingeringTimer = null;
+    let isEmotionHeldForSpeech = false;
+
+    window.getCurrentEmotion = function() { return currentEmotion; };
+
+    function resetEmotionToIdle() {
+      clearAnimationClasses();
+      activeEmotion = null;
+      currentEmotion = null;
+      isEmotionHeldForSpeech = false;
+      if (eyesContainer) eyesContainer.classList.remove('sensor-active');
+      if (thinkingTag && currentState !== 'think') {
+        thinkingTag.classList.add('hidden');
+        thinkingTag.classList.remove('flex');
+      }
+      if (currentEmotionBadge) {
+        currentEmotionBadge.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#15151a] border border-[#272730] text-[#a1a1aa] shadow-sm transition-all';
+      }
+      if (emotionPillIcon) emotionPillIcon.textContent = '⚪';
+      if (emotionPillName) emotionPillName.textContent = 'listo';
+      if (emotionPill) {
+        emotionPill.classList.add('hidden');
+        emotionPill.classList.remove('flex');
+      }
+      if (ambientAura) {
+        ambientAura.style.background = 'radial-gradient(circle, rgba(243,242,238,0.18) 0%, rgba(10,10,12,0) 70%)';
+      }
+      window.setState(currentState);
+    }
+
+    // Motor central de morphing y expresiones vivas con persistencia en el habla
+    window.setEmotion = function(name, duration = null) {
+      const preset = EMOTION_MAP[name] || { name, icon: '✨', desc: 'Custom', shape: 'pill', h: 44, aura: 'rgba(243,242,238,0.2)' };
+      if (emotionTimer) clearTimeout(emotionTimer);
+      if (emotionLingeringTimer) clearTimeout(emotionLingeringTimer);
+      clearAnimationClasses();
+
+      activeEmotion = preset;
+      currentEmotion = name;
+      emotionStartTime = performance.now();
+
+      if (emotionPillIcon) emotionPillIcon.textContent = preset.icon || '✨';
+      if (emotionPillName) emotionPillName.textContent = preset.name;
+      if (currentEmotionBadge) {
+        currentEmotionBadge.className = 'flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#181822] border border-[#383848] text-[#f3f2ee] shadow-[0_0_12px_rgba(243,242,238,0.14)] transition-all';
+      }
+      if (emotionPill) {
+        emotionPill.classList.remove('hidden');
+        emotionPill.classList.add('flex');
+      }
+
+      // Activar sensores micro-dot para Standby o Cyber/Scanning
+      if (eyesContainer) {
+        if (preset.shape === 'standby' || name === 'standby' || name === 'cyber' || name === 'low_battery') {
+          eyesContainer.classList.add('sensor-active');
+        } else {
+          eyesContainer.classList.remove('sensor-active');
+        }
+      }
+
+      // Aplicar animaciones directas si están especificadas en el preset
+      if (preset.anim) {
+        if (eyeLeft) eyeLeft.classList.add(preset.anim);
+        if (eyeRight) eyeRight.classList.add(preset.anim);
+      }
+      if (preset.animLeft && eyeLeft) eyeLeft.classList.add(preset.animLeft);
+      if (preset.animRight && eyeRight) eyeRight.classList.add(preset.animRight);
+      if (preset.animSocket && eyeSocket) {
+        if (preset.animSocket === 'anim-hop') {
+          if (eyeLeft) eyeLeft.classList.add('anim-hop-l');
+          if (eyeRight) eyeRight.classList.add('anim-hop-r');
+        } else {
+          eyeSocket.classList.add(preset.animSocket);
+        }
+      }
+
+      // Mostrar etiqueta THINKING si corresponde
+      if (thinkingTag) {
+        if (name === 'thinking' || preset.shape === 'olitas' || preset.shape === 'wave' || preset.shape === 'thinking_real') {
+          thinkingTag.classList.remove('hidden');
+          thinkingTag.classList.add('flex');
+        } else if (currentState !== 'think') {
+          thinkingTag.classList.add('hidden');
+          thinkingTag.classList.remove('flex');
+        }
+      }
+
+      // Actualizar aura ambiental
+      if (preset.aura && ambientAura) {
+        ambientAura.style.background = `radial-gradient(ellipse at center, ${preset.aura} 0%, transparent 75%)`;
+      }
+
+      // Duración adaptativa por tipo de emoción si no se especificó un valor
+      let effectiveDuration = duration;
+      if (!effectiveDuration) {
+        if (name === 'laughing' || name === 'giggle' || preset.shape === 'asym_wink') {
+          effectiveDuration = 2200;
+        } else if (name === 'surprised' || name === 'startled' || name === 'glitch' || name === 'eureka') {
+          effectiveDuration = 3400;
+        } else if (name === 'yawn') {
+          effectiveDuration = 3600;
+        } else if (name === 'confused' || name === 'puzzled' || name === 'skeptical') {
+          effectiveDuration = 4500;
+        } else if (name === 'amused' || name === 'teasing' || name === 'winking') {
+          effectiveDuration = 8000;
+        } else {
+          effectiveDuration = 12000;
+        }
+      }
+
+      // Si Rowan está pensando o hablando, la emoción NO debe cortarse a mitad del discurso
+      if (currentState === 'think' || currentState === 'speak') {
+        isEmotionHeldForSpeech = true;
+      } else {
+        isEmotionHeldForSpeech = false;
+        // Si no está hablando, mantener visible por el tiempo adaptativo y relajarse suavemente
+        emotionTimer = setTimeout(() => {
+          resetEmotionToIdle();
+        }, effectiveDuration);
+      }
+    };
+
+    window.triggerMusicReaction = function() {
+      window.setEmotion('groove', 12000);
+      showToast('🎵 Rowan bailando con groove');
+    };
+
+    /**
+     * ========================================================
+     * 2. PHYSICS & SPEAKING + COMPLETE MORPHING LOOP (60 FPS)
+     * ========================================================
+     */
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let currentX = 0;
+    let currentY = 0;
+    const isNotchSurface = document.documentElement.dataset.surface === 'notch';
+    // The shared eyes are scaled into a 34px-high notch. Reserve space for
+    // their emotional morphs instead of using the full chat tracking range.
+    const MAX_OFFSET_X = isNotchSurface ? 10 : 18;
+    const MAX_OFFSET_Y = isNotchSurface ? 7 : 12;
+    const LERP_FACTOR = 0.085;
+
+    // Variables de estado continuo para morphing y transición ultra-fluida (60 FPS)
+    let curLH = 44, curRH = 44;
+    let curLW = 16, curRW = 16;
+    let curLRot = 0, curRRot = 0;
+    let curLY = 0, curRY = 0;
+    let curGap = isNotchSurface ? 15 : 24;
+    let curFaceAngle = 0;
+    let curOpacity = 1;
+    const MORPH_FACTOR = 0.175;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    let speakingWaveAngle = 0;
+    let thinkingWaveAngle = 0;
+    let externalAudioLevel = 0;
+    let smoothedAudioLevel = 0;
+    let lastExternalAudioTs = 0;
+    let lastEyeFrameTs = performance.now();
+
+    window.updateAudioLevel = function(level) {
+      const val = Number(level);
+      externalAudioLevel = Number.isFinite(val) ? Math.max(0, Math.min(1, val)) : 0;
+      lastExternalAudioTs = performance.now();
+    };
+
+    function animateEyeTracking(timestamp) {
+      const nowFrame = timestamp || performance.now();
+      const dt = Math.min(0.05, Math.max(0.004, (nowFrame - lastEyeFrameTs) / 1000));
+      lastEyeFrameTs = nowFrame;
+      const lerpStep = 1 - Math.exp(-9.2 * dt);
+      const morphStep = 1 - Math.exp(-10.5 * dt);
+
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight * (isNotchSurface ? 0.5 : (window.isLiveModeActive ? 0.45 : 0.25));
+      
+      const deltaX = (mouseX - centerX) / (window.innerWidth / 2);
+      const deltaY = (mouseY - centerY) / (window.innerHeight / 2);
+
+      const targetX = Math.max(-1, Math.min(1, deltaX)) * MAX_OFFSET_X;
+      const targetY = Math.max(-1, Math.min(1, deltaY)) * MAX_OFFSET_Y;
+
+      currentX += (targetX - currentX) * lerpStep;
+      currentY += (targetY - currentY) * lerpStep;
+
+      // Modulación sonora al hablar (impulsada por envolvente RMS real desde Python + onda continua de respaldo)
+      let speechModulation = 0;
+      if (currentState === 'speak') {
+        speakingWaveAngle += 0.23;
+        const nowPerf = performance.now();
+        if ((nowPerf - lastExternalAudioTs) < 280) {
+          smoothedAudioLevel += (externalAudioLevel - smoothedAudioLevel) * 0.36;
+          const microCarrier = Math.sin(speakingWaveAngle * 1.15) * 2.4;
+          speechModulation = (smoothedAudioLevel * 15.0) + microCarrier;
+        } else {
+          smoothedAudioLevel *= 0.85;
+          speechModulation = Math.sin(speakingWaveAngle) * 8;
+        }
+      } else {
+        smoothedAudioLevel *= 0.8;
+      }
+
+      // Parámetros base de los ojos
+      let lH = 44, rH = 44, lW = 16, rW = 16;
+      let lRot = 0, rRot = 0, lY = 0, rY = 0;
+      let lRadius = '9999px', rRadius = '9999px';
+      let socketGap = isNotchSurface ? 15 : 24;
+      let faceAngle = 0;
+      let eyeColor = document.documentElement.classList.contains('light-surface') ? '#111111' : '#f3f2ee';
+      let opacityVal = 1;
+
+      // Ondas orgánicas continuas de olitas (thinking) en contrafase
+      thinkingWaveAngle += 0.065;
+      const waveSin = Math.sin(thinkingWaveAngle);
+      const waveL = (waveSin + 1) / 2;   // 0 a 1
+      const waveR = (-waveSin + 1) / 2;  // 0 a 1 en contrafase
+
+      const p = activeEmotion;
+      const el = activeEmotion ? (performance.now() - emotionStartTime) / 1000 : 0;
+
+      if (p) {
+        if (p.h) { lH = p.h; rH = p.h; }
+        if (p.w) { lW = p.w; rW = p.w; }
+        if (p.gap) socketGap = p.gap;
+        if (p.transY) { lY = p.transY; rY = p.transY; }
+        if (p.transYLeft !== undefined) lY = p.transYLeft;
+        if (p.transYRight !== undefined) rY = p.transYRight;
+        if (p.hRight !== undefined) rH = p.hRight;
+        if (p.faceRot) faceAngle = p.faceRot;
+        if (p.eyeColor) eyeColor = p.eyeColor;
+        if (p.opacity !== undefined) opacityVal = p.opacity;
+
+        switch (p.shape) {
+          case 'rainbow': // Sonrisa (⌒ ⌒) con arco superior curvado
+            lRadius = '20px 20px 6px 6px';
+            rRadius = '20px 20px 6px 6px';
+            lRot = -(p.rot || 10);
+            rRot = (p.rot || 10);
+            break;
+
+          case 'chevron': // (^ ^) picos de chevron
+            lRadius = '9999px 9999px 4px 4px';
+            rRadius = '9999px 9999px 4px 4px';
+            lRot = -(p.rot || 20);
+            rRot = (p.rot || 20);
+            break;
+
+          case 'thinking_real':
+          case 'olitas':
+          case 'wave':
+            // "Olitas" en contrafase continua (onda sinusoidal donde una cápsula se arquea hacia arriba mientras la otra se ondula en contrafase)
+            lW = 32 + waveL * 6;
+            lH = 13 + waveL * 13;
+            lY = -waveL * 9;
+            lRadius = `${Math.round(14 + waveL * 14)}px ${Math.round(14 + waveL * 14)}px ${Math.round(14 - waveL * 6)}px ${Math.round(14 - waveL * 6)}px`;
+
+            rW = 32 + waveR * 6;
+            rH = 13 + waveR * 13;
+            rY = -waveR * 9;
+            rRadius = `${Math.round(14 + waveR * 14)}px ${Math.round(14 + waveR * 14)}px ${Math.round(14 - waveR * 6)}px ${Math.round(14 - waveR * 6)}px`;
+            break;
+
+          case 'focused': // Enfoque láser hacia el centro
+            lRot = -(p.rot || 6);
+            rRot = (p.rot || 6);
+            lRadius = '9999px';
+            rRadius = '9999px';
+            break;
+
+          case 'curious_tilt': // Ojo alzado y ladeo
+            lRot = -3;
+            rRot = 3;
+            break;
+
+          case 'calculating': // Alternancia rápida de parpadeo procesando
+            const calcPhase = Math.sin(el * 14);
+            lH = calcPhase > 0 ? (p.h || 26) : 8;
+            rH = calcPhase <= 0 ? (p.h || 26) : 8;
+            break;
+
+          case 'puppy': // Inversión solicitada por usuario: \ / se convierte en / \ (lRot positivo, rRot negativo)
+            lRot = Math.abs(p.rot || 14);
+            rRot = -Math.abs(p.rot || 14);
+            lRadius = '9999px';
+            rRadius = '9999px';
+            break;
+
+          case 'angry': // Inversión solicitada por usuario: / \ se convierte en \ / (lRot negativo, rRot positivo)
+            lRot = -Math.abs(p.rot || 18);
+            rRot = Math.abs(p.rot || 18);
+            lRadius = '9999px';
+            rRadius = '9999px';
+            break;
+
+          case 'slant': // Inversión solicitada por usuario: / \ se convierte en \ /
+            lRot = -24;
+            rRot = 24;
+            lRadius = '9999px';
+            rRadius = '9999px';
+            break;
+
+          case 'slit':
+          case 'standby':
+            lH = p.h || 10;
+            rH = p.h || 10;
+            lW = p.w || 38;
+            rW = p.w || 38;
+            lRadius = '6px';
+            rRadius = '6px';
+            break;
+
+          case 'sleepy':
+            lH = p.h || 12;
+            rH = p.h || 12;
+            lRadius = '9999px';
+            rRadius = '9999px';
+            opacityVal = 0.7;
+            break;
+
+          case 'asym_wink_smile':
+            lRadius = '20px 20px 6px 6px';
+            lRot = -10;
+            lH = p.h || 30;
+            rRadius = '9999px';
+            rH = 8;
+            rRot = 6;
+            break;
+
+          case 'winking_quick':
+            lH = p.h || 36;
+            rH = Math.sin(el * 10) > 0 ? 6 : (p.h || 36);
+            break;
+
+          case 'asym_wink':
+            lH = p.h || 36;
+            rH = 10;
+            rRot = 10;
+            break;
+
+          case 'asym_tilt':
+            lRot = -(p.rot || 8);
+            rRot = (p.rot ? p.rot * 0.4 : 4);
+            break;
+
+          case 'asym_weight':
+            lW = 18;
+            rW = 12;
+            lH = 34;
+            rH = 26;
+            break;
+
+          case 'sharp':
+            lRadius = '2px';
+            rRadius = '2px';
+            break;
+
+          case 'groove':
+            const osc = Math.sin(el * 5.2);
+            lH = 44 + osc * 3.5;
+            rH = 44 + osc * 3.5;
+            lY = osc * 1.8;
+            rY = -osc * 1.8;
+            break;
+
+          case 'greeting':
+            const b = Math.sin(el * 9) * 8;
+            lY = -Math.abs(b);
+            rY = -Math.abs(b);
+            break;
+
+          default:
+            if (p.rot) {
+              lRot = p.rot;
+              rRot = -p.rot;
+            }
+            break;
+        }
+      } else if (currentState === 'think') {
+        // Modo think por defecto sin preset: Olitas en contrafase continua
+        lW = 32 + waveL * 6;
+        lH = 13 + waveL * 13;
+        lY = -waveL * 9;
+        lRadius = `${Math.round(14 + waveL * 14)}px ${Math.round(14 + waveL * 14)}px ${Math.round(14 - waveL * 6)}px ${Math.round(14 - waveL * 6)}px`;
+
+        rW = 32 + waveR * 6;
+        rH = 13 + waveR * 13;
+        rY = -waveR * 9;
+        rRadius = `${Math.round(14 + waveR * 14)}px ${Math.round(14 + waveR * 14)}px ${Math.round(14 - waveR * 6)}px ${Math.round(14 - waveR * 6)}px`;
+
+        if (thinkingTag) {
+          thinkingTag.classList.remove('hidden');
+          thinkingTag.classList.add('flex');
+        }
+      } else {
+        if (thinkingTag && !activeEmotion) {
+          thinkingTag.classList.add('hidden');
+          thinkingTag.classList.remove('flex');
+        }
+      }
+
+      // Modulación de habla al responder
+      if (currentState === 'speak') {
+        lH += speechModulation;
+        rH += speechModulation;
+        if (thinkingTag && (!activeEmotion || activeEmotion.name !== 'thinking')) {
+          thinkingTag.classList.add('hidden');
+          thinkingTag.classList.remove('flex');
+        }
+      }
+
+      // Transición orgánica continua (LERP independiente de Hz) entre emociones y estados
+      curLH += (lH - curLH) * morphStep;
+      curRH += (rH - curRH) * morphStep;
+      curLW += (lW - curLW) * morphStep;
+      curRW += (rW - curRW) * morphStep;
+      curLRot += (lRot - curLRot) * morphStep;
+      curRRot += (rRot - curRRot) * morphStep;
+      curLY += (lY - curLY) * morphStep;
+      curRY += (rY - curRY) * morphStep;
+      curGap += (socketGap - curGap) * morphStep;
+      curFaceAngle += (faceAngle - curFaceAngle) * morphStep;
+      curOpacity += (opacityVal - curOpacity) * morphStep;
+
+      // Aplicar transformaciones al socket
+      if (eyeSocket) {
+        eyeSocket.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0) rotate(${curFaceAngle.toFixed(2)}deg)`;
+        eyeSocket.style.gap = `${curGap.toFixed(1)}px`;
+      }
+
+      // Aplicar transformaciones a los ojos izquierdo y derecho
+      if (eyeLeft && !eyeLeft.classList.contains('blink')) {
+        eyeLeft.style.height = `${Math.max(4, curLH).toFixed(2)}px`;
+        eyeLeft.style.width = `${Math.max(6, curLW).toFixed(2)}px`;
+        eyeLeft.style.borderRadius = lRadius;
+        eyeLeft.style.backgroundColor = eyeColor;
+        eyeLeft.style.opacity = curOpacity.toFixed(2);
+        eyeLeft.style.transform = `translate3d(0, ${curLY.toFixed(2)}px, 0) rotate(${curLRot.toFixed(2)}deg)`;
+      }
+
+      if (eyeRight && !eyeRight.classList.contains('blink')) {
+        eyeRight.style.height = `${Math.max(4, curRH).toFixed(2)}px`;
+        eyeRight.style.width = `${Math.max(6, curRW).toFixed(2)}px`;
+        eyeRight.style.borderRadius = rRadius;
+        eyeRight.style.backgroundColor = eyeColor;
+        eyeRight.style.opacity = curOpacity.toFixed(2);
+        eyeRight.style.transform = `translate3d(0, ${curRY.toFixed(2)}px, 0) rotate(${curRRot.toFixed(2)}deg)`;
+      }
+
+      requestAnimationFrame(animateEyeTracking);
+    }
+    requestAnimationFrame(animateEyeTracking);
+
+    function scheduleBlink() {
+      const delay = Math.random() * 2600 + 2800;
+      setTimeout(() => {
+        if (currentState !== 'think' && currentEmotion !== 'sleepy') {
+          eyeLeft.classList.add('blink');
+          eyeRight.classList.add('blink');
+
+          setTimeout(() => {
+            eyeLeft.classList.remove('blink');
+            eyeRight.classList.remove('blink');
+          }, 110);
+        } else if (currentEmotion === 'sleepy') {
+          eyeLeft.classList.add('blink');
+          eyeRight.classList.add('blink');
+          setTimeout(() => {
+            eyeLeft.classList.remove('blink');
+            eyeRight.classList.remove('blink');
+          }, 320);
+        }
+        scheduleBlink();
+      }, delay);
+    }
+    scheduleBlink();
+
+    /**
+     * ========================================================
+     * 3. ASSISTANT STATE MACHINE (window.setState)
+     * ========================================================
+     */
+    window.setState = function(state) {
+      currentState = state;
+
+      const avatarContainer = document.getElementById('eyes-container');
+      if (avatarContainer) {
+        avatarContainer.classList.remove('speaking', 'listening');
+      }
+
+      if (!currentEmotion) {
+        ambientAura.className = window.isLiveModeActive ? 'ambient-glow live-active' : 'ambient-glow';
+      }
+      micIcon.classList.remove('text-rose-400');
+      micPulse.classList.add('hidden');
+      audioWaveDot.classList.add('opacity-0');
+
+      // Gestión de persistencia emocional orgánica según el estado de habla
+      if (state === 'speak' || state === 'think') {
+        if (activeEmotion) {
+          isEmotionHeldForSpeech = true;
+          if (emotionTimer) clearTimeout(emotionTimer);
+          if (emotionLingeringTimer) clearTimeout(emotionLingeringTimer);
+        }
+      } else if (state === 'idle') {
+        if (activeEmotion) {
+          // Remanencia natural adaptativa según la última emoción expresada
+          if (emotionTimer) clearTimeout(emotionTimer);
+          if (emotionLingeringTimer) clearTimeout(emotionLingeringTimer);
+          let lingerMs = 12000;
+          if (currentEmotion === 'laughing' || currentEmotion === 'giggle') {
+            lingerMs = 2400; // La risa no se queda congelada 12 segundos tras terminar de hablar
+          } else if (currentEmotion === 'surprised' || currentEmotion === 'startled' || currentEmotion === 'eureka') {
+            lingerMs = 3600;
+          } else if (currentEmotion === 'yawn') {
+            lingerMs = 3200;
+          } else if (currentEmotion === 'confused' || currentEmotion === 'puzzled') {
+            lingerMs = 4500;
+          } else if (currentEmotion === 'amused' || currentEmotion === 'teasing') {
+            lingerMs = 8000;
+          }
+          emotionLingeringTimer = setTimeout(() => {
+            resetEmotionToIdle();
+          }, lingerMs);
+        }
+      }
+
+      switch (state) {
+        case 'idle':
+          statusDot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.65)]';
+          statusText.textContent = window.isLiveModeActive ? 'EN VIVO' : 'LISTO';
+          break;
+
+        case 'listen':
+          statusDot.className = 'w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.85)] animate-pulse';
+          statusText.textContent = 'ESCUCHANDO';
+          if (!currentEmotion) ambientAura.className = 'ambient-glow listening';
+          if (avatarContainer) avatarContainer.classList.add('listening');
+          micIcon.classList.add('text-rose-400');
+          micPulse.classList.remove('hidden');
+          break;
+
+        case 'think':
+          statusDot.className = 'w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_9px_rgba(251,191,36,0.8)]';
+          statusText.textContent = 'PENSANDO';
+          if (!currentEmotion) ambientAura.className = 'ambient-glow thinking';
+          break;
+
+        case 'speak':
+          statusDot.className = 'w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.95)]';
+          statusText.textContent = 'HABLANDO';
+          if (!currentEmotion) ambientAura.className = 'ambient-glow speaking';
+          if (avatarContainer) avatarContainer.classList.add('speaking');
+          audioWaveDot.classList.remove('opacity-0');
+          break;
+      }
+    };
+
+    const statesCycle = ['idle', 'listen', 'think', 'speak'];
+    let stateIdx = 0;
+    function toggleRandomStateDemo() {
+      stateIdx = (stateIdx + 1) % statesCycle.length;
+      window.setState(statesCycle[stateIdx]);
+    }
+
+    /**
+     * ========================================================
+     * 3.1 LIVE MODE, USER BOTTOM CAPTION & STREAMING HOOKS
+     * ========================================================
+     */
+    let currentStreamTextNode = null;
+    let currentStreamCursor = null;
+    let liveCaptionHideTimer = null;
+    let supportsDisplayTransition;
+
+    function canTransitionDisplay() {
+      if (supportsDisplayTransition !== undefined) return supportsDisplayTransition;
+      if (!window.CSS?.supports?.('transition-behavior', 'allow-discrete') || !document.body) {
+        supportsDisplayTransition = false;
+        return false;
+      }
+      const probe = document.createElement('div');
+      probe.style.cssText = 'transition: display 1s allow-discrete !important; display: block;';
+      document.body.appendChild(probe);
+      getComputedStyle(probe).display;
+      probe.style.display = 'none';
+      supportsDisplayTransition = getComputedStyle(probe).display === 'block';
+      probe.remove();
+      return supportsDisplayTransition;
+    }
+
+    function showDiscreteElement(el) {
+      if (!el) return;
+      el.removeAttribute('data-closing');
+      el.hidden = false;
+    }
+
+    async function hideDiscreteElement(el) {
+      if (!el || el.hidden) return;
+      if (canTransitionDisplay()) {
+        el.hidden = true;
+        return;
+      }
+      el.setAttribute('data-closing', '');
+      const animations = el.getAnimations ? el.getAnimations() : [];
+      if (animations.length > 0) {
+        await Promise.race([
+          Promise.allSettled(animations.map((a) => a.finished)),
+          new Promise((r) => setTimeout(r, 600)),
+        ]);
+      }
+      if (el.hasAttribute('data-closing')) {
+        el.removeAttribute('data-closing');
+        el.hidden = true;
+      }
+    }
+
+    window.setLiveUserCaption = function(text, isFinal = false) {
+      if (!window.isLiveModeActive) return;
+      const clean = (text || '').trim();
+      if (!clean) return;
+
+      if (liveCaptionHideTimer) {
+        clearTimeout(liveCaptionHideTimer);
+        liveCaptionHideTimer = null;
+      }
+
+      if (liveUserCaptionText) {
+        liveUserCaptionText.textContent = clean;
+      }
+      if (liveCaptionDot) {
+        if (isFinal) {
+          liveCaptionDot.className = 'w-2 h-2 rounded-full bg-sky-300 shadow-[0_0_8px_rgba(125,211,252,0.85)] shrink-0';
+        } else {
+          liveCaptionDot.className = 'w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)] shrink-0 animate-pulse';
+        }
+      }
+
+      showDiscreteElement(liveUserCaption);
+
+      if (isFinal) {
+        liveCaptionHideTimer = setTimeout(() => {
+          hideDiscreteElement(liveUserCaption);
+        }, 3600);
+      }
+    };
+
+    window.clearLiveUserCaption = function() {
+      if (liveCaptionHideTimer) {
+        clearTimeout(liveCaptionHideTimer);
+        liveCaptionHideTimer = null;
+      }
+      hideDiscreteElement(liveUserCaption);
+      if (liveUserCaptionText) {
+        liveUserCaptionText.textContent = '';
+      }
+    };
+
+    window.setLiveMode = function(isActive) {
+      if (typeof isActive === 'object' && isActive !== null) {
+        window.isLiveModeActive = Boolean(isActive.live_active);
+      } else {
+        window.isLiveModeActive = Boolean(isActive);
+      }
+
+      document.body.classList.toggle('live-mode-active', window.isLiveModeActive);
+
+      if (window.isLiveModeActive) {
+        // Cerrar cualquier cursor de texto previo para garantizar cero texto de Rowan en Modo Live
+        if (currentStreamCursor && currentStreamCursor.parentNode) {
+          currentStreamCursor.parentNode.removeChild(currentStreamCursor);
+        }
+        currentStreamCursor = null;
+        currentStreamTextNode = null;
+
+        showDiscreteElement(liveStageBottom);
+        liveHeaderBadge.classList.remove('hidden');
+        liveHeaderBadge.classList.add('flex');
+        toggleLiveBtn.classList.remove('text-[#71717A]');
+        toggleLiveBtn.classList.add('text-emerald-400', 'bg-emerald-500/10', 'border-emerald-500/30', 'shadow-[0_0_12px_rgba(16,185,129,0.25)]');
+        liveIcon.classList.add('live-active-wave');
+        livePulse.classList.remove('hidden');
+        if (!currentEmotion) ambientAura.classList.add('live-active');
+        if (currentState === 'idle') {
+          statusText.textContent = 'EN VIVO';
+        }
+        showToast('Modo Live activado · Solo voz');
+      } else {
+        window.clearLiveUserCaption();
+        hideDiscreteElement(liveStageBottom);
+        liveHeaderBadge.classList.add('hidden');
+        liveHeaderBadge.classList.remove('flex');
+        toggleLiveBtn.classList.remove('text-emerald-400', 'bg-emerald-500/10', 'border-emerald-500/30', 'shadow-[0_0_12px_rgba(16,185,129,0.25)]');
+        toggleLiveBtn.classList.add('text-[#71717A]');
+        liveIcon.classList.remove('live-active-wave');
+        livePulse.classList.add('hidden');
+        if (!currentEmotion) ambientAura.classList.remove('live-active');
+        if (currentState === 'idle') {
+          statusText.textContent = 'LISTO';
+        }
+      }
+    };
+
+    async function triggerToggleLiveMode() {
+      if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.toggle_live_mode === 'function') {
+        try {
+          const res = await window.pywebview.api.toggle_live_mode();
+          window.setLiveMode(res);
+        } catch (err) {
+          console.error("Error en toggle_live_mode:", err);
+          window.setLiveMode(!window.isLiveModeActive);
+        }
+      } else {
+        window.setLiveMode(!window.isLiveModeActive);
+      }
+    }
+
+    toggleLiveBtn.addEventListener('click', triggerToggleLiveMode);
+    if (exitLivePillBtn) exitLivePillBtn.addEventListener('click', triggerToggleLiveMode);
+    if (liveHeaderBadge) liveHeaderBadge.addEventListener('click', triggerToggleLiveMode);
+
+    window.startAssistantStream = function() {
+      window.setState('speak');
+      // Regla estricta Modo Live: lo que dice Rowan NUNCA debe aparecer en texto durante Modo Live
+      if (window.isLiveModeActive) {
+        currentStreamTextNode = null;
+        currentStreamCursor = null;
+        return;
+      }
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'w-full flex group msg-entrance justify-start items-start gap-3.5';
+      
+      const avatarDiv = document.createElement('div');
+      avatarDiv.className = 'w-6 h-6 rounded-full bg-[#16161a] border border-[#26262c] flex items-center justify-center shrink-0 mt-0.5 shadow-sm group-hover:border-[#383842] transition-colors';
+      avatarDiv.innerHTML = '<span class="mono text-[11px] text-[#f3f2ee] font-medium">R</span>';
+
+      const contentCol = document.createElement('div');
+      contentCol.className = 'flex flex-col gap-1 max-w-[min(82%,520px)] min-w-0 select-text';
+
+      const metaRow = document.createElement('div');
+      metaRow.className = 'flex items-center gap-2';
+      metaRow.innerHTML = `
+        <span class="mono text-[10px] text-[#52525B] font-medium uppercase tracking-wider">ROWAN</span>
+        <span class="mono text-[9px] text-[#3f3f46]">AHORA</span>
+      `;
+
+      const p = document.createElement('p');
+      p.className = 'text-[13.5px] text-[#d4d4d8] leading-relaxed font-normal selection:bg-[#27272a] whitespace-pre-wrap break-words [overflow-wrap:anywhere] select-text';
+
+      const cursor = document.createElement('span');
+      cursor.className = 'stream-cursor';
+
+      p.appendChild(cursor);
+      contentCol.appendChild(metaRow);
+      contentCol.appendChild(p);
+
+      messageDiv.appendChild(avatarDiv);
+      messageDiv.appendChild(contentCol);
+
+      messagesList.appendChild(messageDiv);
+      messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+
+      currentStreamTextNode = p;
+      currentStreamCursor = cursor;
+    };
+
+    window.appendStreamChunk = function(chunk) {
+      if (window.isLiveModeActive) return;
+      if (!currentStreamTextNode) {
+        window.startAssistantStream();
+      }
+      if (!currentStreamTextNode) return;
+      if (currentStreamCursor && currentStreamCursor.parentNode === currentStreamTextNode) {
+        currentStreamTextNode.insertBefore(document.createTextNode(chunk), currentStreamCursor);
+      } else {
+        currentStreamTextNode.appendChild(document.createTextNode(chunk));
+      }
+      messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+    };
+
+    window.finishAssistantStream = function(finalText) {
+      if (currentStreamCursor && currentStreamCursor.parentNode) {
+        currentStreamCursor.parentNode.removeChild(currentStreamCursor);
+      }
+      if (!window.isLiveModeActive && finalText && currentStreamTextNode) {
+        currentStreamTextNode.textContent = finalText;
+      }
+      currentStreamCursor = null;
+      currentStreamTextNode = null;
+    };
+
+    window.appendMediaCard = function(dataUri, fullPath) {
+      if (window.isLiveModeActive) return;
+      const cardDiv = document.createElement('div');
+      cardDiv.className = 'w-full flex justify-start items-start gap-3.5 msg-entrance mt-2 mb-3';
+      
+      const safePath = (fullPath || '').replace(/"/g, '&quot;');
+      const filename = fullPath ? fullPath.split(/[\/\\]/).pop() : 'archivo_media';
+
+      cardDiv.innerHTML = `
+        <div class="w-6 h-6 rounded-full bg-[#16161a] border border-[#26262c] flex items-center justify-center shrink-0 mt-1 shadow-sm">
+          <span class="material-symbols-outlined text-[13px] text-cyan-400">image</span>
+        </div>
+        <div class="flex flex-col gap-2 max-w-lg bg-[#121216] border border-[#26262e] rounded-2xl p-2.5 shadow-2xl">
+          <div class="relative group cursor-pointer overflow-hidden rounded-xl border border-[#1f1f26] bg-[#09090b]" onclick="if(window.pywebview && window.pywebview.api && window.pywebview.api.open_file) window.pywebview.api.open_file('${safePath}');">
+            <img src="${dataUri}" alt="Vista previa" class="w-full max-h-72 object-contain transition-transform duration-300 group-hover:scale-[1.02]" />
+            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-[20px] text-white">open_in_new</span>
+              <span class="mono text-[11px] text-white font-medium">Abrir en Windows</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between gap-2 px-1 text-[11px] text-[#71717a]">
+            <span class="mono truncate max-w-[280px]" title="${safePath}">📁 ${filename}</span>
+            <button class="mono text-[10.5px] px-2 py-0.5 rounded bg-[#1c1c22] hover:bg-[#282830] text-[#d4d4d8] transition-colors flex items-center gap-1 cursor-pointer" onclick="navigator.clipboard.writeText('${safePath}'); showToast('Ruta copiada');">
+              <span class="material-symbols-outlined text-[12px]">content_copy</span>
+              Copiar ruta
+            </button>
+          </div>
+        </div>
+      `;
+
+      messagesList.appendChild(cardDiv);
+      messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+    };
+
+    /**
+     * ========================================================
+     * 4. CHAT STREAMING & CONTEXTUAL EMOTION TRIGGERS
+     * ========================================================
+     */
+    function detectEmotionFromText(text) {
+      const lower = text.toLowerCase();
+      if (/(música|musica|canción|cancion|play|reproduce|spotify|ritmo|groove)/i.test(lower)) {
+        return 'groove';
+      }
+      if (/(gracias|genial|excelente|bueno|increíble|increible|maravilloso|perfecto|bien)/i.test(lower)) {
+        return 'happy';
+      }
+      if (/(por qué|por que|cómo|como|no entiendo|duda|\?)/i.test(lower)) {
+        return 'confused';
+      }
+      if (/(analiza|código|codigo|optimiza|resuelve|terminal|depurar|error|foto|camara|captura)/i.test(lower)) {
+        return 'focused';
+      }
+      return null;
+    }
+
+    window.appendMessage = function(role, text) {
+      const isAssistant = role === 'assistant' || role === 'rowan';
+      if (window.isLiveModeActive) {
+        // En Modo Live solo se muestra 'abajito' lo que dice el usuario; nada de Rowan en texto
+        if (!isAssistant) {
+          window.setLiveUserCaption(text, true);
+        }
+        return;
+      }
+      
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'w-full flex group msg-entrance ' + (isAssistant ? 'justify-start items-start gap-3.5' : 'justify-end items-end');
+
+      if (isAssistant) {
+        messageDiv.innerHTML = `
+          <div class="w-6 h-6 rounded-full bg-[#16161a] border border-[#26262c] flex items-center justify-center shrink-0 mt-0.5 shadow-sm group-hover:border-[#383842] transition-colors">
+            <span class="mono text-[11px] text-[#f3f2ee] font-medium">R</span>
+          </div>
+          <div class="flex flex-col gap-1 max-w-[min(82%,520px)] min-w-0 select-text">
+            <div class="flex items-center gap-2">
+              <span class="mono text-[10px] text-[#52525B] font-medium uppercase tracking-wider">ROWAN</span>
+              <span class="mono text-[9px] text-[#3f3f46]">AHORA</span>
+            </div>
+            <p class="text-[13.5px] text-[#d4d4d8] leading-relaxed font-normal selection:bg-[#27272a] whitespace-pre-wrap break-words [overflow-wrap:anywhere] select-text">${escapeHtml(text)}</p>
+          </div>
+        `;
+      } else {
+        const senderLabel = (userNameInput.value.trim() || window.currentUserName || 'TÚ');
+        messageDiv.innerHTML = `
+          <div class="flex flex-col items-end gap-1.5 max-w-[min(82%,520px)] min-w-0 ml-auto select-text">
+            <div class="flex items-center gap-2 justify-end pr-1">
+              <span class="mono text-[9px] text-[#4b4b52]">AHORA</span>
+              <span class="user-sender-label mono text-[10px] text-[#71717a] font-medium uppercase tracking-wider">${escapeHtml(senderLabel)}</span>
+            </div>
+            <div class="bg-[#17171b] border border-[#26262c] rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:border-[#33333b] transition-colors max-w-full min-w-0 select-text">
+              <p class="text-[13.5px] text-[#f4f4f5] leading-relaxed font-normal selection:bg-[#3f3f46] whitespace-pre-wrap break-words [overflow-wrap:anywhere] select-text">${escapeHtml(text)}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      messagesList.appendChild(messageDiv);
+      messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+      });
+    };
+
+    function escapeHtml(string) {
+      const div = document.createElement('div');
+      div.textContent = string;
+      return div.innerHTML;
+    }
+
+    async function handleSendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      chatInput.value = '';
+      chatInput.focus();
+
+      window.appendMessage('user', text);
+
+      window.setState('think');
+
+      const triggerEmo = detectEmotionFromText(text);
+      if (triggerEmo === 'groove') {
+        window.triggerMusicReaction();
+      } else if (triggerEmo) {
+        window.setEmotion(triggerEmo, 12000);
+      }
+
+      if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.send_message === 'function') {
+        try {
+          await window.pywebview.api.send_message(text);
+        } catch (err) {
+          console.error("Error al invocar python send_message:", err);
+          window.setState('idle');
+        }
+      } else {
+        console.log("Modo preview: pywebview no detectado");
+        setTimeout(() => {
+          window.startAssistantStream();
+          let previewText = `Entendido. He procesado tu solicitud "${text}". La arquitectura failover responde con normalidad.`;
+          if (triggerEmo === 'groove') {
+            previewText = `Subiendo el beat. Sincronizando ondas sonoras a 110 BPM.`;
+          } else if (triggerEmo === 'happy') {
+            previewText = `¡Excelente! Me alegra saber que todo marcha a la perfección con la arquitectura de Rowan.`;
+          } else if (triggerEmo === 'confused') {
+            previewText = `Revisemos con cuidado ese punto. He consultado el historial y aquí tengo la aclaración técnica que necesitas.`;
+          }
+
+          const words = previewText.split(' ');
+          let i = 0;
+          const streamInt = setInterval(() => {
+            if (i < words.length) {
+              window.appendStreamChunk(words[i] + ' ');
+              i++;
+            } else {
+              clearInterval(streamInt);
+              window.finishAssistantStream();
+            }
+          }, 60);
+        }, 800);
+      }
+    }
+
+    sendBtn.addEventListener('click', handleSendMessage);
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSendMessage();
+      }
+    });
+
+    micBtn.addEventListener('click', async () => {
+      if (currentState === 'listen') {
+        window.setState('idle');
+        return;
+      }
+
+      window.setState('listen');
+      if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.listen_voice === 'function') {
+        try {
+          await window.pywebview.api.listen_voice();
+        } catch (err) {
+          console.error("Error en listen_voice:", err);
+          window.setState('idle');
+        }
+      } else {
+        console.log("Modo preview: pywebview no detectado");
+        setTimeout(() => {
+          window.appendMessage('user', 'Hola Rowan, prueba de comando por voz.');
+          window.setEmotion('amused', 2400);
+          window.setState('think');
+          setTimeout(() => {
+            window.appendMessage('assistant', 'Te escucho claramente. Los canales de audio y las expresiones están calibrados.');
+            window.setState('speak');
+            setTimeout(() => {
+              window.setState('idle');
+            }, 1800);
+          }, 1400);
+        }, 1800);
+      }
+    });
+
+    function toggleAudioAction() {
+      isMuted = !isMuted;
+      if (isMuted) {
+        audioIcon.textContent = 'volume_off';
+        toggleAudioBtn.classList.add('text-rose-400');
+        showToast('Voz del asistente silenciada', 'error');
+      } else {
+        audioIcon.textContent = 'volume_up';
+        toggleAudioBtn.classList.remove('text-rose-400');
+        showToast('Voz del asistente activada');
+      }
+      if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.toggle_voice === 'function') {
+        window.pywebview.api.toggle_voice(!isMuted);
+      }
+    }
+
+    toggleAudioBtn.addEventListener('click', toggleAudioAction);
+    muteBtn.addEventListener('click', toggleAudioAction);
+
+    /**
+     * ========================================================
+     * 5. SETTINGS MODAL & CONTRACTS (v1.1)
+     * ========================================================
+     */
+    function updateTabIndicator(activeBtn) {
+      if (!activeBtn || !tabIndicator) return;
+      const left = activeBtn.offsetLeft;
+      const width = activeBtn.offsetWidth;
+      tabIndicator.style.left = `${left}px`;
+      tabIndicator.style.width = `${width}px`;
+    }
+
+    function showModal() {
+      settingsModal.classList.remove('hidden');
+      settingsModal.classList.add('flex');
+      saveStatus.textContent = '';
+
+      requestAnimationFrame(() => {
+        settingsBackdrop.classList.add('open');
+        settingsCard.classList.add('open');
+      });
+      
+      const activeTabBtn = document.querySelector('.tab-trigger.text-\\[\\#f3f2ee\\]') || document.getElementById('tab-btn-profile');
+      if (activeTabBtn) {
+        updateTabIndicator(activeTabBtn);
+      }
+
+      loadSettings();
+      loadMemories();
+    }
+
+    function hideModal() {
+      settingsBackdrop.classList.remove('open');
+      settingsCard.classList.remove('open');
+
+      setTimeout(() => {
+        settingsModal.classList.remove('flex');
+        settingsModal.classList.add('hidden');
+      }, 260);
+    }
+
+    openSettingsBtn.addEventListener('click', showModal);
+    closeSettingsBtn.addEventListener('click', hideModal);
+    cancelSettingsBtn.addEventListener('click', hideModal);
+    settingsBackdrop.addEventListener('click', hideModal);
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (!settingsModal.classList.contains('hidden')) {
+          hideModal();
+        } else if (window.isLiveModeActive) {
+          triggerToggleLiveMode();
+        }
+      }
+    });
+
+    tabTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const targetTab = trigger.getAttribute('data-tab');
+
+        tabTriggers.forEach(t => {
+          t.classList.remove('text-[#f3f2ee]');
+          t.classList.add('text-[#71717a]');
+        });
+        trigger.classList.remove('text-[#71717a]');
+        trigger.classList.add('text-[#f3f2ee]');
+
+        updateTabIndicator(trigger);
+
+        tabPanels.forEach(panel => panel.classList.add('hidden'));
+        const activePanel = document.getElementById(`tab-${targetTab}`);
+        if (activePanel) {
+          activePanel.classList.remove('hidden');
+        }
+
+        if (targetTab === 'memory') {
+          renderMemoriesList();
+        }
+      });
+    });
+
+    toggleKeyVisibilityBtn.addEventListener('click', () => {
+      const isPass = apiKeyInput.type === 'password';
+      apiKeyInput.type = isPass ? 'text' : 'password';
+      toggleKeyVisibilityBtn.querySelector('.material-symbols-outlined').textContent = isPass ? 'visibility_off' : 'visibility';
+    });
+
+    if (toggleNvidiaKeyVisibilityBtn) {
+      toggleNvidiaKeyVisibilityBtn.addEventListener('click', () => {
+        const isPass = nvidiaKeyInput.type === 'password';
+        nvidiaKeyInput.type = isPass ? 'text' : 'password';
+        toggleNvidiaKeyVisibilityBtn.querySelector('.material-symbols-outlined').textContent = isPass ? 'visibility_off' : 'visibility';
+      });
+    }
+
+    if (toggleOpenrouterKeyVisibilityBtn) {
+      toggleOpenrouterKeyVisibilityBtn.addEventListener('click', () => {
+        const isPass = openrouterKeyInput.type === 'password';
+        openrouterKeyInput.type = isPass ? 'text' : 'password';
+        toggleOpenrouterKeyVisibilityBtn.querySelector('.material-symbols-outlined').textContent = isPass ? 'visibility_off' : 'visibility';
+      });
+    }
+
+    if (toggleFishKeyVisibilityBtn && fishApiKeyInput) {
+      toggleFishKeyVisibilityBtn.addEventListener('click', () => {
+        const isPass = fishApiKeyInput.type === 'password';
+        fishApiKeyInput.type = isPass ? 'text' : 'password';
+        toggleFishKeyVisibilityBtn.querySelector('.material-symbols-outlined').textContent = isPass ? 'visibility_off' : 'visibility';
+      });
+    }
+
+    function syncActiveCharacterBanner(labelText) {
+      if (!activeCharacterBanner || !activeCharacterLabel) return;
+      const clean = (labelText || '').trim();
+      if (clean) {
+        activeCharacterLabel.textContent = clean;
+        activeCharacterBanner.classList.remove('hidden');
+        activeCharacterBanner.classList.add('flex');
+      } else {
+        activeCharacterLabel.textContent = '—';
+        activeCharacterBanner.classList.add('hidden');
+        activeCharacterBanner.classList.remove('flex');
+      }
+    }
+    window.syncActiveCharacterBanner = syncActiveCharacterBanner;
+
+    if (resetCharacterVoiceBtn) {
+      resetCharacterVoiceBtn.addEventListener('click', async () => {
+        if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.reset_character_voice === 'function') {
+          await window.pywebview.api.reset_character_voice();
+        }
+        syncActiveCharacterBanner('');
+        showToast('🎙️ Voz principal de Rowan restaurada');
+      });
+    }
+
+    async function runFishStudioSearch(forcedQuery) {
+      if (!fishStudioSearchInput || !fishStudioResults) return;
+      if (typeof forcedQuery === 'string') {
+        fishStudioSearchInput.value = forcedQuery;
+      }
+      const query = fishStudioSearchInput.value.trim();
+      if (!query) return;
+
+      fishStudioResults.classList.remove('hidden');
+      fishStudioResults.classList.add('flex');
+      fishStudioResults.innerHTML = `<div class="p-2.5 text-[11px] text-[#a1a1aa] mono">Buscando "${escapeHtml(query)}" en Fish Studio...</div>`;
+
+      if (!(window.pywebview && window.pywebview.api && typeof window.pywebview.api.search_fish_voices === 'function')) {
+        fishStudioResults.innerHTML = `<div class="p-2.5 text-[11px] text-[#71717a]">Ejecuta Rowan desde Python para consultar Fish Studio en vivo.</div>`;
+        return;
+      }
+
+      try {
+        const tempKey = fishApiKeyInput ? fishApiKeyInput.value.trim() : '';
+        const res = await window.pywebview.api.search_fish_voices(query, tempKey);
+        const list = (res && Array.isArray(res.results)) ? res.results : [];
+        if (list.length === 0) {
+          fishStudioResults.innerHTML = `<div class="p-2.5 text-[11px] text-[#71717a]">No se hallaron voces entrenadas para "${escapeHtml(query)}". Verifica tu Fish API Key o prueba otro nombre.</div>`;
+          return;
+        }
+        fishStudioResults.innerHTML = '';
+        list.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'p-2.5 rounded-lg bg-[#18181f] border border-[#262630] hover:border-[#383846] flex items-center justify-between gap-2 transition-colors';
+          const esBadge = item.is_spanish
+            ? `<span class="mono text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">ES</span>`
+            : '';
+          const uses = Number(item.task_count || 0).toLocaleString();
+          card.innerHTML = `
+            <div class="flex flex-col min-w-0">
+              <div class="flex items-center gap-1.5 min-w-0">
+                <span class="text-[11.5px] text-[#f3f2ee] font-medium truncate">${escapeHtml(item.title || query)}</span>
+                ${esBadge}
+              </div>
+              <span class="mono text-[9.5px] text-[#71717a] truncate">${escapeHtml(item.id)} · ${uses} usos</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" class="btn-use-temp px-2 py-1 rounded-md bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-[10px] font-medium text-emerald-300 transition-colors cursor-pointer">Probar</button>
+              <button type="button" class="btn-set-main px-2 py-1 rounded-md bg-[#23232c] hover:bg-[#2d2d38] border border-[#32323e] text-[10px] text-[#d4d4d8] transition-colors cursor-pointer" title="Usar como Voice ID Principal">Fijar ID</button>
+            </div>
+          `;
+          card.querySelector('.btn-use-temp').addEventListener('click', async () => {
+            await window.pywebview.api.apply_fish_voice(item.id, item.title || query, true);
+            syncActiveCharacterBanner(item.title || query);
+            showToast(`🎭 Hablando como ${item.title || query}`);
+          });
+          card.querySelector('.btn-set-main').addEventListener('click', () => {
+            if (fishVoiceIdInput) {
+              fishVoiceIdInput.value = item.id;
+              showToast('Voice ID copiado como Principal (pulsa Guardar)');
+            }
+          });
+          fishStudioResults.appendChild(card);
+        });
+      } catch (err) {
+        fishStudioResults.innerHTML = `<div class="p-2.5 text-[11px] text-rose-400">Error consultando Fish Studio.</div>`;
+      }
+    }
+
+    if (fishStudioSearchBtn) {
+      fishStudioSearchBtn.addEventListener('click', () => runFishStudioSearch());
+    }
+    if (fishStudioSearchInput) {
+      fishStudioSearchInput.addEventListener('keydown', (event) => {
+        if (event.isComposing || event.keyCode === 229) return;
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          runFishStudioSearch();
+        }
+      });
+    }
+    document.querySelectorAll('.fish-quick-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const q = chip.getAttribute('data-query') || '';
+        if (q) runFishStudioSearch(q);
+      });
+    });
+
+    toggleBackupAccordion.addEventListener('click', () => {
+      const isHidden = backupAccordionContent.classList.contains('hidden');
+      if (isHidden) {
+        backupAccordionContent.classList.remove('hidden');
+        backupChevron.style.transform = 'rotate(180deg)';
+      } else {
+        backupAccordionContent.classList.add('hidden');
+        backupChevron.style.transform = 'rotate(0deg)';
+      }
+    });
+
+    /**
+     * ========================================================
+     * 5.1 PROVIDER CARDS REORDER LOGIC
+     * ========================================================
+     */
+    function updateCardBadges() {
+      const cards = providersContainer.querySelectorAll('.provider-card');
+      cards.forEach((card, index) => {
+        const badge = card.querySelector('.provider-badge');
+        if (!badge) return;
+        if (index === 0) {
+          badge.textContent = 'Prioridad 1 (Principal)';
+          badge.className = 'provider-badge mono text-[9.5px] px-2 py-0.5 rounded-full font-medium tracking-wide bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+        } else if (index === 1) {
+          badge.textContent = 'Prioridad 2 (Failover)';
+          badge.className = 'provider-badge mono text-[9.5px] px-2 py-0.5 rounded-full font-medium tracking-wide bg-[#202026] text-[#a1a1aa] border border-[#2a2a32]';
+        } else {
+          badge.textContent = 'Prioridad 3 (Failover)';
+          badge.className = 'provider-badge mono text-[9.5px] px-2 py-0.5 rounded-full font-medium tracking-wide bg-[#202026] text-[#a1a1aa] border border-[#2a2a32]';
+        }
+      });
+    }
+
+    function flashCardAnimation(card) {
+      card.classList.remove('card-swapped');
+      void card.offsetWidth;
+      card.classList.add('card-swapped');
+    }
+
+    function moveCard(card, direction) {
+      if (direction === 'up') {
+        const prev = card.previousElementSibling;
+        if (prev && prev.classList.contains('provider-card')) {
+          providersContainer.insertBefore(card, prev);
+          updateCardBadges();
+          flashCardAnimation(card);
+        }
+      } else if (direction === 'down') {
+        const next = card.nextElementSibling;
+        if (next && next.classList.contains('provider-card')) {
+          providersContainer.insertBefore(next, card);
+          updateCardBadges();
+          flashCardAnimation(card);
+        }
+      }
+    }
+
+    providersContainer.addEventListener('click', (e) => {
+      const upBtn = e.target.closest('.btn-move-up');
+      const downBtn = e.target.closest('.btn-move-down');
+      if (upBtn) {
+        const card = upBtn.closest('.provider-card');
+        if (card) moveCard(card, 'up');
+      } else if (downBtn) {
+        const card = downBtn.closest('.provider-card');
+        if (card) moveCard(card, 'down');
+      }
+    });
+
+    function getDomCardsOrder() {
+      const cards = providersContainer.querySelectorAll('.provider-card');
+      return Array.from(cards).map(c => c.getAttribute('data-provider')).filter(Boolean);
+    }
+
+    function applyCardsOrder(orderArray) {
+      if (!Array.isArray(orderArray) || orderArray.length === 0) return;
+      orderArray.forEach(providerKey => {
+        const card = providersContainer.querySelector(`[data-provider="${providerKey}"]`);
+        if (card) {
+          providersContainer.appendChild(card);
+        }
+      });
+      updateCardBadges();
+    }
+
+    let settingsLoaded = false;
+    saveSettingsBtn.disabled = true;
+    async function loadSettings() {
+      if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.get_settings === 'function') {
+        try {
+          const config = await window.pywebview.api.get_settings();
+          if (config) {
+            settingsLoaded = true; saveSettingsBtn.disabled = false;
+            userNameInput.value = config.user_name || '';
+            window.currentUserName = (config.user_name || 'TÚ').toUpperCase();
+            document.querySelectorAll('.user-sender-label').forEach(el => {
+              el.textContent = config.user_name || 'TÚ';
+            });
+            apiKeyInput.value = config.api_key || '';
+            backupKeysInput.value = config.backup_keys || '';
+            if (nvidiaKeyInput) nvidiaKeyInput.value = config.nvidia_key || '';
+            openrouterKeyInput.value = config.openrouter_key || '';
+            if (fishApiKeyInput) fishApiKeyInput.value = config.fish_api_key || '';
+            if (fishVoiceIdInput) fishVoiceIdInput.value = config.fish_voice_id || '';
+            if (liveFishVoiceToggle) liveFishVoiceToggle.checked = config.live_use_fish_voice !== undefined ? Boolean(config.live_use_fish_voice) : true;
+            syncActiveCharacterBanner(config.active_character_label || config.active_character_voice || '');
+            if (config.memories_count !== undefined) {
+              memoriesBadge.textContent = config.memories_count;
+            }
+            if (config.provider_order) {
+              applyCardsOrder(config.provider_order);
+            } else {
+              applyCardsOrder(["nvidia", "google", "openrouter"]);
+            }
+
+            allowCameraToggle.checked = config.allow_camera !== undefined ? Boolean(config.allow_camera) : true;
+            allowScreenshotsToggle.checked = config.allow_screenshots !== undefined ? Boolean(config.allow_screenshots) : true;
+            allowPcControlToggle.checked = config.allow_pc_control !== undefined ? Boolean(config.allow_pc_control) : true;
+            allowFileActionsToggle.checked = config.allow_file_actions !== undefined ? Boolean(config.allow_file_actions) : true;
+            visualStartMenuToggle.checked = config.visual_start_menu !== undefined ? Boolean(config.visual_start_menu) : true;
+
+            if (config.voice_enabled !== undefined) {
+              isMuted = !config.voice_enabled;
+              if (isMuted) {
+                audioIcon.textContent = 'volume_off';
+                toggleAudioBtn.classList.add('text-rose-400');
+              } else {
+                audioIcon.textContent = 'volume_up';
+                toggleAudioBtn.classList.remove('text-rose-400');
+              }
+            }
+          }
+        } catch (e) {
+          console.error("Error al leer ajustes vía pywebview get_settings():", e);
+        }
+      } else {
+        // Si pywebview aún se está inicializando, NO rellenar los inputs con APIs falsas/demo
+        // para jamás sobrescribir las credenciales reales del usuario al pulsar Guardar.
+        console.log("Esperando puente pywebview.api (sin inyectar claves demo)...");
+        applyCardsOrder(["nvidia", "google", "openrouter"]);
+
+        allowCameraToggle.checked = true;
+        allowScreenshotsToggle.checked = true;
+        allowPcControlToggle.checked = true;
+        allowFileActionsToggle.checked = true;
+        visualStartMenuToggle.checked = true;
+      }
+    }
+
+    window.loadSettings = loadSettings;
+    window.loadMemories = loadMemories;
+
+    // Sincronizar automáticamente todas las APIs conectadas apenas el puente Python <-> WebView esté listo
+    window.addEventListener('pywebviewready', () => {
+      loadSettings();
+      loadMemories();
+    });
+
+    for (const [control, permission] of [[allowCameraToggle,'allow_camera'],[allowScreenshotsToggle,'allow_screenshots'],[allowPcControlToggle,'allow_pc_control'],[allowFileActionsToggle,'allow_file_actions'],[visualStartMenuToggle,'visual_start_menu']]) {
+      control.addEventListener('change', async () => {
+        const wanted=control.checked; control.disabled=true;
+        try {
+          if(!settingsLoaded || !window.pywebview?.api?.save_settings)throw new Error('Rowan aún no está listo');
+          const result=await window.pywebview.api.save_settings({[permission]:wanted});
+          if(result?.status!=='ok')throw new Error(result?.message || 'No se guardó el permiso');
+          showToast(wanted?'Permiso activado':'Permiso desactivado');
+        } catch(error) { control.checked=!wanted; showToast('No se pudo cambiar el permiso. Inténtalo de nuevo.','error'); }
+        finally { control.disabled=false; }
+      });
+    }
+    saveSettingsBtn.addEventListener('click', async () => {
+      if(!settingsLoaded)return;
+      const payload = {
+        user_name: document.getElementById('user-name-input').value.trim(),
+        api_key: document.getElementById('api-key-input').value.trim(),
+        backup_keys: document.getElementById('backup-keys-input').value.trim(),
+        nvidia_key: document.getElementById('nvidia-key-input').value.trim(),
+        openrouter_key: document.getElementById('openrouter-key-input').value.trim(),
+        fish_api_key: document.getElementById('fish-api-key-input') ? document.getElementById('fish-api-key-input').value.trim() : '',
+        fish_voice_id: document.getElementById('fish-voice-id-input') ? document.getElementById('fish-voice-id-input').value.trim() : '',
+        live_use_fish_voice: liveFishVoiceToggle ? liveFishVoiceToggle.checked : true,
+        provider_order: getDomCardsOrder(),
+        auto_failover: true,
+        allow_camera: allowCameraToggle.checked,
+        allow_screenshots: allowScreenshotsToggle.checked,
+        allow_pc_control: allowPcControlToggle.checked,
+        allow_file_actions: allowFileActionsToggle.checked,
+        visual_start_menu: visualStartMenuToggle.checked
+      };
+
+      saveStatus.textContent = 'Guardando...';
+      saveStatus.className = 'mono text-[11px] text-[#71717a]';
+
+      if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.save_settings === 'function') {
+        try {
+          const result=await window.pywebview.api.save_settings(payload);
+          if(result?.status!=='ok')throw new Error(result?.message || 'No se guardaron los ajustes');
+          if (payload.user_name) {
+            window.currentUserName = payload.user_name.toUpperCase();
+            document.querySelectorAll('.user-sender-label').forEach(el => {
+              el.textContent = payload.user_name;
+            });
+          }
+          saveStatus.textContent = '✓ Guardado exitosamente';
+          saveStatus.className = 'mono text-[11px] text-emerald-400';
+          showToast('Ajustes guardados correctamente');
+          window.setEmotion('eureka', 2000);
+          setTimeout(() => hideModal(), 400);
+        } catch (err) {
+          console.error("Error al guardar ajustes:", err);
+          saveStatus.textContent = 'Error al guardar';
+          saveStatus.className = 'mono text-[11px] text-rose-400';
+          showToast('Error al guardar ajustes', 'error');
+        }
+      } else {
+        console.log("Modo preview: pywebview no detectado", payload);
+        setTimeout(() => {
+          saveStatus.textContent = '✓ Guardado localmente (modo preview)';
+          saveStatus.className = 'mono text-[11px] text-emerald-400';
+          showToast('Ajustes guardados correctamente');
+          window.setEmotion('eureka', 2000);
+          setTimeout(() => hideModal(), 350);
+        }, 300);
+      }
+    });
+
+    /**
+     * ========================================================
+     * 6. MEMORY CONTRACTS & PREVIEW DATA
+     * ========================================================
+     */
+    async function loadMemories() {
+      if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.get_memories === 'function') {
+        try {
+          const memories = await window.pywebview.api.get_memories();
+          if (Array.isArray(memories)) {
+            memoriesCache = memories;
+          }
+        } catch (e) {
+          console.error("Error al cargar memorias desde pywebview:", e);
+        }
+      } else {
+        console.log("Modo preview: pywebview no detectado");
+      }
+
+      memoriesBadge.textContent = memoriesCache.length;
+      renderMemoriesList();
+    }
+
+    function renderMemoriesList() {
+      memoriesList.innerHTML = '';
+
+      if (memoriesCache.length === 0) {
+        memoriesList.innerHTML = `
+          <div class="p-6 rounded-xl border border-dashed border-[#222228] flex flex-col items-center justify-center text-center gap-2">
+            <span class="material-symbols-outlined text-[24px] text-[#3f3f46]">database</span>
+            <p class="text-[12px] text-[#71717a]">No hay recuerdos registrados en SQLite.</p>
+          </div>
+        `;
+        return;
+      }
+
+      memoriesCache.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'memory-row p-3 rounded-xl bg-[#16161a] border border-[#222228] hover:border-[#303038] flex items-center justify-between gap-3 group';
+        row.id = `memory-item-${item.id}`;
+        row.innerHTML = `
+          <div class="flex items-start gap-2.5 overflow-hidden">
+            <span class="mono text-[10px] uppercase font-semibold text-[#888] bg-[#1e1e24] px-2 py-0.5 rounded border border-[#282830] shrink-0 mt-0.5">
+              ${escapeHtml(item.category || 'gral')}
+            </span>
+            <div class="flex flex-col min-w-0">
+              <span class="mono text-[11px] text-[#a1a1aa] truncate font-medium">${escapeHtml(item.key)}</span>
+              <span class="text-[12.5px] text-[#e4e4e7] truncate">${escapeHtml(item.value)}</span>
+            </div>
+          </div>
+          <button data-id="${item.id}" type="button" title="Eliminar recuerdo" class="delete-memory-btn p-1.5 text-[#52525b] hover:text-rose-400 hover:bg-[#1f1f26] rounded-lg transition-all active:scale-90 shrink-0 cursor-pointer">
+            <span class="material-symbols-outlined text-[16px]">delete</span>
+          </button>
+        `;
+
+        row.querySelector('.delete-memory-btn').addEventListener('click', async (e) => {
+          e.stopPropagation();
+          await handleDeleteMemory(item.id, row);
+        });
+
+        memoriesList.appendChild(row);
+      });
+    }
+
+    async function handleDeleteMemory(id, rowElement) {
+      if (rowElement) {
+        rowElement.classList.add('removing');
+      }
+
+      setTimeout(async () => {
+        if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.delete_memory === 'function') {
+          try {
+            await window.pywebview.api.delete_memory(id);
+          } catch (e) {
+            console.error("Error al ejecutar delete_memory en pywebview:", e);
+          }
+        } else {
+          console.log("Modo preview: pywebview no detectado");
+        }
+        memoriesCache = memoriesCache.filter(m => m.id !== id);
+        memoriesBadge.textContent = memoriesCache.length;
+        renderMemoriesList();
+        showToast('Recuerdo eliminado de la memoria');
+      }, 260);
+    }
+
+    refreshMemoriesBtn.addEventListener('click', () => {
+      refreshMemoriesBtn.classList.add('rotate-180');
+      setTimeout(() => refreshMemoriesBtn.classList.remove('rotate-180'), 300);
+      loadMemories();
+      showToast('Memorias sincronizadas');
+    });
+
+    // Render inicial y disparo automático del Saludo ('greeting')
+    memoriesBadge.textContent = memoriesCache.length;
+    renderMemoriesList();
+    window.setState('idle');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderEmotions === 'function') renderEmotions('');
+      window.setEmotion('greeting', 2400);
+    });
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      window.setEmotion('greeting', 2400);
+    }
+  </script>
+<script src="../showcase.js"></script></body></html>
