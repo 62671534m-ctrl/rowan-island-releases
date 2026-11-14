@@ -1,0 +1,332 @@
+/* ============================================================================
+   ROWAN FACE — Estilos y Animaciones Exactas (100 Emociones)
+   Extraído de rowan/ui/index.html (Rowan Island v1.0)
+   ============================================================================ */
+
+.rowan-avatar-stage {
+  position: relative;
+  width: 240px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  user-select: none;
+}
+
+.rowan-avatar-stage.notch-mode {
+  width: 90px;
+  height: 36px;
+  transform: scale(0.46);
+  transform-origin: center center;
+}
+
+.rowan-eyes-container {
+  position: relative;
+  width: 192px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes auraBreathing {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+  }
+}
+
+.ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+  height: 250px;
+  background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.06) 0%, rgba(243, 242, 238, 0.015) 50%, transparent 75%);
+  filter: blur(44px);
+  pointer-events: none;
+  animation: auraBreathing 5.4s ease-in-out infinite;
+  transition: background 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.65s ease,
+              opacity 0.65s ease;
+  will-change: transform, opacity, background;
+}
+
+.rowan-eyes-container.listening .ambient-glow {
+  background: radial-gradient(ellipse at center, rgba(244, 63, 94, 0.16) 0%, rgba(244, 63, 94, 0.03) 50%, transparent 80%);
+  transform: translate(-50%, -50%) scale(1.22);
+  filter: blur(50px);
+  animation-duration: 2.2s;
+}
+
+.rowan-eyes-container.thinking .ambient-glow {
+  background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.14) 0%, rgba(251, 191, 36, 0.025) 55%, transparent 80%);
+  transform: translate(-50%, -50%) scale(1.15);
+  filter: blur(46px);
+  animation-duration: 3s;
+}
+
+.rowan-eyes-container.speaking .ambient-glow {
+  background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.15) 0%, rgba(243, 242, 238, 0.035) 50%, transparent 75%);
+  transform: translate(-50%, -50%) scale(1.28);
+  filter: blur(52px);
+  animation-duration: 1.8s;
+}
+
+.eye-soundwave-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110px;
+  height: 70px;
+  border-radius: 9999px;
+  border: 1px solid rgba(243, 242, 238, 0.18);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.rowan-eyes-container.speaking .eye-soundwave-ring,
+.rowan-eyes-container.listening .eye-soundwave-ring {
+  opacity: 1;
+  animation: avatarWaveEcho 2.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes avatarWaveEcho {
+  0% {
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.55);
+    opacity: 0;
+  }
+}
+
+.eye-socket {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 16px;
+  will-change: transform;
+  transition: filter 0.3s ease;
+}
+
+.sensor-dot {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: #38bdf8;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.sensor-dot-left { left: -10px; }
+.sensor-dot-right { right: -10px; }
+
+.rowan-eyes-container.sensor-active .sensor-dot {
+  opacity: 0.9;
+  animation: sensorPulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes sensorPulse {
+  0% { opacity: 0.35; transform: translateY(-50%) scale(0.85); }
+  100% { opacity: 1; transform: translateY(-50%) scale(1.15); }
+}
+
+.rowan-eye {
+  position: relative;
+  width: 16px;
+  height: 44px;
+  border-radius: 9999px;
+  background-color: #f3f2ee;
+  box-shadow: 0 0 20px rgba(243, 242, 238, 0.45), 0 0 45px rgba(243, 242, 238, 0.15);
+  transition: border-radius 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease,
+              background-color 0.3s ease;
+  will-change: transform, height, width, box-shadow;
+  transform-origin: center center;
+}
+
+.rowan-eye.blink {
+  transform: scaleY(0.05) !important;
+  box-shadow: 0 0 5px rgba(243, 242, 238, 0.15) !important;
+  transition: transform 0.07s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.07s ease-in-out !important;
+}
+
+.tear-drop {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(147, 197, 253, 0.85);
+  box-shadow: 0 0 8px #93c5fd;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.anim-crying .tear-drop {
+  animation: tearFalling 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes tearFalling {
+  0% { transform: translate(-50%, 2px) scale(0.6); opacity: 0; }
+  20% { opacity: 0.9; }
+  80% { opacity: 0.7; }
+  100% { transform: translate(-50%, 30px) scale(1.1); opacity: 0; }
+}
+
+@keyframes bounceElastic {
+  0%, 100% { transform: translateY(0) scaleY(1) scaleX(1); }
+  30% { transform: translateY(-12px) scaleY(1.15) scaleX(0.9); }
+  50% { transform: translateY(0) scaleY(0.85) scaleX(1.15); }
+  70% { transform: translateY(-4px) scaleY(1.05) scaleX(0.95); }
+}
+.anim-bounce { animation: bounceElastic 0.85s ease infinite; }
+
+@keyframes laughterShake {
+  0%, 100% { transform: translateY(0) scaleY(0.7); }
+  25% { transform: translateY(-5px) scaleY(0.78); }
+  50% { transform: translateY(2px) scaleY(0.65); }
+  75% { transform: translateY(-4px) scaleY(0.75); }
+}
+.anim-laugh { animation: laughterShake 0.3s ease infinite; }
+
+@keyframes rapidVibe {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-1.5px, 1px); }
+  40% { transform: translate(1.5px, -1px); }
+  60% { transform: translate(-1px, -1.5px); }
+  80% { transform: translate(1px, 1.5px); }
+}
+.anim-vibe { animation: rapidVibe 0.08s linear infinite; }
+
+@keyframes glitchJitter {
+  0%, 100% { transform: translate(0, 0) skew(0deg); filter: drop-shadow(0 0 10px #f43f5e); }
+  20% { transform: translate(-4px, 2px) skew(-6deg); filter: drop-shadow(-3px 0 12px #38bdf8); }
+  40% { transform: translate(3px, -2px) skew(4deg); filter: drop-shadow(3px 0 12px #ec4899); }
+  60% { transform: translate(-2px, -3px) skew(-3deg); filter: drop-shadow(0 0 16px #a855f7); }
+  80% { transform: translate(4px, 1px) skew(5deg); filter: drop-shadow(-2px 0 10px #22c55e); }
+}
+.anim-glitch { animation: glitchJitter 0.18s steps(2, start) infinite; }
+
+@keyframes grooveBob {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  35% { transform: translateY(-10px) scale(0.92, 1.14); }
+  50% { transform: translateY(3px) scale(1.14, 0.88); }
+  70% { transform: translateY(-3px) scale(0.98, 1.04); }
+}
+.anim-groove { animation: grooveBob 0.54s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite; }
+
+@keyframes scanMotion {
+  0%, 100% { transform: translateX(-16px); }
+  50% { transform: translateX(16px); }
+}
+.anim-scan { animation: scanMotion 1.4s ease-in-out infinite alternate; }
+
+@keyframes readingSweep {
+  0% { transform: translateX(-18px); }
+  70% { transform: translateX(18px); }
+  85% { transform: translateX(18px); opacity: 0.7; }
+  100% { transform: translateX(-18px); opacity: 1; }
+}
+.anim-reading { animation: readingSweep 1.6s ease-in-out infinite; }
+
+@keyframes headShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(9px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(5px); }
+}
+.anim-headshake { animation: headShake 0.45s ease-in-out infinite; }
+
+@keyframes heartBeatPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 16px rgba(244,114,182,0.3)); }
+  15% { transform: scale(1.16); filter: drop-shadow(0 0 28px rgba(244,114,182,0.7)); }
+  30% { transform: scale(1.02); }
+  45% { transform: scale(1.12); filter: drop-shadow(0 0 24px rgba(244,114,182,0.6)); }
+}
+.anim-heartbeat { animation: heartBeatPulse 1.1s ease infinite; }
+
+@keyframes zenBreathe {
+  0%, 100% { transform: scaleY(0.8) scaleX(0.95); opacity: 0.75; }
+  50% { transform: scaleY(1.08) scaleX(1.04); opacity: 1; }
+}
+.anim-zen { animation: zenBreathe 4s ease-in-out infinite; }
+
+@keyframes paranoidLook {
+  0%, 100% { transform: translateX(-18px); }
+  20% { transform: translateX(-18px); }
+  30% { transform: translateX(18px); }
+  60% { transform: translateX(18px); }
+  70% { transform: translateX(0); }
+  85% { transform: translateY(-6px); }
+}
+.anim-paranoid { animation: paranoidLook 1.8s steps(4) infinite; }
+
+@keyframes dizzySpin {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(4px, -4px) rotate(90deg); }
+  50% { transform: translate(0, -6px) rotate(180deg); }
+  75% { transform: translate(-4px, -2px) rotate(270deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+.anim-dizzy-left { animation: dizzySpin 1.4s linear infinite; }
+.anim-dizzy-right { animation: dizzySpin 1.4s linear infinite reverse; }
+
+@keyframes footTap {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+.anim-tap-right { animation: footTap 0.38s ease infinite; }
+
+@keyframes alternatingHopL {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+@keyframes alternatingHopR {
+  0%, 100% { transform: translateY(-9px); }
+  50% { transform: translateY(0); }
+}
+.anim-hop-l { animation: alternatingHopL 0.65s ease infinite; }
+.anim-hop-r { animation: alternatingHopR 0.65s ease infinite; }
+
+@keyframes partyOscillate {
+  0%, 100% { transform: translateY(0) rotate(-14deg); }
+  50% { transform: translateY(-12px) rotate(14deg); }
+}
+.anim-party { animation: partyOscillate 0.5s ease-in-out infinite alternate; }
+
+@keyframes yawnStretch {
+  0%, 100% { transform: scaleY(0.3) scaleX(1.3); }
+  40% { transform: scaleY(1.4) scaleX(0.85); }
+  70% { transform: scaleY(1.2) scaleX(0.9); }
+  90% { transform: scaleY(0.2) scaleX(1.4); }
+}
+.anim-yawn { animation: yawnStretch 2.8s ease-in-out infinite; }
+
+@keyframes rechargingFill {
+  0% { box-shadow: inset 0 -6px 0 0 #10b981, 0 0 12px #10b981; }
+  50% { box-shadow: inset 0 -28px 0 0 #10b981, 0 0 24px #10b981; }
+  100% { box-shadow: inset 0 -48px 0 0 #10b981, 0 0 32px #10b981; }
+}
+.anim-recharge { animation: rechargingFill 1.8s ease-in-out infinite alternate; }

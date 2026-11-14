@@ -1,0 +1,233 @@
+/* ============================================================================
+   DEMO ANIMATIONS — Vitrina Animada con las Interfaces Reales (Rowan Island)
+   ============================================================================ */
+.fn-showcase {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.fn-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fn-tab {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  color: #a4a4ad;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.fn-tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #f3f2ee;
+}
+
+.fn-tab.active {
+  background: rgba(165, 230, 202, 0.1);
+  border-color: rgba(165, 230, 202, 0.45);
+  color: #f3f2ee;
+}
+
+.fn-tab-num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  color: #a5e6ca;
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.fn-tab-title {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fn-stage {
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(ellipse at 50% 0%, rgba(165, 230, 202, 0.07), #0b0c10 65%, #08090c 100%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.fn-stage-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 14px;
+}
+
+.fn-stage-kicker {
+  font-size: 10px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #a5e6ca;
+  font-weight: 700;
+}
+
+.fn-stage-desc {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #b4b4bc;
+}
+
+.fn-auto-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 10.5px;
+  color: #a4a4ad;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.fn-auto-badge.on {
+  border-color: rgba(165, 230, 202, 0.4);
+  color: #a5e6ca;
+}
+.fn-auto-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.fn-real-viewport {
+  position: relative;
+  width: 100%;
+  height: 525px;
+  margin-top: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: radial-gradient(ellipse at 50% 10%, #151722 0%, #090a0f 70%);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fn-real-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.28s;
+  background: transparent;
+}
+
+.fn-real-frame.active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
+}
+
+.fn-foot-note {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: #8c8c96;
+}
+
+.fn-foot-note a {
+  color: #a5e6ca;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(165, 230, 202, 0.35);
+}
+
+.fn-foot-note a:hover {
+  border-bottom-color: #a5e6ca;
+}
+
+@media (max-width: 960px) {
+  .fn-showcase {
+    grid-template-columns: 1fr;
+  }
+  .fn-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .fn-tab {
+    width: auto;
+    flex-shrink: 0;
+  }
+  .fn-stage {
+    padding: 16px;
+  }
+  .fn-real-viewport {
+    height: 440px;
+  }
+}
+
+/* ============================================================================
+   PROPORTIONAL SCALE ON LARGE SCREENS, RENDERS FIT & SCROLLBAR HIDE
+   ============================================================================ */
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+@media (min-width: 1400px) {
+  body {
+    zoom: 1.24;
+  }
+}
+
+@media (min-width: 1680px) {
+  body {
+    zoom: 1.44;
+  }
+}
+
+.float-tag {
+  z-index: 3;
+}
+
+.real-card {
+  height: 240px !important;
+  padding: 6px !important;
+  background: radial-gradient(ellipse at 50% 0%, #15171d, #0b0c0f) !important;
+}
+
+.real-card img {
+  object-fit: contain !important;
+  object-position: center !important;
+}

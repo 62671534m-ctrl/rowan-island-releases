@@ -1,0 +1,1 @@
+(()=>{document.querySelectorAll('.real-ui').forEach(box=>{const frame=box.querySelector('iframe');const fit=()=>{const scale=box.clientWidth/900;frame.style.transform='scale('+scale+')';frame.style.height=(box.clientHeight/scale)+'px'};new ResizeObserver(fit).observe(box);fit()})})();
