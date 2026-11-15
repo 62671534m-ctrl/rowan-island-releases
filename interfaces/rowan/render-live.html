@@ -1,0 +1,955 @@
+<html><head><meta charset="utf-8"><script src="tailwind.js"></script><link rel="stylesheet" href="fonts.css"><style>
+    /* Bulletproof Fallback CSS (Protects against any CDN or layout delays) */
+    .hidden {
+      display: none !important;
+    }
+    [hidden]:not(.live-discrete-anim) {
+      display: none !important;
+    }
+
+    #emotions-popover.hidden {
+      display: none !important;
+    }
+
+    #emotions-popover {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 10px;
+      width: 440px;
+      max-width: 90vw;
+      background-color: rgba(17, 17, 21, 0.98);
+      border: 1px solid #26262e;
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      backdrop-filter: blur(24px);
+    }
+
+    /* Modern button and input normalization */
+    button {
+      font-family: inherit;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0a0a0c;
+      color: #e5e5e5;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      user-select: none;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #202024;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #323238;
+    }
+
+    /* Ambient Background Aura & Breathing Glow */
+    @keyframes auraBreathing {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.85;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.08);
+        opacity: 1;
+      }
+    }
+
+    .ambient-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 420px;
+      height: 250px;
+      background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.05) 0%, rgba(243, 242, 238, 0.012) 50%, transparent 75%);
+      filter: blur(44px);
+      pointer-events: none;
+      animation: auraBreathing 5.4s ease-in-out infinite;
+      transition: background 0.65s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), 
+                  filter 0.65s ease,
+                  opacity 0.65s ease;
+      will-change: transform, opacity, background;
+    }
+    .ambient-glow.listening {
+      background: radial-gradient(ellipse at center, rgba(244, 63, 94, 0.12) 0%, rgba(244, 63, 94, 0.03) 50%, transparent 80%);
+      transform: translate(-50%, -50%) scale(1.22);
+      filter: blur(50px);
+      animation-duration: 2.2s;
+    }
+    .ambient-glow.thinking {
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.11) 0%, rgba(251, 191, 36, 0.025) 55%, transparent 80%);
+      transform: translate(-50%, -50%) scale(1.15);
+      filter: blur(46px);
+      animation-duration: 3s;
+    }
+    .ambient-glow.speaking {
+      background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.11) 0%, rgba(243, 242, 238, 0.035) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.28);
+      filter: blur(52px);
+      animation-duration: 1.8s;
+    }
+    .ambient-glow.live-active {
+      background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.03) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.3);
+      filter: blur(52px);
+    }
+
+    /* Emotional Auras */
+    .ambient-glow.aura-greeting {
+      background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.16) 0%, rgba(147, 197, 253, 0.08) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.32);
+      filter: blur(50px);
+    }
+    .ambient-glow.aura-happy {
+      background: radial-gradient(ellipse at center, rgba(254, 240, 138, 0.13) 0%, rgba(243, 242, 238, 0.05) 50%, transparent 78%);
+      transform: translate(-50%, -50%) scale(1.28);
+      filter: blur(48px);
+    }
+    .ambient-glow.aura-groove {
+      background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.14) 0%, rgba(236, 72, 153, 0.08) 50%, transparent 80%);
+      transform: translate(-50%, -50%) scale(1.4);
+      filter: blur(54px);
+    }
+    .ambient-glow.aura-eureka {
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(243, 242, 238, 0.08) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.45);
+      filter: blur(55px);
+    }
+    .ambient-glow.aura-confused {
+      background: radial-gradient(ellipse at center, rgba(147, 197, 253, 0.11) 0%, rgba(203, 213, 225, 0.04) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.15);
+      filter: blur(46px);
+    }
+    .ambient-glow.aura-focused {
+      background: radial-gradient(ellipse at center, rgba(96, 165, 250, 0.12) 0%, rgba(243, 242, 238, 0.03) 40%, transparent 70%);
+      transform: translate(-50%, -50%) scale(1.05);
+      filter: blur(36px);
+    }
+    .ambient-glow.aura-surprised {
+      background: radial-gradient(ellipse at center, rgba(243, 242, 238, 0.18) 0%, rgba(244, 114, 182, 0.08) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.36);
+      filter: blur(52px);
+    }
+    .ambient-glow.aura-sympathetic {
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.09) 0%, rgba(243, 242, 238, 0.03) 50%, transparent 75%);
+      transform: translate(-50%, -50%) scale(1.18);
+      filter: blur(46px);
+    }
+    .ambient-glow.aura-sleepy {
+      background: radial-gradient(ellipse at center, rgba(148, 163, 184, 0.04) 0%, transparent 60%);
+      transform: translate(-50%, -50%) scale(0.95);
+      filter: blur(40px);
+      opacity: 0.55;
+    }
+
+    /* Soundwave ripple rings behind Rowan Eyes in Speaking/Listening modes */
+    .eye-soundwave-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 110px;
+      height: 70px;
+      border-radius: 9999px;
+      border: 1px solid rgba(243, 242, 238, 0.18);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .speaking .eye-soundwave-ring,
+    .listening .eye-soundwave-ring {
+      opacity: 1;
+      animation: avatarWaveEcho 2.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    @keyframes avatarWaveEcho {
+      0% {
+        transform: translate(-50%, -50%) scale(0.85);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.55);
+        opacity: 0;
+      }
+    }
+
+    /* Rowan Eyes Base */
+    .rowan-eye {
+      width: 1rem; /* 16px */
+      height: 2.75rem; /* 44px base */
+      border-radius: 9999px;
+      background-color: #f3f2ee;
+      box-shadow: 0 0 20px rgba(243, 242, 238, 0.45), 0 0 45px rgba(243, 242, 238, 0.15);
+      transition: border-radius 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.35s ease,
+                  background-color 0.3s ease;
+      will-change: transform, height, width, box-shadow;
+      transform-origin: center center;
+    }
+
+    /* Eye Blinking */
+    .rowan-eye.blink {
+      transform: scaleY(0.05) !important;
+      box-shadow: 0 0 5px rgba(243, 242, 238, 0.15) !important;
+      transition: transform 0.07s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.07s ease-in-out !important;
+    }
+
+    /* ========================================================
+       EMOTION KEYFRAME ANIMATIONS & CLASSES
+       ======================================================== */
+    /* 1. GREETING: Doble rebote elástico hacia arriba y pulso de luz */
+    @keyframes emotionGreetingBounce {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      20% { transform: translateY(-16px) scaleY(1.12); }
+      40% { transform: translateY(2px) scaleY(0.92); }
+      60% { transform: translateY(-8px) scaleY(1.05); }
+      80% { transform: translateY(0) scaleY(0.98); }
+    }
+    .emotion-greeting .rowan-eye {
+      animation: emotionGreetingBounce 1.25s cubic-bezier(0.34, 1.56, 0.64, 1) 1;
+      box-shadow: 0 0 28px rgba(243, 242, 238, 0.75), 0 0 55px rgba(243, 242, 238, 0.35);
+    }
+
+    /* 2. HAPPY: Cápsulas en arco sonriente (^ ^), rotadas hacia afuera con rebote rítmico */
+    @keyframes emotionHappyBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4.5px); }
+    }
+    .emotion-happy #eye-left {
+      border-radius: 9999px 9999px 40% 40% !important;
+      box-shadow: 0 0 24px rgba(254, 240, 138, 0.6), 0 0 45px rgba(243, 242, 238, 0.25);
+    }
+    .emotion-happy #eye-right {
+      border-radius: 9999px 9999px 40% 40% !important;
+      box-shadow: 0 0 24px rgba(254, 240, 138, 0.6), 0 0 45px rgba(243, 242, 238, 0.25);
+    }
+    .emotion-happy #eyes-container {
+      animation: emotionHappyBob 0.68s ease-in-out infinite alternate;
+    }
+
+    /* 3. CONFUSED: Arqueo asimétrico de ceja con socket ladeado */
+    .emotion-confused #eye-left {
+      box-shadow: 0 0 22px rgba(243, 242, 238, 0.5);
+    }
+
+    /* 4. FOCUSED: Ojos hendidura de precisión, gap estrecho y aura recogida */
+    .emotion-focused #eye-socket {
+      gap: 1.125rem !important; /* 18px */
+    }
+
+    /* 5. SURPRISED: Ojos como platos, más anchos (22px), alargados */
+    .emotion-surprised .rowan-eye {
+      width: 1.375rem !important; /* 22px */
+      box-shadow: 0 0 32px rgba(243, 242, 238, 0.8), 0 0 60px rgba(243, 242, 238, 0.3);
+    }
+
+    /* 6. AMUSED: Guiño asimétrico con arco pícaro */
+    @keyframes amusedWink {
+      0%, 20%, 80%, 100% { transform: scaleY(0.18) rotate(12deg); }
+      35%, 65% { transform: scaleY(0.08) rotate(12deg); }
+    }
+    .emotion-amused #eye-right {
+      animation: amusedWink 1.4s ease-in-out infinite;
+    }
+
+    /* 7. GROOVE: Head-bobbing rítmico a ~110 BPM (0.54s) con squash & stretch */
+    @keyframes grooveHeadBob {
+      0% { transform: translateY(0) scale(1, 1); }
+      25% { transform: translateY(-7px) rotate(-2.5deg) scale(0.96, 1.12); }
+      50% { transform: translateY(3px) rotate(0deg) scale(1.08, 0.92); }
+      75% { transform: translateY(-7px) rotate(2.5deg) scale(0.96, 1.12); }
+      100% { transform: translateY(0) scale(1, 1); }
+    }
+    .emotion-groove #eye-socket {
+      animation: grooveHeadBob 0.54s ease-in-out infinite;
+    }
+    .emotion-groove .rowan-eye {
+      box-shadow: 0 0 28px rgba(192, 132, 252, 0.65), 0 0 50px rgba(244, 114, 182, 0.35);
+    }
+
+    /* 8. SYMPATHETIC: Mirada baja, inclinación suave y tierna */
+    .emotion-sympathetic .rowan-eye {
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.4), 0 0 35px rgba(243, 242, 238, 0.15);
+    }
+
+    /* 9. EUREKA: Salto elástico con destello resplandeciente */
+    @keyframes eurekaHop {
+      0% { transform: translateY(0) scale(1); }
+      30% { transform: translateY(-18px) scale(1.15, 1.2); }
+      60% { transform: translateY(2px) scale(1.05, 0.95); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .emotion-eureka #eye-socket {
+      animation: eurekaHop 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) 1;
+    }
+    .emotion-eureka .rowan-eye {
+      box-shadow: 0 0 38px rgba(255, 255, 255, 0.95), 0 0 70px rgba(243, 242, 238, 0.6) !important;
+      background-color: #ffffff !important;
+    }
+
+    /* 10. SLEEPY: Cápsulas bajas, pesadas, al 35% de altura */
+    .emotion-sleepy .rowan-eye {
+      box-shadow: 0 0 10px rgba(243, 242, 238, 0.25);
+      opacity: 0.72;
+    }
+
+    /* Message entrance animation: soft spring stagger + slide up 6px */
+    @keyframes messageIn {
+      0% {
+        opacity: 0;
+        transform: translateY(6px) scale(0.99);
+      }
+      65% {
+        transform: translateY(-0.8px) scale(1.001);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .msg-entrance {
+      animation: messageIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Streaming Cursor Pulsing Effect */
+    @keyframes streamCursorBlink {
+      0%, 100% { 
+        opacity: 1; 
+        box-shadow: 0 0 8px rgba(243, 242, 238, 0.6);
+      }
+      50% { 
+        opacity: 0.15; 
+        box-shadow: none;
+      }
+    }
+    .stream-cursor {
+      display: inline-block;
+      width: 6.5px;
+      height: 14px;
+      margin-left: 3px;
+      vertical-align: -2px;
+      background-color: #f3f2ee;
+      border-radius: 1.5px;
+      animation: streamCursorBlink 0.75s ease-in-out infinite;
+    }
+
+    /* Modal Animation: scale-95 to scale-100 with backdrop-blur */
+    .modal-backdrop-anim {
+      opacity: 0;
+      transition: opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-backdrop-anim.open {
+      opacity: 1;
+    }
+    .modal-card-anim {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.24s ease-out;
+    }
+    .modal-card-anim.open {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Pulse wave ripples for Mic button */
+    .mic-ripple-ring {
+      position: absolute;
+      inset: -4px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(244, 63, 94, 0.65);
+      pointer-events: none;
+      animation: micRippleAnim 1.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    @keyframes micRippleAnim {
+      0% {
+        transform: scale(0.92);
+        opacity: 0.95;
+      }
+      100% {
+        transform: scale(1.48);
+        opacity: 0;
+      }
+    }
+
+    /* Live Mode Ripple Ring */
+    .live-ripple-ring {
+      position: absolute;
+      inset: -3px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(16, 185, 129, 0.7);
+      pointer-events: none;
+      animation: livePulseAnim 1.35s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    @keyframes livePulseAnim {
+      0% {
+        transform: scale(0.94);
+        opacity: 0.9;
+      }
+      100% {
+        transform: scale(1.45);
+        opacity: 0;
+      }
+    }
+
+    /* Live button audio waves micro animation */
+    @keyframes liveWavePulse {
+      0%, 100% { transform: scaleY(0.7); }
+      50% { transform: scaleY(1.35); }
+    }
+    .live-active-wave {
+      animation: liveWavePulse 0.9s ease-in-out infinite alternate;
+    }
+
+    /* Toast Notification Animation */
+    .toast-anim {
+      transform: translateY(16px) scale(0.94);
+      opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+    }
+    .toast-anim.show {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    /* Reorder card flash highlight */
+    @keyframes cardSwapGlow {
+      0% {
+        box-shadow: 0 0 0 1.5px rgba(243, 242, 238, 0.45), 0 0 24px rgba(243, 242, 238, 0.15);
+        transform: scale(1.008);
+      }
+      100% {
+        box-shadow: 0 0 0 1px rgba(34, 34, 38, 1), 0 0 0 rgba(243, 242, 238, 0);
+        transform: scale(1);
+      }
+    }
+    .card-swapped {
+      animation: cardSwapGlow 0.46s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Memory row remove animation with height collapse */
+    .memory-row {
+      transition: opacity 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+                  max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+                  padding 0.28s ease,
+                  margin 0.28s ease;
+      max-height: 90px;
+    }
+    .memory-row.removing {
+      opacity: 0;
+      transform: translateX(24px) scale(0.96);
+      max-height: 0px !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      overflow: hidden;
+      border-color: transparent !important;
+    }
+
+    /* PC Control switch spring transitions */
+    .toggle-spring {
+      transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+    }
+
+    /* Bottom dock floating glow upon focus */
+    .chat-dock-glow {
+      box-shadow: 0 12px 36px rgba(0,0,0,0.7), 0 0 0 0 rgba(243,242,238,0);
+      transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    }
+    .chat-dock-glow:focus-within {
+      border-color: #3e3e48;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 28px rgba(243, 242, 238, 0.06);
+    }
+  
+    /* --- STITCH 100 EMOTIONS KEYFRAMES --- */
+    .tear-drop {
+
+      position: absolute;
+
+      top: 100%;
+
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      width: 4px;
+
+      height: 8px;
+
+      border-radius: 9999px;
+
+      background: rgba(147, 197, 253, 0.85);
+
+      box-shadow: 0 0 8px #93c5fd;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+    }
+
+    .anim-crying .tear-drop {
+
+      animation: tearFalling 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+    }
+
+    @keyframes tearFalling {
+
+      0% { transform: translate(-50%, 2px) scale(0.6); opacity: 0; }
+
+      20% { opacity: 0.9; }
+
+      80% { opacity: 0.7; }
+
+      100% { transform: translate(-50%, 30px) scale(1.1); opacity: 0; }
+
+    }
+
+
+
+    /* ================= KEYFRAMES DE ANIMACIONES ESPECIALES ================= */
+
+    @keyframes bounceElastic {
+
+      0%, 100% { transform: translateY(0) scaleY(1) scaleX(1); }
+
+      30% { transform: translateY(-12px) scaleY(1.15) scaleX(0.9); }
+
+      50% { transform: translateY(0) scaleY(0.85) scaleX(1.15); }
+
+      70% { transform: translateY(-4px) scaleY(1.05) scaleX(0.95); }
+
+    }
+
+    .anim-bounce { animation: bounceElastic 0.85s ease infinite; }
+
+
+
+    @keyframes laughterShake {
+
+      0%, 100% { transform: translateY(0) scaleY(0.7); }
+
+      25% { transform: translateY(-5px) scaleY(0.78); }
+
+      50% { transform: translateY(2px) scaleY(0.65); }
+
+      75% { transform: translateY(-4px) scaleY(0.75); }
+
+    }
+
+    .anim-laugh { animation: laughterShake 0.3s ease infinite; }
+
+
+
+    @keyframes rapidVibe {
+
+      0%, 100% { transform: translate(0, 0); }
+
+      20% { transform: translate(-1.5px, 1px); }
+
+      40% { transform: translate(1.5px, -1px); }
+
+      60% { transform: translate(-1px, -1.5px); }
+
+      80% { transform: translate(1px, 1.5px); }
+
+    }
+
+    .anim-vibe { animation: rapidVibe 0.08s linear infinite; }
+
+
+
+    @keyframes glitchJitter {
+
+      0%, 100% { transform: translate(0, 0) skew(0deg); filter: drop-shadow(0 0 10px #f43f5e); }
+
+      20% { transform: translate(-4px, 2px) skew(-6deg); filter: drop-shadow(-3px 0 12px #38bdf8); }
+
+      40% { transform: translate(3px, -2px) skew(4deg); filter: drop-shadow(3px 0 12px #ec4899); }
+
+      60% { transform: translate(-2px, -3px) skew(-3deg); filter: drop-shadow(0 0 16px #a855f7); }
+
+      80% { transform: translate(4px, 1px) skew(5deg); filter: drop-shadow(-2px 0 10px #22c55e); }
+
+    }
+
+    .anim-glitch { animation: glitchJitter 0.18s steps(2, start) infinite; }
+
+
+
+    @keyframes grooveBob {
+
+      0%, 100% { transform: translateY(0) scale(1, 1); }
+
+      35% { transform: translateY(-10px) scale(0.92, 1.14); }
+
+      50% { transform: translateY(3px) scale(1.14, 0.88); }
+
+      70% { transform: translateY(-3px) scale(0.98, 1.04); }
+
+    }
+
+    .anim-groove { animation: grooveBob 0.54s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite; }
+
+
+
+    @keyframes scanMotion {
+
+      0%, 100% { transform: translateX(-16px); }
+
+      50% { transform: translateX(16px); }
+
+    }
+
+    .anim-scan { animation: scanMotion 1.4s ease-in-out infinite alternate; }
+
+
+
+    @keyframes readingSweep {
+
+      0% { transform: translateX(-18px); }
+
+      70% { transform: translateX(18px); }
+
+      85% { transform: translateX(18px); opacity: 0.7; }
+
+      100% { transform: translateX(-18px); opacity: 1; }
+
+    }
+
+    .anim-reading { animation: readingSweep 1.6s ease-in-out infinite; }
+
+
+
+    @keyframes headShake {
+
+      0%, 100% { transform: translateX(0); }
+
+      20% { transform: translateX(-10px); }
+
+      40% { transform: translateX(9px); }
+
+      60% { transform: translateX(-6px); }
+
+      80% { transform: translateX(5px); }
+
+    }
+
+    .anim-headshake { animation: headShake 0.45s ease-in-out infinite; }
+
+
+
+    @keyframes heartBeatPulse {
+
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 16px rgba(244,114,182,0.3)); }
+
+      15% { transform: scale(1.16); filter: drop-shadow(0 0 28px rgba(244,114,182,0.7)); }
+
+      30% { transform: scale(1.02); }
+
+      45% { transform: scale(1.12); filter: drop-shadow(0 0 24px rgba(244,114,182,0.6)); }
+
+    }
+
+    .anim-heartbeat { animation: heartBeatPulse 1.1s ease infinite; }
+
+
+
+    @keyframes zenBreathe {
+
+      0%, 100% { transform: scaleY(0.8) scaleX(0.95); opacity: 0.75; }
+
+      50% { transform: scaleY(1.08) scaleX(1.04); opacity: 1; }
+
+    }
+
+    .anim-zen { animation: zenBreathe 4s ease-in-out infinite; }
+
+
+
+    @keyframes paranoidLook {
+
+      0%, 100% { transform: translateX(-18px); }
+
+      20% { transform: translateX(-18px); }
+
+      30% { transform: translateX(18px); }
+
+      60% { transform: translateX(18px); }
+
+      70% { transform: translateX(0); }
+
+      85% { transform: translateY(-6px); }
+
+    }
+
+    .anim-paranoid { animation: paranoidLook 1.8s steps(4) infinite; }
+
+
+
+    @keyframes dizzySpin {
+
+      0% { transform: translate(0, 0) rotate(0deg); }
+
+      25% { transform: translate(4px, -4px) rotate(90deg); }
+
+      50% { transform: translate(0, -6px) rotate(180deg); }
+
+      75% { transform: translate(-4px, -2px) rotate(270deg); }
+
+      100% { transform: translate(0, 0) rotate(360deg); }
+
+    }
+
+    .anim-dizzy-left { animation: dizzySpin 1.4s linear infinite; }
+
+    .anim-dizzy-right { animation: dizzySpin 1.4s linear infinite reverse; }
+
+
+
+    @keyframes footTap {
+
+      0%, 100% { transform: translateY(0); }
+
+      50% { transform: translateY(-7px); }
+
+    }
+
+    .anim-tap-right { animation: footTap 0.38s ease infinite; }
+
+
+
+    @keyframes alternatingHopL {
+
+      0%, 100% { transform: translateY(0); }
+
+      50% { transform: translateY(-9px); }
+
+    }
+
+    @keyframes alternatingHopR {
+
+      0%, 100% { transform: translateY(-9px); }
+
+      50% { transform: translateY(0); }
+
+    }
+
+    .anim-hop-l { animation: alternatingHopL 0.65s ease infinite; }
+
+    .anim-hop-r { animation: alternatingHopR 0.65s ease infinite; }
+
+
+
+    @keyframes partyOscillate {
+
+      0%, 100% { transform: translateY(0) rotate(-14deg); }
+
+      50% { transform: translateY(-12px) rotate(14deg); }
+
+    }
+
+    .anim-party { animation: partyOscillate 0.5s ease-in-out infinite alternate; }
+
+
+
+    @keyframes yawnStretch {
+
+      0%, 100% { transform: scaleY(0.3) scaleX(1.3); }
+
+      40% { transform: scaleY(1.4) scaleX(0.85); }
+
+      70% { transform: scaleY(1.2) scaleX(0.9); }
+
+      90% { transform: scaleY(0.2) scaleX(1.4); }
+
+    }
+
+    .anim-yawn { animation: yawnStretch 2.8s ease-in-out infinite; }
+
+
+
+    @keyframes rechargingFill {
+
+      0% { box-shadow: inset 0 -6px 0 0 #10b981, 0 0 12px #10b981; }
+
+      50% { box-shadow: inset 0 -28px 0 0 #10b981, 0 0 24px #10b981; }
+
+      100% { box-shadow: inset 0 -48px 0 0 #10b981, 0 0 32px #10b981; }
+
+    }
+
+    .anim-recharge { animation: rechargingFill 1.8s ease-in-out infinite alternate; }
+
+    /* ========================================================
+       MODO LIVE vs MODO CHAT — FLUID COMPOSITOR TRANSITIONS
+       ======================================================== */
+    #avatar-section {
+      /* Identity transformations prevent stacking-context shifts on state change */
+      translate: 0px 0px;
+      scale: 1;
+      z-index: 25;
+      transform-origin: center center;
+      transition:
+        translate 0.68s cubic-bezier(0.22, 1, 0.36, 1),
+        scale 0.68s cubic-bezier(0.22, 1, 0.36, 1);
+      @media (prefers-reduced-motion: reduce) {
+        transition-duration: 0.2s;
+      }
+    }
+
+    #messages-container {
+      opacity: 1;
+      translate: 0px 0px;
+      scale: 1;
+      transition:
+        opacity 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+        translate 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+        scale 0.56s cubic-bezier(0.22, 1, 0.36, 1);
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        transition-duration: 0.18s;
+      }
+    }
+
+    footer#chat-footer {
+      opacity: 1;
+      translate: 0px 0px;
+      scale: 1;
+      transition:
+        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        translate 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        scale 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        transition-duration: 0.18s;
+      }
+    }
+
+    /* En Modo Live: la cara de Rowan se agranda en el centro y el chat desaparece con fluidez */
+    body.live-mode-active #avatar-section {
+      translate: 0px calc(45vh - 148px);
+      scale: 2.08;
+      @media (prefers-reduced-motion: reduce) {
+        scale: 1.75;
+      }
+    }
+
+    body.live-mode-active #messages-container {
+      opacity: 0;
+      translate: 0px 44px;
+      scale: 0.96;
+      pointer-events: none;
+      user-select: none;
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        scale: 1;
+      }
+    }
+
+    body.live-mode-active footer#chat-footer {
+      opacity: 0;
+      translate: 0px 36px;
+      scale: 0.95;
+      pointer-events: none;
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        scale: 1;
+      }
+    }
+
+    body.live-mode-active .listening .eye-soundwave-ring {
+      border-color: rgba(52, 211, 153, 0.32);
+    }
+
+    /* Subtítulo inferior del usuario ("abajito") y controles de Modo Live */
+    .live-discrete-anim {
+      display: flex;
+      opacity: 1;
+      translate: 0px 0px;
+      scale: 1;
+      transition:
+        display 0.38s,
+        opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        translate 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+        scale 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+      transition-behavior: allow-discrete;
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        scale: 1;
+        transition-duration: 0.15s;
+      }
+    }
+
+    @starting-style {
+      .live-discrete-anim {
+        opacity: 0;
+        translate: 0px 18px;
+        scale: 0.96;
+      }
+    }
+
+    .live-discrete-anim:where([hidden], [data-closing]) {
+      opacity: 0;
+      translate: 0px 18px;
+      scale: 0.96;
+      pointer-events: none;
+      @media (prefers-reduced-motion: reduce) {
+        translate: none;
+        scale: 1;
+      }
+    }
+
+    .live-discrete-anim[hidden] {
+      display: none;
+    }
+  </style><style>html,body{margin:0!important;width:100%!important;height:100%!important;background:#101214!important;overflow:hidden!important}body{display:grid!important;place-items:center!important}*,*:before,*:after{animation:none!important;transition:none!important;opacity:1} #avatar-section{position:relative!important;width:100%!important;height:100%!important}#eyes-container{transform:scale(1.65)!important}#ambient-aura{opacity:.5!important}.sensor-dot{display:none!important}</style></head><body><div class="w-full h-28 shrink-0 flex flex-col items-center justify-center relative overflow-visible pointer-events-none" id="avatar-section">
+<div class="relative w-48 h-20 flex items-center justify-center pointer-events-auto" id="eyes-container">
+<!-- Atmospheric ambient aura -->
+<div class="ambient-glow" id="ambient-aura"></div>
+<!-- Soundwave Ripple Ring for voice activity -->
+<div class="eye-soundwave-ring"></div>
+<!-- Eye Socket Tracked Wrapper (Accelerated with translate3d) -->
+<div class="flex items-center justify-center gap-6 p-4 select-none cursor-default will-change-transform transition-[filter] duration-300" id="eye-socket">
+<!-- Sensor micro-dot Izquierdo (Standby / Scanning) -->
+<div class="sensor-dot absolute -left-4 top-1/2 -translate-y-1/2" id="sensor-dot-left"></div>
+<!-- Left Eye con lágrimas -->
+<div class="rowan-eye" id="eye-left">
+<div class="tear-drop" id="tear-left"></div>
+</div>
+<!-- Right Eye con lágrimas -->
+<div class="rowan-eye" id="eye-right">
+<div class="tear-drop" id="tear-right"></div>
+</div>
+<!-- Sensor micro-dot Derecho (Standby / Scanning) -->
+<div class="sensor-dot absolute -right-4 top-1/2 -translate-y-1/2" id="sensor-dot-right"></div>
+</div>
+</div>
+<!-- Etiqueta Mental 'THINKING' con diseño de alta precisión -->
+<div class="hidden items-center justify-center gap-2 mt-2 px-3 py-0.5 rounded-full bg-[#0d0d12]/90 border border-cyan-500/30 text-cyan-300 mono text-[9.5px] tracking-[0.22em] uppercase shadow-[0_0_15px_rgba(6,182,212,0.22)] select-none transition-all duration-300" id="thinking-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+<span>Thinking</span>
+<span class="w-7 h-[1px] bg-gradient-to-r from-cyan-400/50 to-transparent"></span>
+</div>
+</div></body></html>
