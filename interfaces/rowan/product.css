@@ -1,0 +1,18 @@
+#emotions-menu-btn,#emotions-popover { display:none !important; }
+.product-help { color:#e8e8ec; font:13px/1.6 Inter,system-ui,sans-serif; }
+.product-help h3 { font-size:21px; letter-spacing:-.5px; margin:0 0 8px; }
+.product-help p { color:#aaaab6; margin:8px 0 16px; }
+.product-help button,.product-help a { cursor:pointer; border:1px solid #393943; border-radius:9px; background:#222229; color:#f2f2f7; padding:9px 13px; display:inline-block; text-decoration:none; }
+.product-help button:hover,.product-help a:hover { background:#353540; }
+.product-help .help-providers { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+.product-help button[aria-pressed="true"] { border-color:#98dfc1; background:#1e4033; }
+.product-help .help-step { padding:16px 18px; border:1px solid #303039; border-radius:14px; margin:14px 0; min-height:100px; background:#16161b; }
+.product-help .help-step strong { color:#a8e8cf; display:block; font-size:11px; letter-spacing:1px; margin-bottom:8px; }
+.product-help input { display:block; width:100%; padding:10px; border:1px solid #41414c; border-radius:8px; background:#111116; color:#fff; margin:8px 0; }
+.product-help .help-controls { display:flex; gap:8px; flex-wrap:wrap; }
+.product-help video { width:100%; max-height:260px; margin:14px 0; border-radius:12px; background:#111; }
+.product-help #help-result { white-space:pre-wrap; color:#a8e8cf; }
+.product-help details { padding:12px 0; border-top:1px solid #303039; }
+#product-welcome { position:fixed; inset:0; z-index:1000; background:#000b; display:grid; place-items:center; padding:24px; }
+#product-welcome > div { max-width:460px; border:1px solid #404047; background:#15151a; border-radius:22px; padding:30px; box-shadow:0 20px 100px #000; }
+#product-update { font-size:11px; border:1px solid #365f4c; border-radius:9px; background:#173325; color:#b4f4d5; padding:7px 10px; margin-right:10px; cursor:pointer; }

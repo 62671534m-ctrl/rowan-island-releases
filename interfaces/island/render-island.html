@@ -1,0 +1,894 @@
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="styles.css"><style>html,body{margin:0!important;width:100%!important;height:100%!important;background:#101214!important;overflow:hidden!important}body{display:grid!important;place-items:center!important}*,*:before,*:after{animation:none!important;transition:none!important;opacity:1} .island-container.expanded{position:relative!important;left:auto!important;top:auto!important;transform:none!important;width:660px!important;height:485px!important;flex-shrink:0;border-radius:22px!important;margin:0 auto!important}.island-expanded{position:relative!important;left:auto!important;top:auto!important;opacity:1!important;transform:none!important;visibility:visible!important;width:660px!important;height:485px!important}.island-pill{display:none!important}</style></head><body><div class="island-container expanded" id="island-container">
+<!-- ================= COLLAPSED PILL (NOTCH) ================= -->
+<div class="island-pill" id="island-pill" title="Click para expandir (o Ctrl+Shift+I)">
+<!-- Rowan Docked Avatar (Left Anchored Ocular Capsules) -->
+<div class="notch-rowan-avatar" id="notch-rowan-avatar" title="Rowan (Click para restaurar ventana)">
+<div class="notch-eye-socket" id="notch-eye-socket">
+<div class="notch-eye notch-eye-left" id="notch-eye-left"></div>
+<div class="notch-eye notch-eye-right" id="notch-eye-right"></div>
+</div>
+</div>
+<!-- Idle State (when no music is playing): Only Clock & Battery -->
+<div class="pill-idle-view active" id="pill-idle-view">
+<div class="pill-slot pill-left">
+<span class="pill-clock" id="pill-clock">--:--</span>
+</div>
+<div class="pill-slot pill-right">
+<div class="pill-battery" id="pill-battery" title="Batería">
+<span class="battery-level" id="pill-battery-level">--%</span>
+<div class="battery-icon"><div class="battery-fill" id="battery-fill"></div></div>
+</div>
+</div>
+</div>
+<!-- Music Playing State: Thumbnail + Singing Lyric Line + Equalizer -->
+<div class="pill-music-view" id="pill-music-view">
+<div class="pill-music-left">
+<div class="pill-thumb-wrap">
+<img alt="Cover" class="pill-cover-img" id="pill-cover-img" style="display: none;"/>
+<div class="pill-cover-placeholder" id="pill-cover-placeholder">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+</div>
+</div>
+<div class="pill-lyric-wrapper">
+<span class="pill-status-lyric" id="pill-status-lyric"></span>
+</div>
+</div>
+<div class="pill-music-right">
+<div class="equalizer-bars playing" id="pill-equalizer">
+<span class="bar bar-1"></span>
+<span class="bar bar-2"></span>
+<span class="bar bar-3"></span>
+<span class="bar bar-4"></span>
+</div>
+</div>
+</div>
+<!-- Dynamic Alert View: Dynamic Island System Animations (Bluetooth, Charger, Volume, Wi-Fi, Mic, Clipboard) -->
+<div class="pill-alert-view" id="pill-alert-view">
+<div class="pill-alert-icon" id="pill-alert-icon">
+<!-- Dynamic SVG -->
+</div>
+<div class="pill-alert-body">
+<span class="pill-alert-title" id="pill-alert-title"></span>
+<span class="pill-alert-sub" id="pill-alert-sub"></span>
+</div>
+<div class="pill-alert-right" id="pill-alert-right">
+<!-- Dynamic Right Element -->
+</div>
+</div>
+</div>
+<!-- ================= EXPANDED DASHBOARD ================= -->
+<div class="island-expanded" id="island-expanded">
+<!-- Top Navigation & Controls Header (Only active tab shows text, inactive tabs show only icon) -->
+<header class="island-topbar">
+<nav class="topbar-nav" id="topbar-nav">
+<button class="nav-btn active" data-tab="home" title="Home (Inicio)">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+<span>Home</span>
+</button>
+<button class="nav-btn" data-tab="rowan" id="tab-btn-rowan" title="Rowan AI Assistant">
+<svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15">
+<rect height="14" rx="4" width="18" x="3" y="6"></rect>
+<line stroke-width="2.5" x1="9" x2="9" y1="11" y2="15"></line>
+<line stroke-width="2.5" x1="15" x2="15" y1="11" y2="15"></line>
+<path d="M12 2v4"></path>
+</svg>
+<span>Rowan</span>
+</button>
+<button class="nav-btn" data-tab="calendar" title="Calendario &amp; Agenda">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<span>Calendario</span>
+</button>
+<button class="nav-btn" data-tab="notes" title="Tareas &amp; Notas">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect height="4" rx="1" ry="1" width="8" x="8" y="2"></rect><path d="m9 14 2 2 4-4"></path></svg>
+<span>Tareas</span>
+</button>
+<button class="nav-btn" data-tab="clipboard" title="Historial del Portapapeles">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect height="4" rx="1" ry="1" width="8" x="8" y="2"></rect></svg>
+<span>Clips</span>
+</button>
+<button class="nav-btn" data-tab="shelf" title="Bandeja Shelf">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><line x1="3" x2="21" y1="9" y2="9"></line><line x1="9" x2="9" y1="21" y2="9"></line></svg>
+<span>Shelf</span>
+</button>
+<button class="nav-btn" data-tab="weather" title="Clima">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><circle cx="12" cy="12" r="5"></circle><line x1="12" x2="12" y1="1" y2="3"></line><line x1="12" x2="12" y1="21" y2="23"></line><line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line><line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line><line x1="1" x2="3" y1="12" y2="12"></line><line x1="21" x2="23" y1="12" y2="12"></line></svg>
+<span>Clima</span>
+</button>
+<button class="nav-btn" data-tab="timer" title="Temporizador &amp; Cronómetro">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+<span>Reloj</span>
+</button>
+<button class="nav-btn" data-tab="tools" title="Herramientas Útiles">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+<span>Herramientas</span>
+</button>
+</nav>
+<div class="topbar-actions">
+<button class="action-btn" id="btn-toggle-theme" title="Alternar tema">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"></path></svg>
+</button>
+<button class="action-btn" id="btn-open-lyrics-drawer" title="Ver Letras Completas">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+</button>
+<button aria-pressed="false" class="action-btn pin-btn" id="btn-pin-island" title="Fijar island abierto">
+<svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M12 17v5"></path><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path></svg>
+</button>
+<button class="action-btn" id="btn-collapse" title="Colapsar a Notch (Esc)">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+</div>
+</header>
+<!-- Main Tab Content Area -->
+<main class="island-main">
+<!-- ================= TAB 1: HOME (Image 1 + Image 2 Replicated) ================= -->
+<section class="tab-content active" id="tab-home">
+<div class="home-grid-layout">
+<!-- Left: Music Player Card with Ambient Blur Cover Background -->
+<div class="home-player-card" id="home-player-card">
+<div class="player-ambient-blur" id="player-ambient-blur"></div>
+<!-- Album Artwork -->
+<div class="player-cover-container">
+<img alt="Cover" class="album-cover-img player-cover-image" id="album-cover-img" style="display: none;"/>
+<div class="player-cover-placeholder" id="album-placeholder">
+<svg fill="none" height="36" stroke="currentColor" stroke-width="1.6" viewbox="0 0 24 24" width="36"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+</div>
+</div>
+<!-- Track Title & Artist -->
+<div class="player-meta-info">
+<h3 class="player-track-title" id="track-title">Sin reproducción</h3>
+<p class="player-track-artist" id="track-artist">Inicia música en Spotify o reproductor</p>
+</div>
+<!-- Scrubber Bar -->
+<div class="player-scrubber-bar" id="player-scrubber-bar">
+<span class="time-stamp" id="time-current">0:00</span>
+<div class="progress-track" id="progress-bar-bg">
+<div class="progress-fill" id="progress-bar-fill" style="width: 0%;"></div>
+</div>
+<span class="time-stamp" id="time-total">0:00</span>
+</div>
+<!-- Controls (Prev, Circular Play/Pause, Next) -->
+<div class="player-buttons-row">
+<button class="player-ctrl-btn" id="btn-prev" title="Anterior">
+<svg fill="currentColor" height="18" viewbox="0 0 24 24" width="18"><polygon points="19 20 9 12 19 4 19 20"></polygon><line stroke="currentColor" stroke-width="3" x1="5" x2="5" y1="19" y2="5"></line></svg>
+</button>
+<button class="player-ctrl-btn player-play-circle" id="btn-play" title="Play / Pause">
+<svg fill="currentColor" height="20" id="play-icon" viewbox="0 0 24 24" width="20"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+</button>
+<button class="player-ctrl-btn" id="btn-next" title="Siguiente">
+<svg fill="currentColor" height="18" viewbox="0 0 24 24" width="18"><polygon points="5 4 15 12 5 20 5 4"></polygon><line stroke="currentColor" stroke-width="3" x1="19" x2="19" y1="5" y2="19"></line></svg>
+</button>
+</div>
+<!-- Bottom Volume & Speaker Pill -->
+<div class="player-bottom-row">
+<div class="player-volume-control">
+<button class="vol-icon-btn" id="btn-volume-mute" title="Silenciar">
+<svg fill="none" height="14" id="volume-icon" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+</button>
+<input id="volume-slider" max="100" min="0" type="range" value="80"/>
+<span class="volume-number" id="volume-val">80</span>
+</div>
+<button class="speaker-selector-pill" id="btn-device-selector" title="Elegir altavoces en los ajustes de Sonido de Windows">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="12"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+<span id="speaker-name-label">Speakers</span>
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="10"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+</div>
+</div>
+<!-- Right: System Controls Grid (Image 2) -->
+<div class="home-system-panel">
+<!-- 4 Top Cards (Wi-Fi, Bluetooth, Dark theme, Battery) -->
+<div class="system-quick-cards">
+<!-- Card 1: Wi-Fi -->
+<div class="sys-card" id="card-wifi" title="Clic para activar/desactivar Wi-Fi">
+<div class="sys-card-header">
+<div class="sys-icon-circle blue-tint" id="wifi-icon-circle">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="16"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" x2="12.01" y1="20" y2="20"></line></svg>
+</div>
+<div class="sys-card-more" id="btn-wifi-menu" title="Ver redes Wi-Fi">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><line x1="8" x2="21" y1="6" y2="6"></line><line x1="8" x2="21" y1="12" y2="12"></line><line x1="8" x2="21" y1="18" y2="18"></line><line x1="3" x2="3.01" y1="6" y2="6"></line><line x1="3" x2="3.01" y1="12" y2="12"></line><line x1="3" x2="3.01" y1="18" y2="18"></line></svg>
+</div>
+</div>
+<div class="sys-card-body">
+<div class="sys-card-title">Wi-Fi</div>
+<div class="sys-card-sub" id="wifi-status-text">On</div>
+</div>
+</div>
+<!-- Card 2: Bluetooth -->
+<div class="sys-card" id="card-bluetooth" title="Clic para activar/desactivar Bluetooth">
+<div class="sys-card-header">
+<div class="sys-icon-circle blue-tint" id="bt-icon-circle">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="16"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"></polyline></svg>
+</div>
+<div class="sys-card-more" id="btn-bt-menu" title="Ver dispositivos Bluetooth">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><line x1="8" x2="21" y1="6" y2="6"></line><line x1="8" x2="21" y1="12" y2="12"></line><line x1="8" x2="21" y1="18" y2="18"></line><line x1="3" x2="3.01" y1="6" y2="6"></line><line x1="3" x2="3.01" y1="12" y2="12"></line><line x1="3" x2="3.01" y1="18" y2="18"></line></svg>
+</div>
+</div>
+<div class="sys-card-body">
+<div class="sys-card-title">Bluetooth</div>
+<div class="sys-card-sub" id="bluetooth-status-text">On</div>
+</div>
+</div>
+<!-- Card 3: Dark theme -->
+<div class="sys-card" id="card-darktheme" title="Alternar tema oscuro / claro">
+<div class="sys-card-header">
+<div class="sys-icon-circle blue-tint">
+<svg fill="none" height="16" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="16"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"></path></svg>
+</div>
+</div>
+<div class="sys-card-body">
+<div class="sys-card-title">Dark theme</div>
+<div class="sys-card-sub">On</div>
+</div>
+</div>
+<!-- Card 4: Battery -->
+<div class="sys-card" id="card-battery" title="Estado de batería y energía">
+<div class="sys-card-header">
+<div class="battery-status-pill">
+<div class="battery-inner-bar"><div class="fill" id="card-battery-fill"></div></div>
+<span id="card-battery-pct">100%</span>
+</div>
+</div>
+<div class="sys-card-body">
+<div class="sys-card-title">Battery</div>
+<div class="sys-card-sub" id="card-battery-sub">On mains power</div>
+</div>
+</div>
+</div>
+<!-- Wi-Fi Networks Dropdown Drawer -->
+<div class="radio-devices-drawer" id="wifi-menu-drawer" style="display: none;">
+<div class="drawer-header">
+<div class="drawer-title">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path></svg>
+<span>Redes Wi-Fi Disponibles</span>
+</div>
+<button class="btn-drawer-action" id="btn-refresh-wifi" title="Buscar redes">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+</button>
+</div>
+<div class="drawer-list-items" id="wifi-networks-list">
+<p class="drawer-loading">Buscando redes...</p>
+</div>
+</div>
+<!-- Bluetooth Devices Dropdown Drawer -->
+<div class="radio-devices-drawer" id="bt-menu-drawer" style="display: none;">
+<div class="drawer-header">
+<div class="drawer-title">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"></polyline></svg>
+<span>Dispositivos Bluetooth</span>
+</div>
+<button class="btn-drawer-action" id="btn-refresh-bt" title="Buscar dispositivos">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+</button>
+</div>
+<div class="drawer-list-items" id="bt-devices-list">
+<p class="drawer-loading">Buscando dispositivos...</p>
+</div>
+</div>
+<!-- Audio Output / Speakers Dropdown Drawer -->
+<div class="radio-devices-drawer" id="speaker-menu-drawer" style="display: none;">
+<div class="drawer-header">
+<div class="drawer-title">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+<span>Salidas de Audio (Altavoces)</span>
+</div>
+<button class="btn-drawer-action" id="btn-open-win-sound" style="width:auto; padding:2px 8px; font-size:10px;" title="Abrir mezclador de Sonido de Windows">
+<span>Ajustes de Windows</span>
+</button>
+</div>
+<div class="drawer-list-items" id="speaker-devices-list">
+<p class="drawer-loading">Cargando salidas de audio...</p>
+</div>
+</div>
+<!-- 4 Bottom Buttons (Lock, Sleep, Restart, Shut down) -->
+<div class="system-action-buttons">
+<button class="sys-action-btn" id="btn-sys-lock" title="Bloquear equipo (Win+L)">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+<span>Lock</span>
+</button>
+<button class="sys-action-btn" id="btn-sys-sleep" title="Suspender equipo">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+<span>Sleep</span>
+</button>
+<button class="sys-action-btn" id="btn-sys-restart" title="Reiniciar equipo">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+<span>Restart</span>
+</button>
+<button class="sys-action-btn" id="btn-sys-shutdown" title="Apagar equipo">
+<svg fill="none" height="18" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" x2="12" y1="2" y2="12"></line></svg>
+<span>Shut down</span>
+</button>
+</div>
+</div>
+<!-- Bottom Row: Direct Access Shortcuts Drop Zone Bar (Full width across Home) -->
+<div class="home-shelf-dropzone" id="home-shelf-dropzone" title="Arrastra accesos directos, carpetas o archivos aquí">
+<div class="shelf-drop-empty-prompt" id="home-shelf-empty-prompt">
+<div class="shelf-plus-icon">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</div>
+<span class="shelf-drop-text">Drop app shortcuts, folders or files here</span>
+</div>
+<div class="home-shortcuts-list" id="home-shortcuts-list" style="display: none; align-items: center; gap: 8px;"></div>
+</div>
+</div>
+<!-- Synced Lyrics Overlay Drawer (can be toggled from topbar or player) -->
+<div class="home-lyrics-drawer" id="home-lyrics-drawer">
+<div class="lyrics-drawer-header">
+<div class="lyrics-drawer-title">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+<span>Letras sincronizadas</span>
+</div>
+<div class="lyrics-drawer-actions">
+<button class="btn-mini" id="btn-search-lyrics" title="Buscar de nuevo en LRCLIB">Buscar Letra</button>
+<button class="btn-mini-close" id="btn-close-lyrics-drawer">
+<svg fill="none" height="12" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="12"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</button>
+</div>
+</div>
+<div class="lyrics-lines" id="lyrics-lines">
+<div class="lyrics-notice">
+<svg fill="none" height="24" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24" width="24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+<p>Inicia música para ver la letra sincronizada</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= TAB 2: CALENDARIO & FECHAS ================= -->
+<section class="tab-content" id="tab-calendar">
+<div class="calendar-layout">
+<!-- Left Side: Interactive Calendar Grid -->
+<div class="calendar-grid-container">
+<div class="calendar-header">
+<button class="cal-nav-btn" id="btn-cal-prev" title="Mes anterior">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<h4 class="cal-title" id="cal-month-year">Noviembre 2026</h4>
+<div class="cal-header-actions">
+<button class="cal-today-btn" id="btn-cal-today">Hoy</button>
+<button class="cal-nav-btn" id="btn-cal-next" title="Mes siguiente">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="14"><polyline points="9 18 15 12 9 6"></polyline></svg>
+</button>
+</div>
+</div>
+<!-- Day of week names -->
+<div class="cal-weekdays">
+<span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sá</span><span>Do</span>
+</div>
+<!-- Day Cells Grid -->
+<div class="cal-days-grid" id="cal-days-grid">
+<!-- Dynamically generated days -->
+</div>
+</div>
+<!-- Right Side: Selected Date Agenda & Date Notes -->
+<div class="calendar-agenda-container">
+<div class="agenda-header">
+<div class="agenda-date-info">
+<h4 class="agenda-date-title" id="agenda-date-title">7 de Noviembre</h4>
+<span class="agenda-date-sub" id="agenda-date-sub">Hoy</span>
+</div>
+</div>
+<!-- Tasks linked to this date -->
+<div class="agenda-section">
+<div class="agenda-section-title">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><path d="m9 11 3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+<span>Tareas con esta fecha</span>
+</div>
+<div class="agenda-items-list" id="agenda-tasks-list">
+<p class="agenda-empty">No hay tareas programadas para este día.</p>
+</div>
+</div>
+<!-- Notes & Reminders for this date -->
+<div class="agenda-section">
+<div class="agenda-section-title">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" x2="8" y1="13" y2="13"></line><line x1="16" x2="8" y1="17" y2="17"></line></svg>
+<span>Anotaciones y recordatorios</span>
+</div>
+<div class="agenda-items-list" id="agenda-notes-list">
+<p class="agenda-empty">Sin notas para esta fecha.</p>
+</div>
+<!-- Add date note input -->
+<div class="agenda-add-row">
+<input id="agenda-note-input" placeholder="Añadir nota para esta fecha..." type="text"/>
+<button class="btn-primary-mini" id="btn-add-agenda-note">Añadir</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= TAB 3: TAREAS (CHECKLIST CON FECHA OPCIONAL) ================= -->
+<section class="tab-content" id="tab-notes">
+<div class="notes-workspace">
+<div class="notes-toolbar">
+<div class="notes-mode-switcher">
+<button class="mode-btn active" id="btn-mode-checklist">Checklist &amp; Fechas</button>
+<button class="mode-btn" id="btn-mode-text">Texto Libre</button>
+</div>
+<span class="save-status" id="notes-save-indicator"><svg fill="none" height="10" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24" width="10"><polyline points="20 6 9 17 4 12"></polyline></svg> Guardado</span>
+</div>
+<!-- Mode: Checklist with Date Option -->
+<div class="checklist-view" id="checklist-view">
+<div class="checklist-new-task-row">
+<input id="new-task-input" placeholder="Escribe una tarea..." type="text"/>
+<div class="date-picker-wrap" title="Fecha límite opcional (se reflejará en el calendario)">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+<input id="new-task-date" type="date"/>
+</div>
+<button class="btn-primary-mini" id="btn-add-task">Agregar</button>
+</div>
+<ul class="checklist-items" id="checklist-items">
+<!-- Checkbox items dynamically populated -->
+</ul>
+</div>
+<!-- Mode: Free Text -->
+<div class="freetext-view" id="freetext-view" style="display: none;">
+<textarea id="freetext-area" placeholder="Escribe tus notas, snippets o ideas aquí..."></textarea>
+</div>
+</div>
+</section>
+<!-- ================= TAB 4: CLIPBOARD CLIPS ================= -->
+<section class="tab-content" id="tab-clipboard">
+<div class="clips-container">
+<div class="clips-toolbar">
+<div class="search-field">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+<input id="clips-search-input" placeholder="Buscar texto, URLs o código..." type="text"/>
+</div>
+<div class="filter-chips">
+<button class="chip active" data-filter="all">Todos</button>
+<button class="chip" data-filter="url">Enlaces</button>
+<button class="chip" data-filter="code">Código</button>
+<button class="chip" data-filter="text">Texto</button>
+</div>
+<button class="btn-secondary" id="btn-clear-clips" title="Eliminar clips no fijados">Limpiar</button>
+</div>
+<div class="clips-feed" id="clips-feed">
+<!-- Dynamically populated -->
+</div>
+</div>
+</section>
+<!-- ================= TAB 5: SHELF (DROP ZONE) ================= -->
+<section class="tab-content" id="tab-shelf">
+<div class="shelf-workspace">
+<div class="shelf-dropzone" id="shelf-dropzone">
+<div class="dropzone-icon">
+<svg fill="none" height="32" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24" width="32"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" x2="12" y1="3" y2="15"></line></svg>
+</div>
+<h4>Arrastra y suelta archivos aquí</h4>
+<p>Tu bandeja temporal rápida para tener archivos y accesos directos a mano</p>
+</div>
+<div class="shelf-inventory-header">
+<span>Archivos guardados en Shelf</span>
+<button class="btn-mini" id="btn-clear-shelf">Vaciar Shelf</button>
+</div>
+<div class="shelf-cards-grid" id="shelf-cards-grid">
+<!-- Dynamically populated shelf cards -->
+</div>
+</div>
+</section>
+<!-- ================= TAB 6: WEATHER (100% Dedicated) ================= -->
+<section class="tab-content" id="tab-weather">
+<div class="weather-dedicated-workspace">
+<!-- Weather Hero Card -->
+<div class="weather-hero-card">
+<div class="weather-hero-main">
+<div class="weather-hero-info">
+<div class="weather-location-row">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<span class="weather-location" id="weather-city-country">Lima, Perú</span>
+</div>
+<div class="weather-status" id="weather-description">Soleado / Despejado</div>
+<div class="weather-temp-huge">
+<span id="weather-temp-display">22</span><span class="temp-unit">°C</span>
+</div>
+</div>
+<div class="weather-hero-art" id="weather-hero-icon">
+<svg fill="none" height="64" stroke="#f59e0b" stroke-width="1.8" viewbox="0 0 24 24" width="64"><circle cx="12" cy="12" r="5"></circle><line x1="12" x2="12" y1="1" y2="3"></line><line x1="12" x2="12" y1="21" y2="23"></line><line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line><line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line><line x1="1" x2="3" y1="12" y2="12"></line><line x1="21" x2="23" y1="12" y2="12"></line><line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line><line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line></svg>
+</div>
+</div>
+<!-- Weather Metric Chips Grid -->
+<div class="weather-details-grid">
+<div class="weather-metric-cell">
+<span class="wm-label">Sensación</span>
+<strong class="wm-val" id="weather-feels">23°C</strong>
+</div>
+<div class="weather-metric-cell">
+<span class="wm-label">Humedad</span>
+<strong class="wm-val" id="weather-hum">72%</strong>
+</div>
+<div class="weather-metric-cell">
+<span class="wm-label">Viento</span>
+<strong class="wm-val" id="weather-wind">14 km/h</strong>
+</div>
+<div class="weather-metric-cell">
+<span class="wm-label">Índice UV</span>
+<strong class="wm-val" id="weather-uv">5 Mod</strong>
+</div>
+<div class="weather-metric-cell">
+<span class="wm-label">Lluvia</span>
+<strong class="wm-val" id="weather-precip">0 mm</strong>
+</div>
+<div class="weather-metric-cell">
+<span class="wm-label">Presión</span>
+<strong class="wm-val" id="weather-pressure">1014 hPa</strong>
+</div>
+</div>
+<!-- Quick City Search & Preset Chips -->
+<div class="weather-search-bar">
+<input id="weather-city-input" placeholder="Buscar ciudad (ej: Madrid, Bogotá, Miami)..." type="text"/>
+<button class="btn-mini" id="btn-update-weather">Buscar</button>
+</div>
+<div class="weather-preset-chips" id="weather-preset-chips">
+<button class="city-chip active" data-city="Lima">Lima</button>
+<button class="city-chip" data-city="Madrid">Madrid</button>
+<button class="city-chip" data-city="Buenos Aires">Buenos Aires</button>
+<button class="city-chip" data-city="Ciudad de México">CDMX</button>
+<button class="city-chip" data-city="Bogotá">Bogotá</button>
+<button class="city-chip" data-city="Miami">Miami</button>
+<button class="city-chip" data-city="Tokio">Tokio</button>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= TAB 7: RELOJ & TEMPORIZADOR ================= -->
+<section class="tab-content" id="tab-timer">
+<div class="clock-timer-workspace">
+<!-- Mode Switch: Temporizador vs Cronómetro -->
+<div class="timer-mode-selector">
+<button class="subtab-btn active" id="btn-switch-to-timer">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+<span>Temporizador</span>
+</button>
+<button class="subtab-btn" id="btn-switch-to-stopwatch">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M12 5V2"></path><path d="m9 2 6 0"></path></svg>
+<span>Cronómetro</span>
+</button>
+</div>
+<!-- View A: Temporizador -->
+<div class="timer-subview active" id="view-timer-mode">
+<div class="timer-card-main">
+<!-- Custom Editable Duration Display / Spinners -->
+<div class="timer-time-editor">
+<div class="time-spinner-unit">
+<button class="btn-spin-arrow" id="btn-hour-up" title="+1 Hora">
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="10"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+<input class="time-spin-input" id="input-timer-hours" max="23" min="0" type="number" value="00"/>
+<button class="btn-spin-arrow" id="btn-hour-down" title="-1 Hora">
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="10"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+</div>
+<span class="time-spin-sep">:</span>
+<div class="time-spinner-unit">
+<button class="btn-spin-arrow" id="btn-min-up" title="+1 Minuto">
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="10"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+<input class="time-spin-input" id="input-timer-mins" max="59" min="0" type="number" value="25"/>
+<button class="btn-spin-arrow" id="btn-min-down" title="-1 Minuto">
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="10"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+</div>
+<span class="time-spin-sep">:</span>
+<div class="time-spinner-unit">
+<button class="btn-spin-arrow" id="btn-sec-up" title="+1 Segundo">
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="10"><polyline points="18 15 12 9 6 15"></polyline></svg>
+</button>
+<input class="time-spin-input" id="input-timer-secs" max="59" min="0" type="number" value="00"/>
+<button class="btn-spin-arrow" id="btn-sec-down" title="-1 Segundo">
+<svg fill="none" height="10" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="10"><polyline points="6 9 12 15 18 9"></polyline></svg>
+</button>
+</div>
+</div>
+<!-- Big Countdown Display -->
+<div class="timer-countdown-display" id="timer-countdown-display">25:00</div>
+<!-- Progress Bar Gauge -->
+<div class="timer-progress-bar-bg">
+<div class="timer-progress-bar-fill" id="timer-progress-fill" style="width: 100%;"></div>
+</div>
+<!-- Quick Presets -->
+<div class="timer-presets-row">
+<button class="timer-preset-btn" data-time="60">1m</button>
+<button class="timer-preset-btn" data-time="300">5m</button>
+<button class="timer-preset-btn" data-time="600">10m</button>
+<button class="timer-preset-btn" data-time="900">15m</button>
+<button class="timer-preset-btn active" data-time="1500">25m</button>
+<button class="timer-preset-btn" data-time="1800">30m</button>
+<button class="timer-preset-btn" data-time="3600">1h</button>
+</div>
+<!-- Action Controls -->
+<div class="timer-action-controls">
+<button class="btn-timer-primary" id="btn-timer-toggle">
+<svg fill="currentColor" height="14" viewbox="0 0 24 24" width="14"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+<span id="txt-timer-toggle">Iniciar</span>
+</button>
+<button class="btn-timer-secondary" id="btn-timer-reset" title="Reiniciar tiempo">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="14"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+<span>Reiniciar</span>
+</button>
+<button class="btn-timer-secondary" id="btn-timer-add-min" title="+1 minuto adicional">
+<span>+1 min</span>
+</button>
+</div>
+</div>
+</div>
+<!-- View B: Cronómetro -->
+<div class="timer-subview" id="view-stopwatch-mode">
+<div class="stopwatch-card-main">
+<div class="stopwatch-display-huge" id="stopwatch-display">00:00.00</div>
+<div class="stopwatch-action-controls">
+<button class="btn-timer-primary" id="btn-stopwatch-toggle">
+<svg fill="currentColor" height="14" viewbox="0 0 24 24" width="14"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+<span id="txt-stopwatch-toggle">Iniciar</span>
+</button>
+<button class="btn-timer-secondary" id="btn-stopwatch-lap" title="Registrar vuelta (Lap)">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+<span>Vuelta</span>
+</button>
+<button class="btn-timer-secondary" id="btn-stopwatch-reset" title="Reiniciar cronómetro">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24" width="14"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+<span>Reset</span>
+</button>
+</div>
+<div class="stopwatch-laps-wrapper">
+<div class="stopwatch-laps-header">
+<span>Vuelta</span>
+<span>Tiempo de Vuelta</span>
+<span>Total</span>
+</div>
+<div class="stopwatch-laps-list" id="stopwatch-laps-list">
+<p class="empty-laps">Sin vueltas registradas.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= TAB 8: HERRAMIENTAS ÚTILES ================= -->
+<section class="tab-content" id="tab-tools">
+<div class="tools-workspace-grid">
+<!-- Tool 1: Brillo de Pantalla -->
+<div class="util-card util-wide">
+<div class="util-header">
+<div class="util-title-wrap">
+<div class="util-icon-circle amber-tint">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+</div>
+<div>
+<div class="util-title">Brillo de Pantalla</div>
+<div class="util-sub">Ajuste de retroiluminación en tiempo real</div>
+</div>
+</div>
+<span class="util-value-pill" id="tools-brightness-val">50%</span>
+</div>
+<div class="util-slider-row">
+<input class="util-range-slider" id="tools-brightness-slider" max="100" min="0" type="range" value="50"/>
+</div>
+<div class="util-presets-row">
+<button class="btn-util-chip" data-bright="25">25%</button>
+<button class="btn-util-chip" data-bright="50">50%</button>
+<button class="btn-util-chip" data-bright="75">75%</button>
+<button class="btn-util-chip" data-bright="100">100%</button>
+</div>
+</div>
+<!-- Tool 2: Cuentagotas (Selector de Color) -->
+<div class="util-card">
+<div class="util-header">
+<div class="util-title-wrap">
+<div class="util-icon-circle blue-tint">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="m2 22 1-1h3l9-9"></path><path d="M3 21v-3l9-9"></path><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9"></path></svg>
+</div>
+<div>
+<div class="util-title">Cuentagotas</div>
+<div class="util-sub">EyeDropper de precisión</div>
+</div>
+</div>
+</div>
+<div class="eyedropper-preview-row">
+<div class="color-preview-box" id="tools-color-preview" style="background: #3b82f6;"></div>
+<div class="eyedropper-info">
+<span class="color-hex-badge" id="tools-color-hex">#3B82F6</span>
+<span class="color-rgb-badge" id="tools-color-rgb">rgb(59, 130, 246)</span>
+</div>
+</div>
+<div class="util-action-row">
+<button class="btn-util-action" id="btn-tools-eyedropper">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><path d="m2 22 1-1h3l9-9"></path><path d="M3 21v-3l9-9"></path><path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9"></path></svg>
+<span>Tomar Color</span>
+</button>
+<button class="btn-util-action secondary" id="btn-tools-copy-color">Copiar</button>
+</div>
+</div>
+<!-- Tool 3: Captura de Pantalla -->
+<div class="util-card">
+<div class="util-header">
+<div class="util-title-wrap">
+<div class="util-icon-circle green-tint">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+</div>
+<div>
+<div class="util-title">Tomador de Captura</div>
+<div class="util-sub">Recortes y pantalla completa</div>
+</div>
+</div>
+</div>
+<div class="util-buttons-stack">
+<button class="btn-util-action" id="btn-snap-area">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path></svg>
+<span>Capturar Área</span>
+</button>
+<button class="btn-util-action secondary" id="btn-snap-full">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><rect height="14" rx="2" ry="2" width="20" x="2" y="3"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>
+<span>Pantalla Completa</span>
+</button>
+</div>
+</div>
+<!-- Tool 4: Extractor de Texto (OCR) -->
+<div class="util-card">
+<div class="util-header">
+<div class="util-title-wrap">
+<div class="util-icon-circle purple-tint">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" x2="15" y1="20" y2="20"></line><line x1="12" x2="12" y1="4" y2="20"></line></svg>
+</div>
+<div>
+<div class="util-title">Extractor de Texto</div>
+<div class="util-sub">OCR de pantalla al portapapeles</div>
+</div>
+</div>
+</div>
+<div class="util-buttons-stack">
+<button class="btn-util-action" id="btn-ocr-screen">
+<svg fill="none" height="13" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="13"><path d="M4 7V4h16v3"></path><path d="M12 4v16"></path></svg>
+<span>Escanear Texto en Pantalla</span>
+</button>
+<div class="ocr-result-row">
+<input id="ocr-preview-text" placeholder="El texto capturado aparecerá aquí..." readonly="" type="text"/>
+<button class="btn-mini" id="btn-copy-ocr">Copiar</button>
+</div>
+</div>
+</div>
+<!-- Tool 5: Lector de QR -->
+<div class="util-card">
+<div class="util-header">
+<div class="util-title-wrap">
+<div class="util-icon-circle cyan-tint">
+<svg fill="none" height="15" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="15"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+</div>
+<div>
+<div class="util-title">Lector de QR</div>
+<div class="util-sub">Decodifica enlaces y códigos QR</div>
+</div>
+</div>
+</div>
+<div class="qr-dropzone" id="qr-dropzone" title="Arrastra una imagen con QR o pega del portapapeles">
+<span id="qr-result-text">Arrastra o pega imagen de QR</span>
+</div>
+<div class="util-action-row" style="margin-top: 6px;">
+<button class="btn-util-action secondary" id="btn-paste-qr">Pegar del Portapapeles</button>
+<button class="btn-util-action" id="btn-open-qr-link" style="display: none;">Abrir Enlace</button>
+</div>
+</div>
+<!-- Tool 6: Modo Nocturno & No Molestar -->
+<div class="util-card util-wide">
+<div class="util-toggles-duo">
+<div class="util-toggle-item" id="btn-toggle-nightlight">
+<div class="util-icon-circle amber-tint">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+</div>
+<div class="toggle-texts">
+<div class="tt-title">Modo Nocturno</div>
+<div class="tt-status" id="nightlight-status-text">Desactivado</div>
+</div>
+</div>
+<div class="util-toggle-item" id="btn-toggle-dnd">
+<div class="util-icon-circle red-tint">
+<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" x2="19.07" y1="4.93" y2="19.07"></line></svg>
+</div>
+<div class="toggle-texts">
+<div class="tt-title">No Molestar</div>
+<div class="tt-status" id="dnd-status-text">Desactivado</div>
+</div>
+</div>
+</div>
+</div>
+</div></section>
+<!-- ================= TAB: ROWAN AI ASSISTANT & MINI-CHAT ================= -->
+<section class="tab-content" id="tab-rowan">
+<div class="rowan-chat-workspace">
+<!-- Rowan Tab Header Bar -->
+<div class="rowan-tab-header">
+<div class="rowan-brand-left">
+<div class="rowan-brand-avatar" title="Rowan AI">
+<span class="rowan-brand-letter">R</span>
+</div>
+<div class="rowan-brand-meta">
+<span class="rowan-brand-title">Rowan AI</span>
+<div class="rowan-status-pill disconnected" id="rowan-status-pill" title="Estado de conexion IPC">
+<span class="rowan-status-dot" id="rowan-status-dot"></span>
+<span id="rowan-status-text">Desconectado</span>
+</div>
+</div>
+</div>
+<div class="rowan-header-actions">
+<!-- Live Mode Quick Toggle Button -->
+<button class="rowan-action-chip" id="rowan-tab-live-btn" title="Alternar Modo Live (Voz bidireccional)">
+<svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="12">
+<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+<path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+<line x1="12" x2="12" y1="19" y2="23"></line>
+<line x1="8" x2="16" y1="23" y2="23"></line>
+</svg>
+<span id="rowan-tab-live-text">Modo Live</span>
+</button>
+<!-- Restore Standalone Window Button -->
+<button class="rowan-icon-action" id="rowan-restore-btn" title="Abrir ventana principal de Rowan">
+<svg fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="13">
+<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+<polyline points="15 3 21 3 21 9"></polyline>
+<line x1="10" x2="21" y1="14" y2="3"></line>
+</svg>
+</button>
+<!-- Clear Chat Conversation Button -->
+<button class="rowan-icon-action" id="rowan-chat-clear" title="Limpiar conversacion">
+<svg fill="none" height="13" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="13">
+<polyline points="3 6 5 6 21 6"></polyline>
+<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Live Mode Active Status Banner (shown when Live Mode is engaged) -->
+<div class="rowan-live-banner" id="rowan-live-banner" style="display: none;">
+<div class="live-banner-left">
+<span class="live-pulse-dot"></span>
+<span class="live-phase-text" id="rowan-live-phase-text">Modo Live Activo - Escuchando voz</span>
+</div>
+<div class="live-banner-eq">
+<span class="eq-mini-bar eq-b1"></span>
+<span class="eq-mini-bar eq-b2"></span>
+<span class="eq-mini-bar eq-b3"></span>
+</div>
+</div>
+<!-- Scrollable Messages Container -->
+<div class="rowan-chat-messages" id="rowan-chat-messages">
+<!-- Welcome Empty State -->
+<div class="rowan-welcome-view" id="rowan-welcome-view">
+<div class="welcome-avatar-socket">
+<div class="welcome-capsule"></div>
+<div class="welcome-capsule"></div>
+</div>
+<h4 class="welcome-title">Rowan AI Assistant</h4>
+<p class="welcome-subtitle">Pregunta lo que desees o controla widgets de la isla.</p>
+<div class="welcome-chips-row">
+<button class="welcome-chip" data-prompt="Que tareas tengo pendientes?">Tareas pendientes</button>
+<button class="welcome-chip" data-prompt="Activa el modo nocturno">Modo nocturno</button>
+<button class="welcome-chip" data-prompt="Inicia el Modo Live">Modo Live</button>
+</div>
+</div>
+<!-- Messages List -->
+<div class="rowan-messages-list" id="rowan-messages-list"></div>
+</div>
+<!-- Bottom Chat Input Bar -->
+<div class="rowan-chat-bar">
+<!-- Live Mode Mic Toggle Button -->
+<button class="rowan-bar-btn mic-btn" id="rowan-live-toggle" title="Alternar Modo Live (Voz)">
+<svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15">
+<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+<path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+<line x1="12" x2="12" y1="19" y2="23"></line>
+<line x1="8" x2="16" y1="23" y2="23"></line>
+</svg>
+</button>
+<!-- Text Input Field -->
+<input autocomplete="off" class="rowan-chat-input" id="rowan-chat-input" maxlength="4000" placeholder="Escribe un mensaje a Rowan..." spellcheck="false" type="text"/>
+<!-- Send Button -->
+<button class="rowan-bar-btn send-btn" id="rowan-chat-send" title="Enviar mensaje (Enter)">
+<svg fill="none" height="14" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="14">
+<line x1="22" x2="11" y1="2" y2="13"></line>
+<polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+</svg>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Status Bar -->
+</div>
+</div></body></html>
