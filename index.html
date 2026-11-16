@@ -11,6 +11,14 @@
   <link rel="stylesheet" href="demo.css">
   <link rel="stylesheet" href="showcase.css">
   <link rel="stylesheet" href="promo.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-71D1NRCXZP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-71D1NRCXZP');
+  </script>
 </head>
 <body>
   <div class="ambient-aura" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -135,6 +143,29 @@
   </main>
   <footer class="footer wrap"><a class="brand" href="#inicio"><span class="brand-mark"><i></i><i></i></span><span>rowan</span></a><span>Una presencia propia en tu escritorio.</span><a href="#inicio">VOLVER ARRIBA ↑</a><small>© 2026 Rowan · Proyecto independiente</small></footer>
   <link rel="stylesheet" href="rowan-face.css"><script src="rowan-face.js"></script><script src="emotions-data.js"></script>
-<link rel="stylesheet" href="demo-animations.css"><script src="demo-animations.js"></script><script src="promo.js"></script></body>
+<link rel="stylesheet" href="demo-animations.css"><script src="demo-animations.js"></script><script src="promo.js"></script>
+<script>
+  document.addEventListener('click', (e) => {
+    if (typeof window.gtag !== 'function') return;
+    const dl = e.target.closest('a[download]');
+    if (dl) {
+      window.gtag('event', 'download_installer', {
+        file_name: (dl.getAttribute('href') || '').split('/').pop() || 'Rowan-Island-Setup.exe',
+        link_url: dl.href
+      });
+      return;
+    }
+    const rel = e.target.closest('a[href*="github.com/62671534m-ctrl/rowan-island-releases/releases"]');
+    if (rel) {
+      window.gtag('event', 'click_github_releases', { link_url: rel.href });
+      return;
+    }
+    const btn = e.target.closest('button, a');
+    if (btn && /presentaci[oó]n/i.test(btn.textContent || '')) {
+      window.gtag('event', 'view_presentation');
+    }
+  });
+</script>
+</body>
 </html>
 
