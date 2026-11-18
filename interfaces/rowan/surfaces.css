@@ -1,0 +1,297 @@
+html[data-surface="notch"],
+html[data-surface="notch"] body {
+  background: transparent !important;
+  overflow: hidden !important;
+  user-select: none !important;
+}
+html[data-surface="notch"] body > *:not(main),
+html[data-surface="notch"] #messages-container,
+html[data-surface="notch"] #thinking-tag,
+html[data-surface="notch"] #sensor-dot-left,
+html[data-surface="notch"] #sensor-dot-right,
+html[data-surface="notch"] .eye-soundwave-ring {
+  display: none !important;
+}
+html[data-surface="notch"] #ambient-aura {
+  display: block !important;
+  width: 68px !important;
+  height: 36px !important;
+  opacity: 0.72 !important;
+  filter: blur(8px) !important;
+  pointer-events: none !important;
+}
+html[data-surface="notch"] main {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+html[data-surface="notch"] #avatar-section {
+  width: 90px !important;
+  height: 70px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  will-change: transform, filter;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.55s ease !important;
+}
+html[data-surface="notch"] #eyes-container {
+  width: 90px !important;
+  height: 70px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform: scale(0.30) !important;
+  transform-origin: center center !important;
+}
+html[data-surface="notch"] #eye-socket {
+  padding: 0 !important;
+  cursor: pointer !important;
+  transition: filter 0.35s ease !important;
+}
+html[data-surface="notch"] .rowan-eye {
+  --eye-w: 5px;
+  --eye-h: 13px;
+  --eye-r: 99px;
+}
+html[data-surface="notch"][data-theme="light"] .rowan-eye {
+  --eye-color: #111114;
+  --eye-glow: rgba(17, 17, 20, 0.25);
+  background-color: #111114 !important;
+  box-shadow: 0 0 8px rgba(17, 17, 20, 0.25) !important;
+}
+
+/* =========================================================================
+   SECCIÓN 6: PACK DE 20 ANIMACIONES SUAVES Y FLUIDAS DE ROWAN EN EL NOTCH
+   ========================================================================= */
+@keyframes notchClockPendulum {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25% { transform: translate3d(-1.4px, 0, 0) rotate(-4.5deg); }
+  75% { transform: translate3d(1.4px, 0, 0) rotate(4.5deg); }
+}
+@keyframes notchDanceBounce {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0) scale(1, 1); }
+  25% { transform: translate3d(0, -1.1px, 0) scale(0.98, 1.04); }
+  75% { transform: translate3d(0, 0.8px, 0) scale(1.03, 0.97); }
+}
+@keyframes notchDanceWave {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scaleY(1); }
+  25% { transform: translate3d(-1.1px, -0.7px, 0) rotate(-3.5deg) scaleY(1.03); }
+  75% { transform: translate3d(1.1px, -0.7px, 0) rotate(3.5deg) scaleY(1.03); }
+}
+@keyframes notchDanceWaveLeft {
+  0%, 50%, 100% { transform: translateY(0) scaleY(1); }
+  25% { transform: translateY(-1.2px) scaleY(1.04); }
+  75% { transform: translateY(1.2px) scaleY(0.96); }
+}
+@keyframes notchDanceWaveRight {
+  0%, 50%, 100% { transform: translateY(0) scaleY(1); }
+  25% { transform: translateY(1.2px) scaleY(0.96); }
+  75% { transform: translateY(-1.2px) scaleY(1.04); }
+}
+@keyframes notchDancePulse {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0) scale(1); filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.45)); }
+  25%, 75% { transform: translate3d(0, -0.6px, 0) scale(1.04, 0.97); filter: drop-shadow(0 0 7px rgba(236, 72, 153, 0.65)); }
+}
+@keyframes notchDanceSway {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25% { transform: translate3d(-1.3px, -0.3px, 0) rotate(-4deg); }
+  75% { transform: translate3d(1.3px, -0.3px, 0) rotate(4deg); }
+}
+@keyframes notchDanceFunk {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scaleY(1); }
+  25% { transform: translate3d(-1px, -0.7px, 0) rotate(-3deg) scaleY(1.03); }
+  75% { transform: translate3d(1px, -0.7px, 0) rotate(3deg) scaleY(1.03); }
+}
+@keyframes notchDanceStrobe {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0) scaleY(1); filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.45)); }
+  25% { transform: translate3d(0, -0.8px, 0) scaleY(1.04); filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.65)); }
+  75% { transform: translate3d(0, 0.6px, 0) scaleY(0.97); filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.65)); }
+}
+@keyframes notchPeekDown {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  45%, 65% { transform: translate3d(0, 1.6px, 0) scaleY(0.92); }
+}
+@keyframes notchScanHorizontal {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-2px, 0, 0); }
+  75% { transform: translate3d(2px, 0, 0); }
+}
+@keyframes notchFloatZeroG {
+  0%, 50%, 100% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(0, -1.2px, 0); }
+  75% { transform: translate3d(0, 1.2px, 0); }
+}
+@keyframes notchStretchElastic {
+  0%, 100% { transform: scale(1, 1); }
+  45% { transform: scale(0.94, 1.10); }
+  75% { transform: scale(1.05, 0.94); }
+}
+@keyframes notchCuriousTilt {
+  0%, 100% { transform: rotate(0deg); }
+  40%, 70% { transform: rotate(-6deg) translate3d(-0.8px, -0.4px, 0); }
+}
+@keyframes notchDaydream {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(1.2px, -1.4px, 0) scale(1.03); }
+}
+@keyframes notchMicroNap {
+  0%, 100% { transform: translate3d(0, 0, 0) scaleY(1); }
+  60% { transform: translate3d(0, 1.4px, 0) scaleY(0.55); }
+  82% { transform: translate3d(0, -0.8px, 0) scaleY(1.06); }
+}
+@keyframes notchGlitchPop {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  35% { transform: translate3d(-1px, 0.4px, 0) skewX(5deg); }
+  65% { transform: translate3d(1px, -0.4px, 0) skewX(-5deg); }
+}
+@keyframes notchReactiveTyping {
+  0%, 50%, 100% { transform: translate3d(0, 0.6px, 0) scaleY(0.95); }
+  25% { transform: translate3d(-1px, 0.6px, 0) scaleY(0.95); }
+  75% { transform: translate3d(1px, 0.6px, 0) scaleY(0.95); }
+}
+
+html[data-surface="notch"][data-notch-anim="clock_tick"] #avatar-section {
+  animation: notchClockPendulum 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="dance_bounce"] #avatar-section {
+  animation: notchDanceBounce 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="dance_wave"] #avatar-section {
+  animation: notchDanceWave 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="dance_pulse"] #avatar-section {
+  animation: notchDancePulse 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="dance_sway"] #avatar-section {
+  animation: notchDanceSway 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="dance_funk"] #avatar-section {
+  animation: notchDanceFunk 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="dance_strobe"] #avatar-section {
+  animation: notchDanceStrobe 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="notch_peek"] #avatar-section {
+  animation: notchPeekDown 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="notch_scan"] #avatar-section,
+html[data-surface="notch"][data-notch-anim="reactive_chrome"] #avatar-section {
+  animation: notchScanHorizontal 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="notch_float"] #avatar-section {
+  animation: notchFloatZeroG 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="notch_stretch"] #avatar-section {
+  animation: notchStretchElastic 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="notch_curious_tilt"] #avatar-section {
+  animation: notchCuriousTilt 2.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="notch_daydream"] #avatar-section {
+  animation: notchDaydream 2.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="notch_micro_nap"] #avatar-section {
+  animation: notchMicroNap 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="notch_glitch_pop"] #avatar-section {
+  animation: notchGlitchPop 1.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+html[data-surface="notch"][data-notch-anim="reactive_typing"] #avatar-section {
+  animation: notchReactiveTyping 1.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite !important;
+}
+
+/* =========================================================================
+   SECCIÓN 5: SELECCIÓN Y COPIA DE TEXTO + BURBUJAS RESPONSIVAS + MINI-CHAT
+   ========================================================================= */
+#messages-container,
+#messages-list,
+#messages-list p,
+#messages-list span,
+#messages-list div {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+#messages-list p {
+  cursor: text;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Burbujas responsivas en ventana grande */
+#messages-list > div > div.flex-col {
+  max-width: min(82%, 520px) !important;
+  min-width: 0;
+}
+
+/* Mini-chat dentro del menú de Dynamic Island */
+html[data-surface="mini"] body {
+  overflow: hidden !important;
+}
+html[data-surface="mini"] header {
+  padding: 2px 10px !important;
+  min-height: 26px !important;
+  max-height: 30px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+html[data-surface="mini"] #status-badge {
+  padding: 2px 7px !important;
+  gap: 5px !important;
+}
+html[data-surface="mini"] header button {
+  padding: 3px !important;
+}
+html[data-surface="mini"] #open-full-window-btn {
+  display: inline-flex !important;
+}
+html[data-surface="mini"] main {
+  padding: 4px 10px 58px !important;
+  max-width: none !important;
+}
+html[data-surface="mini"] #avatar-section {
+  height: 48px !important;
+  margin-top: 3px !important;
+  margin-bottom: 2px !important;
+}
+html[data-surface="mini"] #eyes-container {
+  width: 112px !important;
+  height: 44px !important;
+  transform: scale(0.68);
+  transform-origin: center center;
+}
+html[data-surface="mini"] #messages-container {
+  padding: 4px 6px 26px !important;
+  gap: 8px !important;
+}
+html[data-surface="mini"] #messages-list {
+  gap: 8px !important;
+  padding-bottom: 26px !important;
+}
+html[data-surface="mini"] #messages-list > div > div.flex-col {
+  max-width: 86% !important;
+  min-width: 0 !important;
+}
+html[data-surface="mini"] #messages-list p {
+  font-size: 11.5px !important;
+  line-height: 1.42 !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+html[data-surface="mini"] #chat-footer {
+  bottom: 6px !important;
+  padding: 0 8px !important;
+  max-width: none !important;
+}
+html[data-surface="mini"] #live-stage-bottom {
+  bottom: 6px !important;
+  padding: 0 10px !important;
+}
