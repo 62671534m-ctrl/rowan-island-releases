@@ -1,0 +1,976 @@
+{
+  "Familia 1: Alegría, Éxito & Celebración (15)": [
+    {
+      "name": "happy",
+      "icon": "😊",
+      "desc": "Sonrisa suave (⌒ ⌒), arco superior",
+      "shape": "rainbow",
+      "h": 26,
+      "w": 18,
+      "rot": 12,
+      "transY": -4,
+      "aura": "rgba(254, 240, 138, 0.22)"
+    },
+    {
+      "name": "cheerful",
+      "icon": "😄",
+      "desc": "Rebote elástico y aura dorada",
+      "shape": "rainbow",
+      "h": 32,
+      "w": 18,
+      "rot": 8,
+      "anim": "anim-bounce",
+      "aura": "rgba(250, 204, 21, 0.28)"
+    },
+    {
+      "name": "ecstatic",
+      "icon": "✨",
+      "desc": "Chevrons agudos (^ ^) y rebote",
+      "shape": "chevron",
+      "h": 26,
+      "w": 18,
+      "rot": 22,
+      "transY": -6,
+      "anim": "anim-bounce",
+      "aura": "rgba(251, 191, 36, 0.3)"
+    },
+    {
+      "name": "laughing",
+      "icon": "😆",
+      "desc": "Temblor alegre de risa",
+      "shape": "rainbow",
+      "h": 22,
+      "w": 20,
+      "rot": 14,
+      "anim": "anim-laugh",
+      "aura": "rgba(253, 224, 71, 0.28)"
+    },
+    {
+      "name": "giggle",
+      "icon": "🤭",
+      "desc": "Guiño travieso con micro-vibración",
+      "shape": "asym_wink",
+      "h": 26,
+      "anim": "anim-vibe",
+      "aura": "rgba(244, 114, 182, 0.24)"
+    },
+    {
+      "name": "proud",
+      "icon": "😌",
+      "desc": "Ojos erguidos, ladeo exterior y elevación",
+      "shape": "rainbow",
+      "h": 42,
+      "rot": -8,
+      "transY": -6,
+      "aura": "rgba(167, 243, 208, 0.24)"
+    },
+    {
+      "name": "victorious",
+      "icon": "🏆",
+      "desc": "Chevrons (^ ^) y destello triunfal",
+      "shape": "chevron",
+      "h": 30,
+      "w": 18,
+      "rot": 24,
+      "transY": -8,
+      "aura": "rgba(251, 191, 36, 0.38)"
+    },
+    {
+      "name": "party",
+      "icon": "🎉",
+      "desc": "Vaivén festivo y ondas de brillo",
+      "shape": "chevron",
+      "h": 32,
+      "anim": "anim-party",
+      "aura": "rgba(244, 63, 94, 0.3)"
+    },
+    {
+      "name": "grateful",
+      "icon": "🌸",
+      "desc": "Mirada dulce marfil y parpadeo lento",
+      "shape": "rainbow",
+      "h": 32,
+      "w": 16,
+      "transY": 2,
+      "aura": "rgba(254, 243, 199, 0.25)"
+    },
+    {
+      "name": "greeting",
+      "icon": "👋",
+      "desc": "Doble rebote elástico de bienvenida",
+      "shape": "greeting",
+      "h": 46,
+      "w": 17,
+      "anim": "anim-bounce",
+      "aura": "rgba(243, 242, 238, 0.26)"
+    },
+    {
+      "name": "playful",
+      "icon": "😜",
+      "desc": "Alternancia de salto asimétrico",
+      "shape": "rainbow",
+      "h": 34,
+      "animSocket": "anim-hop",
+      "aura": "rgba(232, 121, 249, 0.24)"
+    },
+    {
+      "name": "excited",
+      "icon": "🤩",
+      "desc": "Cápsulas agrandadas vibrando",
+      "shape": "pill",
+      "h": 54,
+      "w": 20,
+      "anim": "anim-vibe",
+      "aura": "rgba(250, 204, 21, 0.32)"
+    },
+    {
+      "name": "beaming",
+      "icon": "🌟",
+      "desc": "Ultra-brillantes con resplandor amplio",
+      "shape": "rainbow",
+      "h": 36,
+      "w": 18,
+      "rot": 6,
+      "aura": "rgba(255, 255, 255, 0.42)"
+    },
+    {
+      "name": "delighted",
+      "icon": "🥰",
+      "desc": "Micro-arqueo hacia arriba y aura ámbar",
+      "shape": "rainbow",
+      "h": 28,
+      "w": 17,
+      "transY": -4,
+      "rot": 9,
+      "aura": "rgba(245, 158, 11, 0.25)"
+    },
+    {
+      "name": "optimistic",
+      "icon": "🚀",
+      "desc": "Cápsulas alargadas hacia arriba",
+      "shape": "pill",
+      "h": 50,
+      "w": 16,
+      "transY": -5,
+      "aura": "rgba(52, 211, 153, 0.25)"
+    }
+  ],
+  "Familia 2: Curiosidad, Intelecto & Enfoque (15)": [
+    {
+      "name": "thinking",
+      "icon": "🌊",
+      "desc": "Asimétrico: izq plano, der arco (— ⌒)",
+      "shape": "thinking_real",
+      "h": 34,
+      "aura": "rgba(56, 189, 248, 0.26)"
+    },
+    {
+      "name": "focused",
+      "icon": "🎯",
+      "desc": "Hendiduras 6° hacia el centro, gap 16px",
+      "shape": "focused",
+      "h": 22,
+      "w": 13,
+      "gap": 16,
+      "rot": 6,
+      "aura": "rgba(96, 165, 250, 0.26)"
+    },
+    {
+      "name": "curious",
+      "icon": "🧐",
+      "desc": "Ojo izq +8px y ladeo facial de 5°",
+      "shape": "curious_tilt",
+      "h": 42,
+      "transYLeft": -8,
+      "faceRot": 5,
+      "aura": "rgba(251, 191, 36, 0.22)"
+    },
+    {
+      "name": "analytical",
+      "icon": "📊",
+      "desc": "Barras horizontales escaneando",
+      "shape": "slit",
+      "h": 18,
+      "w": 18,
+      "animSocket": "anim-scan",
+      "aura": "rgba(56, 189, 248, 0.28)"
+    },
+    {
+      "name": "eureka",
+      "icon": "💡",
+      "desc": "Micro-salto con destello blanco intenso",
+      "shape": "pill",
+      "h": 56,
+      "w": 20,
+      "transY": -10,
+      "aura": "rgba(255, 255, 255, 0.48)"
+    },
+    {
+      "name": "calculating",
+      "icon": "🧮",
+      "desc": "Parpadeo alternado procesando",
+      "shape": "calculating",
+      "h": 26,
+      "aura": "rgba(99, 102, 241, 0.25)"
+    },
+    {
+      "name": "observing",
+      "icon": "👁️",
+      "desc": "Seguimiento horizontal fluido",
+      "shape": "pill",
+      "h": 36,
+      "w": 16,
+      "animSocket": "anim-scan",
+      "aura": "rgba(45, 212, 191, 0.22)"
+    },
+    {
+      "name": "intrigued",
+      "icon": "🤨",
+      "desc": "Ceja alzada asimétrica pulsante",
+      "shape": "asym_tilt",
+      "h": 40,
+      "transYLeft": -6,
+      "aura": "rgba(217, 119, 6, 0.24)"
+    },
+    {
+      "name": "studious",
+      "icon": "📖",
+      "desc": "Rendijas horizontales ultra-estables",
+      "shape": "slit",
+      "h": 16,
+      "w": 16,
+      "aura": "rgba(148, 163, 184, 0.2)"
+    },
+    {
+      "name": "brainstorming",
+      "icon": "🧠",
+      "desc": "Vibración con aura pulsante",
+      "shape": "pill",
+      "h": 44,
+      "anim": "anim-vibe",
+      "aura": "rgba(168, 85, 247, 0.35)"
+    },
+    {
+      "name": "reading",
+      "icon": "📑",
+      "desc": "Lectura rítmica de izquierda a derecha",
+      "shape": "slit",
+      "h": 22,
+      "w": 15,
+      "animSocket": "anim-reading",
+      "aura": "rgba(125, 211, 252, 0.22)"
+    },
+    {
+      "name": "evaluating",
+      "icon": "⚖️",
+      "desc": "Un ojo más estrecho sopesando",
+      "shape": "asym_weight",
+      "h": 36,
+      "aura": "rgba(148, 163, 184, 0.24)"
+    },
+    {
+      "name": "puzzled",
+      "icon": "❓",
+      "desc": "Inclinación de cabeza y alturas dispares",
+      "shape": "curious_tilt",
+      "h": 38,
+      "transYLeft": -10,
+      "transYRight": 4,
+      "faceRot": -7,
+      "aura": "rgba(253, 224, 71, 0.2)"
+    },
+    {
+      "name": "sharp",
+      "icon": "🗡️",
+      "desc": "Máxima altura con bordes hiper-definidos",
+      "shape": "sharp",
+      "h": 56,
+      "w": 14,
+      "aura": "rgba(243, 242, 238, 0.38)"
+    },
+    {
+      "name": "detective",
+      "icon": "🕵️",
+      "desc": "Entrecerrados mirando esquina inferior",
+      "shape": "slit",
+      "h": 20,
+      "transY": 7,
+      "aura": "rgba(180, 83, 9, 0.22)"
+    }
+  ],
+  "Familia 3: Picardía, Afecto & Complicidad (15)": [
+    {
+      "name": "amused",
+      "icon": "😏",
+      "desc": "Guiño pícaro clásico (guiño + sonrisa)",
+      "shape": "asym_wink_smile",
+      "h": 30,
+      "aura": "rgba(244, 114, 182, 0.24)"
+    },
+    {
+      "name": "smug",
+      "icon": "😼",
+      "desc": "Entrecerrados con superioridad amistosa",
+      "shape": "slit",
+      "h": 20,
+      "rot": 10,
+      "faceRot": 3,
+      "aura": "rgba(251, 191, 36, 0.22)"
+    },
+    {
+      "name": "winking",
+      "icon": "😉",
+      "desc": "Guiño rápido con rebote elástico",
+      "shape": "winking_quick",
+      "h": 36,
+      "aura": "rgba(236, 72, 153, 0.22)"
+    },
+    {
+      "name": "flirty",
+      "icon": "😘",
+      "desc": "Parpadeo coqueto y aura rosada",
+      "shape": "rainbow",
+      "h": 30,
+      "rot": 8,
+      "aura": "rgba(244, 114, 182, 0.3)"
+    },
+    {
+      "name": "tsundere",
+      "icon": "😒",
+      "desc": "Inclinados hacia afuera mirando ladeado",
+      "shape": "angry",
+      "h": 26,
+      "rot": 14,
+      "faceRot": 6,
+      "aura": "rgba(244, 63, 94, 0.22)"
+    },
+    {
+      "name": "affectionate",
+      "icon": "💌",
+      "desc": "Arcos suaves con latido cardíaco tenue",
+      "shape": "rainbow",
+      "h": 28,
+      "rot": 10,
+      "anim": "anim-heartbeat",
+      "aura": "rgba(251, 113, 133, 0.3)"
+    },
+    {
+      "name": "bashful",
+      "icon": "🙈",
+      "desc": "Inclinación diagonal (/ \\) tímida",
+      "shape": "puppy",
+      "h": 30,
+      "rot": -8,
+      "transY": 5,
+      "aura": "rgba(253, 164, 175, 0.22)"
+    },
+    {
+      "name": "charming",
+      "icon": "✨",
+      "desc": "Mirada centrada con pulsación elegante",
+      "shape": "pill",
+      "h": 44,
+      "anim": "anim-heartbeat",
+      "aura": "rgba(216, 180, 254, 0.25)"
+    },
+    {
+      "name": "teasing",
+      "icon": "😋",
+      "desc": "Guiño alternado con ladeo de cabeza",
+      "shape": "asym_wink",
+      "h": 32,
+      "faceRot": -6,
+      "aura": "rgba(244, 114, 182, 0.24)"
+    },
+    {
+      "name": "sarcastic",
+      "icon": "🙄",
+      "desc": "Entrecerrados horizontales con ladeo 6°",
+      "shape": "slit",
+      "h": 18,
+      "faceRot": 6,
+      "transY": -4,
+      "aura": "rgba(148, 163, 184, 0.18)"
+    },
+    {
+      "name": "friendly",
+      "icon": "🤝",
+      "desc": "Cápsulas acogedoras con respiración armónica",
+      "shape": "pill",
+      "h": 42,
+      "anim": "anim-zen",
+      "aura": "rgba(254, 240, 138, 0.2)"
+    },
+    {
+      "name": "cozy",
+      "icon": "☕",
+      "desc": "Cápsulas gorditas y redondeadas",
+      "shape": "pill",
+      "h": 34,
+      "w": 22,
+      "aura": "rgba(253, 186, 116, 0.22)"
+    },
+    {
+      "name": "tender",
+      "icon": "🌿",
+      "desc": "Mirada suave hacia abajo con descenso",
+      "shape": "puppy",
+      "h": 32,
+      "transY": 6,
+      "aura": "rgba(167, 243, 208, 0.2)"
+    },
+    {
+      "name": "conspirator",
+      "icon": "🤫",
+      "desc": "Gap reducido a 12px compartiendo secreto",
+      "shape": "slit",
+      "h": 22,
+      "gap": 12,
+      "aura": "rgba(192, 132, 252, 0.24)"
+    },
+    {
+      "name": "reassured",
+      "icon": "🕊️",
+      "desc": "Parpadeo largo de alivio y confianza",
+      "shape": "rainbow",
+      "h": 32,
+      "aura": "rgba(147, 197, 253, 0.22)"
+    }
+  ],
+  "Familia 4: Vulnerabilidad, Tristeza & Empatía (15)": [
+    {
+      "name": "puppy_eyes",
+      "icon": "🥺",
+      "desc": "Inclinación (/ \\) dilatada y vidriosa",
+      "shape": "puppy",
+      "h": 46,
+      "w": 20,
+      "rot": -14,
+      "aura": "rgba(251, 191, 36, 0.2)"
+    },
+    {
+      "name": "sympathetic",
+      "icon": "🫂",
+      "desc": "Mirada comprensiva hacia abajo",
+      "shape": "puppy",
+      "h": 38,
+      "rot": 10,
+      "transY": 4,
+      "aura": "rgba(253, 224, 71, 0.2)"
+    },
+    {
+      "name": "pleading",
+      "icon": "🙏",
+      "desc": "Cápsulas en (/ \\) con micro-temblor",
+      "shape": "puppy",
+      "h": 36,
+      "rot": -12,
+      "anim": "anim-vibe",
+      "aura": "rgba(244, 114, 182, 0.22)"
+    },
+    {
+      "name": "sad",
+      "icon": "😢",
+      "desc": "Cápsulas caídas en altura y aura tenue",
+      "shape": "puppy",
+      "h": 24,
+      "rot": 8,
+      "transY": 7,
+      "opacity": 0.7,
+      "aura": "rgba(96, 165, 250, 0.16)"
+    },
+    {
+      "name": "crying",
+      "icon": "😭",
+      "desc": "Micro-gota de luz desprendiéndose",
+      "shape": "puppy",
+      "h": 28,
+      "rot": 10,
+      "transY": 6,
+      "anim": "anim-crying",
+      "aura": "rgba(147, 197, 253, 0.3)"
+    },
+    {
+      "name": "heartbroken",
+      "icon": "💔",
+      "desc": "Tiemblan levemente con aura fría azulada",
+      "shape": "puppy",
+      "h": 26,
+      "rot": 6,
+      "anim": "anim-vibe",
+      "aura": "rgba(59, 130, 246, 0.28)"
+    },
+    {
+      "name": "shy",
+      "icon": "👉👈",
+      "desc": "Ojos retraídos, gap estrecho y mirada baja",
+      "shape": "puppy",
+      "h": 22,
+      "w": 12,
+      "gap": 14,
+      "transY": 8,
+      "aura": "rgba(244, 114, 182, 0.18)"
+    },
+    {
+      "name": "apologetic",
+      "icon": "🙇",
+      "desc": "Reverencia suave y desplazamiento en Y",
+      "shape": "puppy",
+      "h": 28,
+      "transY": 10,
+      "aura": "rgba(203, 213, 225, 0.18)"
+    },
+    {
+      "name": "melancholy",
+      "icon": "🌧️",
+      "desc": "Ojos lánguidos con parpadeo pesado",
+      "shape": "slit",
+      "h": 14,
+      "w": 18,
+      "transY": 4,
+      "aura": "rgba(100, 116, 139, 0.15)"
+    },
+    {
+      "name": "comforting",
+      "icon": "🤍",
+      "desc": "Ondulación suave como un abrazo visual",
+      "shape": "rainbow",
+      "h": 34,
+      "animSocket": "anim-scan",
+      "aura": "rgba(243, 242, 238, 0.24)"
+    },
+    {
+      "name": "lonely",
+      "icon": "🍂",
+      "desc": "Ojos separados con mínima luminosidad",
+      "shape": "slit",
+      "h": 16,
+      "gap": 34,
+      "opacity": 0.5,
+      "aura": "rgba(71, 85, 105, 0.1)"
+    },
+    {
+      "name": "disappointed",
+      "icon": "😞",
+      "desc": "Encogiéndose verticalmente con descenso seco",
+      "shape": "slit",
+      "h": 12,
+      "transY": 8,
+      "aura": "rgba(148, 163, 184, 0.12)"
+    },
+    {
+      "name": "vulnerable",
+      "icon": "🫧",
+      "desc": "Translúcidas al 60% y formas frágiles",
+      "shape": "pill",
+      "h": 30,
+      "w": 14,
+      "opacity": 0.6,
+      "aura": "rgba(186, 230, 253, 0.18)"
+    },
+    {
+      "name": "forgiving",
+      "icon": "🤲",
+      "desc": "Apertura suave y luminosa",
+      "shape": "rainbow",
+      "h": 38,
+      "w": 18,
+      "transY": -2,
+      "aura": "rgba(254, 240, 138, 0.26)"
+    },
+    {
+      "name": "nostalgic",
+      "icon": "🌌",
+      "desc": "Mirada perdida arriba a la derecha",
+      "shape": "pill",
+      "h": 34,
+      "transY": -7,
+      "faceRot": 5,
+      "aura": "rgba(199, 210, 254, 0.2)"
+    }
+  ],
+  "Familia 5: Intensidad, Determinación & Tensión (15)": [
+    {
+      "name": "determined",
+      "icon": "⚔️",
+      "desc": "Inclinación agresiva (\\ /) fija",
+      "shape": "angry",
+      "h": 34,
+      "rot": 14,
+      "aura": "rgba(239, 68, 68, 0.28)"
+    },
+    {
+      "name": "angry",
+      "icon": "💢",
+      "desc": "Diagonal (/ ) marcada y aura roja",
+      "shape": "angry",
+      "h": 32,
+      "rot": -22,
+      "anim": "anim-vibe",
+      "aura": "rgba(239, 68, 68, 0.42)"
+    },
+    {
+      "name": "annoyed",
+      "icon": "😤",
+      "desc": "Un ojo plano y el otro ladeado",
+      "shape": "asym_tilt",
+      "h": 22,
+      "rot": 12,
+      "aura": "rgba(249, 115, 22, 0.28)"
+    },
+    {
+      "name": "glare",
+      "icon": "😠",
+      "desc": "Rendijas hiper-estrechas fijas",
+      "shape": "slit",
+      "h": 10,
+      "w": 18,
+      "rot": -8,
+      "aura": "rgba(220, 38, 38, 0.32)"
+    },
+    {
+      "name": "fierce",
+      "icon": "🦁",
+      "desc": "Ojos anchos con inclinación filosa",
+      "shape": "angry",
+      "h": 36,
+      "w": 19,
+      "rot": -18,
+      "aura": "rgba(244, 63, 94, 0.36)"
+    },
+    {
+      "name": "frustrated",
+      "icon": "🤦",
+      "desc": "Headshake lateral rápido de 'no puede ser'",
+      "shape": "angry",
+      "h": 28,
+      "rot": -12,
+      "animSocket": "anim-headshake",
+      "aura": "rgba(239, 68, 68, 0.34)"
+    },
+    {
+      "name": "impatient",
+      "icon": "⏱️",
+      "desc": "Golpeteo rítmico vertical de una cápsula",
+      "shape": "asym_tilt",
+      "h": 30,
+      "animRight": "anim-tap-right",
+      "aura": "rgba(249, 115, 22, 0.24)"
+    },
+    {
+      "name": "defiant",
+      "icon": "✊",
+      "desc": "Elevación con ojos entrecerrados pero altos",
+      "shape": "slit",
+      "h": 22,
+      "transY": -8,
+      "rot": 8,
+      "aura": "rgba(245, 158, 11, 0.3)"
+    },
+    {
+      "name": "protective",
+      "icon": "🛡️",
+      "desc": "Cápsulas firmes con escudo brillante",
+      "shape": "pill",
+      "h": 46,
+      "w": 20,
+      "aura": "rgba(59, 130, 246, 0.35)"
+    },
+    {
+      "name": "rebellious",
+      "icon": "⚡",
+      "desc": "Inclinación asimétrica desafiante",
+      "shape": "asym_tilt",
+      "h": 36,
+      "rot": 15,
+      "faceRot": -6,
+      "aura": "rgba(236, 72, 153, 0.32)"
+    },
+    {
+      "name": "serious",
+      "icon": "🗿",
+      "desc": "Hendiduras sobrias sin movimiento",
+      "shape": "slit",
+      "h": 20,
+      "w": 16,
+      "aura": "rgba(148, 163, 184, 0.2)"
+    },
+    {
+      "name": "overheated",
+      "icon": "🔥",
+      "desc": "Parpadeo rápido y alarma térmica roja",
+      "shape": "pill",
+      "h": 42,
+      "anim": "anim-vibe",
+      "aura": "rgba(220, 38, 38, 0.48)"
+    },
+    {
+      "name": "stubborn",
+      "icon": "🧱",
+      "desc": "Ojos apretados que no se mueven",
+      "shape": "slit",
+      "h": 12,
+      "w": 18,
+      "aura": "rgba(217, 119, 6, 0.25)"
+    },
+    {
+      "name": "commanding",
+      "icon": "👑",
+      "desc": "Grandes y autoritarios con resplandor nítido",
+      "shape": "pill",
+      "h": 54,
+      "w": 18,
+      "aura": "rgba(243, 242, 238, 0.4)"
+    },
+    {
+      "name": "hyperfocus",
+      "icon": "🎯",
+      "desc": "Ultra-delgadas con brillo concentrado",
+      "shape": "slit",
+      "h": 28,
+      "w": 10,
+      "gap": 14,
+      "aura": "rgba(56, 189, 248, 0.35)"
+    }
+  ],
+  "Familia 6: Asombro, Confusión & Glitch (15)": [
+    {
+      "name": "surprised",
+      "icon": "😲",
+      "desc": "Agrandados (24x56) y destello en aura",
+      "shape": "pill",
+      "h": 56,
+      "w": 24,
+      "aura": "rgba(255, 255, 255, 0.45)"
+    },
+    {
+      "name": "confused",
+      "icon": "🤨",
+      "desc": "Arqueo asimétrico y ladeo de 5°",
+      "shape": "asym_tilt",
+      "h": 42,
+      "transYLeft": -8,
+      "faceRot": 5,
+      "aura": "rgba(251, 191, 36, 0.24)"
+    },
+    {
+      "name": "shocked",
+      "icon": "😱",
+      "desc": "Abiertos temblando con respiración contenida",
+      "shape": "pill",
+      "h": 58,
+      "w": 22,
+      "anim": "anim-vibe",
+      "aura": "rgba(239, 68, 68, 0.35)"
+    },
+    {
+      "name": "mindblown",
+      "icon": "🤯",
+      "desc": "Expansión rápida con halo explosivo suave",
+      "shape": "pill",
+      "h": 62,
+      "w": 26,
+      "aura": "rgba(251, 191, 36, 0.5)"
+    },
+    {
+      "name": "dizzy",
+      "icon": "💫",
+      "desc": "Oscilación contraria o tambaleo",
+      "shape": "pill",
+      "h": 36,
+      "w": 18,
+      "animLeft": "anim-dizzy-left",
+      "animRight": "anim-dizzy-right",
+      "aura": "rgba(192, 132, 252, 0.28)"
+    },
+    {
+      "name": "hypnotized",
+      "icon": "😵💫",
+      "desc": "Movimiento sinusoidal continuo",
+      "shape": "olitas",
+      "h": 36,
+      "aura": "rgba(232, 121, 249, 0.3)"
+    },
+    {
+      "name": "glitch",
+      "icon": "⚡",
+      "desc": "Desfase horizontal y chromatic glitch",
+      "shape": "pill",
+      "h": 42,
+      "anim": "anim-glitch",
+      "aura": "rgba(236, 72, 153, 0.45)"
+    },
+    {
+      "name": "paranoid",
+      "icon": "👀",
+      "desc": "Mirando frenéticamente a ambos lados",
+      "shape": "pill",
+      "h": 40,
+      "animSocket": "anim-paranoid",
+      "aura": "rgba(245, 158, 11, 0.3)"
+    },
+    {
+      "name": "skeptical",
+      "icon": "🧐",
+      "desc": "Un ojo muy achinado mirando con recelo",
+      "shape": "asym_tilt",
+      "h": 44,
+      "hRight": 16,
+      "aura": "rgba(161, 161, 170, 0.22)"
+    },
+    {
+      "name": "speechless",
+      "icon": "😶",
+      "desc": "Congeladas a media altura sin parpadear",
+      "shape": "pill",
+      "h": 32,
+      "aura": "rgba(243, 242, 238, 0.2)"
+    },
+    {
+      "name": "baffled",
+      "icon": "🌀",
+      "desc": "Desalineados verticalmente con aura confusa",
+      "shape": "asym_tilt",
+      "h": 42,
+      "transYLeft": -10,
+      "transYRight": 8,
+      "aura": "rgba(125, 211, 252, 0.25)"
+    },
+    {
+      "name": "startled",
+      "icon": "⚡",
+      "desc": "Salto de 10px arriba y encogimiento",
+      "shape": "pill",
+      "h": 52,
+      "transY": -10,
+      "anim": "anim-bounce",
+      "aura": "rgba(250, 204, 21, 0.35)"
+    },
+    {
+      "name": "overloaded",
+      "icon": "💥",
+      "desc": "Parpadeo caótico alternante",
+      "shape": "calculating",
+      "h": 38,
+      "anim": "anim-vibe",
+      "aura": "rgba(239, 68, 68, 0.38)"
+    },
+    {
+      "name": "disoriented",
+      "icon": "😵",
+      "desc": "Balanceo lento buscando equilibrio",
+      "shape": "asym_tilt",
+      "h": 34,
+      "faceRot": -8,
+      "animSocket": "anim-headshake",
+      "aura": "rgba(168, 85, 247, 0.25)"
+    },
+    {
+      "name": "clueless",
+      "icon": "😶🌫️",
+      "desc": "Redondeadas vacías mirando al infinito",
+      "shape": "pill",
+      "h": 26,
+      "w": 26,
+      "opacity": 0.7,
+      "aura": "rgba(148, 163, 184, 0.16)"
+    }
+  ],
+  "Familia 7: Calma, Sueño, Música & Standby (10)": [
+    {
+      "name": "groove",
+      "icon": "🎵",
+      "desc": "Head-bob squash & stretch a ~110 BPM",
+      "shape": "groove",
+      "h": 44,
+      "anim": "anim-groove",
+      "aura": "rgba(168, 85, 247, 0.32)"
+    },
+    {
+      "name": "sleepy",
+      "icon": "🥱",
+      "desc": "Cápsulas al 25% de altura y parpadeo pesado",
+      "shape": "sleepy",
+      "h": 12,
+      "transY": 7,
+      "aura": "rgba(148, 163, 184, 0.12)"
+    },
+    {
+      "name": "sleeping",
+      "icon": "😴",
+      "desc": "Rendijas estáticas con respiración profunda",
+      "shape": "slit",
+      "h": 6,
+      "w": 18,
+      "transY": 6,
+      "anim": "anim-zen",
+      "aura": "rgba(100, 116, 139, 0.1)"
+    },
+    {
+      "name": "yawn",
+      "icon": "🥱",
+      "desc": "Se alargan verticalmente y luego se cierran",
+      "shape": "pill",
+      "h": 54,
+      "anim": "anim-yawn",
+      "aura": "rgba(253, 186, 116, 0.24)"
+    },
+    {
+      "name": "zen",
+      "icon": "🪨",
+      "desc": "Respiración armónica de 4s y aura azulada",
+      "shape": "pill",
+      "h": 36,
+      "anim": "anim-zen",
+      "aura": "rgba(147, 197, 253, 0.2)"
+    },
+    {
+      "name": "meditating",
+      "icon": "🧘",
+      "desc": "Rendijas flotando con aura pacífica",
+      "shape": "rainbow",
+      "h": 20,
+      "w": 18,
+      "anim": "anim-zen",
+      "aura": "rgba(167, 243, 208, 0.22)"
+    },
+    {
+      "name": "low_battery",
+      "icon": "🪫",
+      "desc": "Hendiduras ultra-finas con puntos parpadeando",
+      "shape": "standby",
+      "h": 8,
+      "eyeColor": "#fca5a5",
+      "aura": "rgba(239, 68, 68, 0.2)"
+    },
+    {
+      "name": "recharging",
+      "icon": "🔋",
+      "desc": "Llenándose de luz progresivamente",
+      "shape": "pill",
+      "h": 40,
+      "anim": "anim-recharge",
+      "eyeColor": "#a7f3d0",
+      "aura": "rgba(16, 185, 129, 0.32)"
+    },
+    {
+      "name": "standby",
+      "icon": "⚪",
+      "desc": "Hendiduras mínimas (— —) con sensores cian",
+      "shape": "standby",
+      "h": 10,
+      "w": 18,
+      "aura": "rgba(56, 189, 248, 0.18)"
+    },
+    {
+      "name": "cyber",
+      "icon": "🌐",
+      "desc": "Destello futurista con micro-escaneo y aura fría",
+      "shape": "slit",
+      "h": 22,
+      "w": 16,
+      "animSocket": "anim-scan",
+      "aura": "rgba(186, 230, 253, 0.32)"
+    }
+  ]
+}
