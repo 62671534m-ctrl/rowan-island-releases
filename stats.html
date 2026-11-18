@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Rowan Island — Panel de Descargas</title>
+  <link rel="icon" href="assets/app-icon.png">
+  <style>
+    :root {
+      --bg: #08090b;
+      --panel: #111317;
+      --border: rgba(255, 255, 255, 0.09);
+      --text: #f3f5f8;
+      --muted: #9aa3b2;
+      --accent: #34d399;
+      --accent-soft: rgba(52, 211, 153, 0.12);
+      --warn: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top right, rgba(52, 211, 153, 0.08), transparent 40%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 36px 20px 64px;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    .topbar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 14px; margin-bottom: 28px;
+    }
+    .title-wrap h1 { margin: 0 0 6px; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+    .title-wrap p { margin: 0; color: var(--muted); font-size: 14px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 15px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--panel); color: var(--text); text-decoration: none;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .btn:hover { border-color: rgba(255,255,255,0.22); }
+    .btn.primary {
+      background: var(--accent-soft); border-color: rgba(52, 211, 153, 0.35); color: var(--accent);
+    }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px; margin-bottom: 24px;
+    }
+    .card {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px;
+    }
+    .card-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .card-value { font-size: 32px; font-weight: 700; margin: 8px 0 4px; letter-spacing: -0.02em; }
+    .card-sub { font-size: 12px; color: var(--muted); }
+    .panel {
+      background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 18px;
+    }
+    .panel h2 { margin: 0 0 14px; font-size: 16px; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+    tr:last-child td { border-bottom: none; }
+    .pill {
+      display: inline-block; padding: 3px 9px; border-radius: 999px;
+      background: rgba(255,255,255,0.06); font-size: 12px; font-weight: 600;
+    }
+    .pill.latest { background: var(--accent-soft); color: var(--accent); }
+    .note {
+      background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.25);
+      border-radius: 12px; padding: 14px 16px; font-size: 13px; color: #e5e7eb; line-height: 1.55;
+    }
+    .note strong { color: var(--warn); }
+    .muted-link { color: var(--accent); text-decoration: none; }
+    .muted-link:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      th:nth-child(4), td:nth-child(4), th:nth-child(5), td:nth-child(5) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="title-wrap">
+        <h1>Métricas de Rowan Island</h1>
+        <p id="status-line">Consultando estadísticas reales desde GitHub Releases...</p>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="refresh-btn" type="button">Actualizar datos</button>
+        <a class="btn" href="https://analytics.google.com/" target="_blank" rel="noopener">Abrir Google Analytics (G-71D1NRCXZP) ↗</a>
+        <a class="btn" href="https://github.com/62671534m-ctrl/rowan-island-releases/releases" target="_blank" rel="noopener">GitHub Releases ↗</a>
+        <a class="btn" href="index.html">← Volver a la web</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-label">Descargas totales (.exe)</div>
+        <div class="card-value" id="total-exe">—</div>
+        <div class="card-sub">Instaladores descargados acumulados</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Última versión</div>
+        <div class="card-value" id="latest-ver">—</div>
+        <div class="card-sub" id="latest-dl">Descargas de esta versión: —</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Descargas de SHA256SUMS</div>
+        <div class="card-value" id="total-sha">—</div>
+        <div class="card-sub">Verificaciones / descargas de actualización</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Versiones publicadas</div>
+        <div class="card-value" id="total-rel">—</div>
+        <div class="card-sub">Releases públicas en GitHub</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Desglose real por versión (GitHub Releases API)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Versión</th>
+            <th>Instalador (.exe)</th>
+            <th>SHA256</th>
+            <th>Peso</th>
+            <th>Publicada</th>
+          </tr>
+        </thead>
+        <tbody id="releases-body">
+          <tr><td colspan="5" style="color:var(--muted)">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <strong>Sobre "usuarios activos usando la app":</strong> GitHub Releases mide todas las descargas reales del instalador (<code>.exe</code>) y actualizaciones, mientras que <strong>Google Analytics (G-71D1NRCXZP)</strong> mide visitas en vivo a la web y clics en el botón de descarga. Actualmente la aplicación de escritorio no envía telemetría ni pings de uso en segundo plano para respetar la privacidad; si más adelante deseas ver cuántas PCs tienen Rowan abierto al mismo tiempo, podemos añadir un pulso anónimo opcional en <code>v1.0.8+</code> hacia un contador privado.
+    </div>
+  </div>
+
+  <script>
+    const REPO = '62671534m-ctrl/rowan-island-releases';
+
+    function fmtDate(iso) {
+      if (!iso) return '—';
+      try {
+        return new Date(iso).toLocaleDateString('es-PE', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch (_) {
+        return iso.slice(0, 10);
+      }
+    }
+
+    async function loadStats() {
+      const statusEl = document.getElementById('status-line');
+      const bodyEl = document.getElementById('releases-body');
+      statusEl.textContent = 'Actualizando desde GitHub API...';
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${REPO}/releases?per_page=50`, {
+          headers: { 'Accept': 'application/vnd.github+json' },
+          cache: 'no-store'
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const releases = (await res.json()).filter(r => !r.draft && !r.prerelease);
+
+        let totalExe = 0;
+        let totalSha = 0;
+        const rows = [];
+
+        releases.forEach((rel, idx) => {
+          const assets = Array.isArray(rel.assets) ? rel.assets : [];
+          const exeAsset = assets.find(a => /\.exe$/i.test(a.name || ''));
+          const shaAsset = assets.find(a => /sha256/i.test(a.name || ''));
+          const exeCount = exeAsset ? Number(exeAsset.download_count || 0) : 0;
+          const shaCount = shaAsset ? Number(shaAsset.download_count || 0) : 0;
+          totalExe += exeCount;
+          totalSha += shaCount;
+
+          if (idx === 0) {
+            document.getElementById('latest-ver').textContent = rel.tag_name || '—';
+            document.getElementById('latest-dl').textContent = `Descargas de esta versión: ${exeCount}`;
+          }
+
+          const sizeMb = exeAsset && exeAsset.size ? `${(exeAsset.size / (1024 * 1024)).toFixed(1)} MB` : '—';
+          const tagHtml = `<a class="muted-link" href="${rel.html_url}" target="_blank" rel="noopener"><span class="pill ${idx === 0 ? 'latest' : ''}">${rel.tag_name}</span></a>`;
+          rows.push(`<tr>
+            <td>${tagHtml}</td>
+            <td><strong>${exeCount}</strong></td>
+            <td>${shaCount}</td>
+            <td>${sizeMb}</td>
+            <td>${fmtDate(rel.published_at)}</td>
+          </tr>`);
+        });
+
+        document.getElementById('total-exe').textContent = String(totalExe);
+        document.getElementById('total-sha').textContent = String(totalSha);
+        document.getElementById('total-rel').textContent = String(releases.length);
+        bodyEl.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="5">No hay releases publicadas.</td></tr>';
+        statusEl.textContent = `Última actualización: ${new Date().toLocaleTimeString('es-PE')}`;
+      } catch (err) {
+        statusEl.textContent = `No se pudieron cargar los datos de GitHub (${err.message}).`;
+        bodyEl.innerHTML = '<tr><td colspan="5">Error al consultar la API pública de GitHub.</td></tr>';
+      }
+    }
+
+    document.getElementById('refresh-btn').addEventListener('click', loadStats);
+    loadStats();
+  </script>
+</body>
+</html>
