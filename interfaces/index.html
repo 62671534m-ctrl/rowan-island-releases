@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rowan Island — Previews Interactivos Web</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #07070a;
+      color: #f4f4f5;
+      display: flex;
+      flex-direction: column;
+    }
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 18px;
+      background: #0e0e13;
+      border-bottom: 1px solid #20202a;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      background: #1b1b24;
+      color: #a1a1aa;
+      border: 1px solid #2b2b38;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+    }
+    .tab-btn {
+      padding: 7px 14px;
+      border-radius: 10px;
+      border: 1px solid #282834;
+      background: #15151c;
+      color: #d4d4d8;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover { background: #1e1e28; }
+    .tab-btn.active {
+      background: #f3f2ee;
+      color: #09090b;
+      border-color: #f3f2ee;
+    }
+    .stage {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    .pane {
+      flex: 1;
+      border: none;
+      width: 100%;
+      height: 100%;
+      display: none;
+      background: #07070a;
+    }
+    .pane.visible {
+      display: block;
+    }
+    .stage.dual .pane {
+      display: block;
+      width: 50%;
+    }
+    .stage.dual .pane:first-child {
+      border-right: 1px solid #20202a;
+    }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div class="brand">
+      <span>Rowan Island v1.0</span>
+      <span class="badge">Interfaces Web Interactivas</span>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-mode="island">Dynamic Island (Notch + 9 pestañas)</button>
+      <button class="tab-btn" data-mode="rowan">Rowan AI (Ventana Completa + Ajustes)</button>
+      <button class="tab-btn" data-mode="dual">Vista Dual</button>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+    <iframe class="pane visible" id="frame-island" src="island/index.html" title="Dynamic Island"></iframe>
+    <iframe class="pane" id="frame-rowan" src="rowan/index.html" title="Rowan AI"></iframe>
+  </main>
+
+  <script>
+    const stage = document.getElementById('stage');
+    const fIsland = document.getElementById('frame-island');
+    const fRowan = document.getElementById('frame-rowan');
+    const btns = document.querySelectorAll('.tab-btn');
+
+    function setMode(mode) {
+      btns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+      stage.classList.toggle('dual', mode === 'dual');
+      fIsland.classList.toggle('visible', mode === 'island' || mode === 'dual');
+      fRowan.classList.toggle('visible', mode === 'rowan' || mode === 'dual');
+    }
+
+    btns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'open-rowan-full') {
+        setMode('rowan');
+      }
+    });
+  </script>
+</body>
+</html>
